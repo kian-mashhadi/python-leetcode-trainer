@@ -146,134 +146,495 @@ print("Age: " + str(25))   # convert 25 to string first
     color: '#58a6ff',
     lessons: [
       {
-        id: 'l1-0', title: 'Hello, World!',
-        explanation: ['The tradition of writing "Hello, World!" as your first program has existed since the 1970s. It confirms everything is working: Python is installed, your file is saved, and you can run code.', 'It is one line of Python. That\'s it. The fact that it takes one line in Python (vs 8 lines in Java) shows you why Python is great for beginners.', 'Every programmer — from total beginner to senior engineer — has written this exact program. Welcome to the club.'],
-        analogy: 'Like saying "1, 2, 3, testing" into a microphone before a speech. You\'re not really making a speech yet — you\'re confirming the equipment works. Hello World confirms your coding setup works.',
-        code: `print("Hello, World!")
-
-# That's it. Run this and you'll see:
-# Hello, World!
-
-# You can print anything:
-print("Hello, Python!")
-print("I am learning to code.")
-print("This is exciting!")`,
-        codeCaption: 'Your first Python program',
-        stepByStep: [
-          '1. Python sees the word "print" — it knows this is the print function',
-          '2. Python sees the parentheses — it knows you\'re calling the function',
-          '3. Inside the parentheses: "Hello, World!" wrapped in quotes — a string',
-          '4. Python sends that string to the screen',
-          '5. Done — moves to the next line'
+        id: 'l1-0', title: 'What is Python Code?',
+        explanation: [
+          'Python code is plain text written in a precise way. It lives in a file ending in .py, and the Python interpreter reads that file top to bottom and runs each instruction one by one.',
+          'Why this matters: every Python program you ever write is built from this single idea — a sequence of small, precise instructions executed in order. Once you can read a few lines, you can read almost any beginner program.',
+          'The rules are surprisingly small: spelling matters, capitalization matters, quotes mark text, and indentation matters. Almost every error you will hit at this stage is one of those rules being broken.'
         ],
-        mistake: { title: 'Capitalizing Print', description: 'Python is case-sensitive. "print" must be lowercase. "Print" is not the same as "print".', bad: 'Print("Hello")   # NameError: name \'Print\' is not defined', good: 'print("Hello")   # correct — all lowercase' },
-        quiz: {
-          question: 'What does the print() function do?',
-          options: [
-            'Sends the code to a printer to be printed on paper',
-            'Saves the text to a file',
-            'Displays the value inside the parentheses on the screen',
-            'Asks the user to type something'
-          ],
-          correctIndex: 2,
-          explanation: 'Despite the name, print() does NOT use a physical printer. It just shows whatever is inside the parentheses on the screen (the terminal/console).'
+        analogy: 'Python code is like a strict cooking recipe. Spell ingredients correctly, use exact amounts, follow the steps in order. Skip a step or be vague and the dish is ruined.',
+        code: `# A tiny Python program
+# - the first two lines are comments (humans only)
+# - the next two lines are real instructions
+
+print("This is real code")
+print("It runs top to bottom")
+
+# Output:
+# This is real code
+# It runs top to bottom`,
+        codeCaption: 'Python reads the file from the top — comments are skipped, print() shows text',
+        stepByStep: [
+          '1. Python opens your .py file',
+          '2. Reads line 1: a comment — skipped',
+          '3. Reads line 2: another comment — skipped',
+          '4. Reads line 4: print(...) — shows the text',
+          '5. Reads line 5: print(...) — shows the next line',
+          '6. End of file — Python stops'
+        ],
+        mistake: {
+          title: 'Treating code like English',
+          description: 'Python is precise. "Print", "PRINT", and "print" are all different. Code is closer to math notation than written English — exact spelling and case matter.',
+          bad: 'Print("Hi")     # NameError\nPRINT("Hi")     # NameError',
+          good: 'print("Hi")     # correct — exactly lowercase'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint("hello")\nprint("there")',
+          hint: 'Python runs each line in order, top to bottom.',
+          answer: 'hello\nthere\n\nThe first print runs, then the second on its own line.'
         },
         challenge: {
-          description: 'Use print() three times to display three lines: "Hello", "I am learning Python", and "Goodbye!"',
-          starter: '# Write 3 print() statements\n',
+          description: 'Mini practice: write two print() lines that output "code" then "works".',
+          starter: '# two print() statements\n',
           tests: [],
           runMode: 'output',
-          expectedOutput: 'Hello\nI am learning Python\nGoodbye!',
-          solution: 'print("Hello")\nprint("I am learning Python")\nprint("Goodbye!")',
-          hint: 'Each print() statement makes a new line. So three print() calls = three lines.'
+          expectedOutput: 'code\nworks',
+          solution: 'print("code")\nprint("works")',
+          hint: 'Each line calls print() with the word in quotes.'
         },
-        practice: { question: 'Write a print() statement that outputs your name.', hint: 'Put your name in quotes inside print().', answer: 'print("Your Name Here")\n\nThe quotes are required — they tell Python this is text, not a variable.' },
-        reflection: 'Why do you think every programmer\'s first program is "Hello, World!" instead of something more useful?'
+        quiz: {
+          question: 'Python code is best described as:',
+          options: [
+            'Free-form English the computer interprets loosely',
+            'Strict text instructions read top to bottom by Python',
+            'A picture-based programming style',
+            'Commands the computer guesses at'
+          ],
+          correctIndex: 1,
+          explanation: 'Python is strict and line-by-line. Each instruction runs in order from the top of the file.'
+        },
+        reflection: 'Recap: Python code is precise text in a .py file. The interpreter reads it top to bottom. Spelling, quotes, capitalization, and indentation are part of the language.'
       },
       {
-        id: 'l1-1', title: 'The print() Function',
-        explanation: ['print() is Python\'s way of showing output on the screen. Whatever you put inside the parentheses gets displayed. It is the most-used function in Python, especially when learning.', 'You can print text (wrap in quotes), numbers (no quotes needed), and variables. You can also print multiple things at once by separating them with commas — Python adds a space between them automatically.', 'print() always adds a new line after the output. So two print() calls always appear on two separate lines.'],
-        code: `# Print text (string — needs quotes)
-print("Hello")
+        id: 'l1-1', title: 'Hello World',
+        explanation: [
+          'Hello World is the traditional first program in any language. Its job is simple: confirm everything is working — the language is installed, your file runs, and you can see output.',
+          'Why it matters: it is the smallest possible feedback loop. You write one line, run it, and immediately know whether your setup is good. Every learning step after this builds on the same write → run → see-output cycle.',
+          'In Python, Hello World is one line. Compare that to languages like Java where the same program needs 8 lines of boilerplate.'
+        ],
+        analogy: 'Hello World is like saying "1, 2, 3, testing" into a microphone. You are not giving the speech yet — you are confirming the equipment works.',
+        code: `# The most famous one-liner in programming
+print("Hello, World!")
 
-# Print a number (no quotes needed)
-print(42)
-print(3.14)
+# You can print anything as your "hello"
+print("Hello, Python!")
+print("I am learning to code.")
+print("Day 1.")`,
+        codeCaption: 'A one-line program that confirms Python is working',
+        stepByStep: [
+          '1. Python sees the word print — recognises it as the print function',
+          '2. Sees the parentheses — knows you are calling it',
+          '3. Inside: a string in quotes — that is the value to display',
+          '4. Python sends that string to the screen',
+          '5. Moves to the next line'
+        ],
+        mistake: {
+          title: 'Forgetting one of the quotes',
+          description: 'Strings need an opening AND a closing quote. Forgetting one gives a SyntaxError that points to the wrong place — read carefully.',
+          bad: 'print("Hello)     # SyntaxError: unterminated string',
+          good: 'print("Hello")    # both quotes present'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint("Hello")\nprint("World")',
+          hint: 'Each print() uses its own line.',
+          answer: 'Hello\nWorld\n\nTwo print() calls = two lines of output.'
+        },
+        challenge: {
+          description: 'Mini practice: print "Hello, <your name>!" — replace <your name> with your real name.',
+          starter: '# one print() statement\nprint("Hello, ___!")\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: null,
+          solution: 'print("Hello, Alex!")',
+          hint: 'Just put your name where the underscores are. The whole thing must stay inside the quotes.'
+        },
+        quiz: {
+          question: 'What is the main point of Hello World?',
+          options: [
+            'It teaches you advanced syntax',
+            'It confirms your setup works and you can run code',
+            'It is required by Python',
+            'It is the only valid first program'
+          ],
+          correctIndex: 1,
+          explanation: 'Hello World is a setup check, not a language requirement. Any small print() works — the tradition just standardised on this.'
+        },
+        reflection: 'Recap: print("Hello, World!") is a tiny smoke test. If you see the output, your environment is ready for everything that follows in this course.'
+      },
+      {
+        id: 'l1-2', title: 'print()',
+        explanation: [
+          'print() is a function — a built-in tool in Python that takes whatever you put inside the parentheses and shows it on the screen.',
+          'Why it matters: print() is how you see results. Without it, your program could compute the right answer and you would never know. It is also the simplest debugging tool you have for the rest of your career.',
+          'You can pass print() text, numbers, variables, or several values at once separated by commas. Each call automatically adds a new line at the end.'
+        ],
+        code: `# print() shows text
+print("Hello")            # Hello
 
-# Print multiple things with a comma
-print("My age is", 25)      # My age is 25
+# print() shows numbers (no quotes)
+print(42)                 # 42
+print(3.14)               # 3.14
 
-# Print a variable
-name = "Alice"
-print(name)                  # Alice
-print("Hello,", name)        # Hello, Alice
+# print() can take multiple values, separated by commas
+print("Age", 25)          # Age 25  (Python adds a space)
 
-# Print nothing (empty line)
+# Each print() ends with a new line
+print("Line A")
+print("Line B")
+# Output:
+# Line A
+# Line B
+
+# Empty print() prints just a blank line
 print()`,
-        codeCaption: 'print() can display text, numbers, variables, and combinations',
-        mistake: { title: 'Forgetting quotes around text', description: 'Text must be in quotes. Without quotes, Python thinks it\'s a variable name and crashes if that variable doesn\'t exist.', bad: 'print(Hello)   # NameError: name \'Hello\' is not defined', good: 'print("Hello") # correct — quotes make it text' },
-        practice: { question: 'What does this print?\n\nprint("The answer is", 6 + 6)', hint: 'Python evaluates 6 + 6 first.', answer: 'The answer is 12\n\nPython computes 6 + 6 = 12, then print() displays them with a space: "The answer is 12"' }
+        codeCaption: 'print() is the universal "show it on screen" tool',
+        stepByStep: [
+          '1. Python sees print(',
+          '2. Evaluates whatever is between the ( and ) (text, number, math, variable...)',
+          '3. Joins multiple comma-separated values with a space',
+          '4. Writes the result to the screen',
+          '5. Adds a newline at the end so the next print() starts on a fresh line'
+        ],
+        mistake: {
+          title: 'Missing the parentheses',
+          description: 'print is a function — it must be called with parentheses. Just typing the word without () does nothing in Python 3.',
+          bad: 'print "Hello"     # SyntaxError in Python 3',
+          good: 'print("Hello")    # correct — call the function'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint("Score", 7 + 3)',
+          hint: 'Python evaluates the math first, then prints both values with a space.',
+          answer: 'Score 10\n\n7 + 3 is computed to 10. The comma tells print() to show both values separated by a space.'
+        },
+        challenge: {
+          description: 'Mini practice: use one print() call (with commas) to output "Sum is 25".',
+          starter: '# one print() call with commas\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'Sum is 25',
+          solution: 'print("Sum is", 10 + 15)',
+          hint: 'A comma between values inserts a space. The math runs first.'
+        },
+        quiz: {
+          question: 'Why are the parentheses required after print?',
+          options: [
+            'Python ignores them',
+            'They mark the function call and contain the values to print',
+            'They are optional in Python 3',
+            'They turn the text into a string'
+          ],
+          correctIndex: 1,
+          explanation: 'Functions in Python are called with (). The values inside the parentheses are the arguments — what you want to print.'
+        },
+        reflection: 'Recap: print(value) shows value on the screen and ends with a newline. It accepts text, numbers, multiple values, or nothing at all.'
       },
       {
-        id: 'l1-2', title: 'Comments',
-        explanation: ['A comment is a note in your code that Python completely ignores. You write # and everything after it on that line is skipped. Comments are for humans, not computers.', 'Comments have two uses: explaining what your code does (so you remember later), and temporarily disabling a line of code without deleting it. Both are extremely common in real-world code.', 'Good programmers write comments for the "why", not the "what". The code itself shows what happens — comments explain why you made that choice.'],
-        code: `# This is a comment — Python skips it entirely
+        id: 'l1-3', title: 'Strings inside print()',
+        explanation: [
+          'A string is text wrapped in quotes — either single quotes or double quotes. They both work the same way; pick one and stay consistent.',
+          'Why it matters: most of what you print to a user — labels, messages, prompts — is text, and text in Python is always strings. Knowing how to write a string correctly is a daily-use skill.',
+          'Inside a string you can put almost anything: letters, numbers, spaces, punctuation, even emoji. The quotes mark where the text starts and ends; everything between is the value.'
+        ],
+        code: `# Both quote styles work the same
+print("double quotes")
+print('single quotes')
 
-print("Hello")  # this part runs, this comment is ignored
+# Strings can contain numbers and symbols
+print("Score: 100 / 100  ⭐")
 
-# You can "comment out" code to disable it temporarily:
-# print("This line is disabled")
-print("This line runs normally")
+# Use the OTHER style if you need a quote inside the text
+print("It's a great day")    # ' inside ""
+print('He said "hi"')         # " inside ''
 
-# Comments explaining WHY (good practice):
-# Using a set here for O(1) lookup instead of O(n) with a list
-seen = set()`,
-        codeCaption: 'Use # to write comments Python will ignore',
-        mistake: { title: 'Accidentally commenting out code', description: 'If you put # before print("Hello"), nothing prints. Beginners sometimes do this by accident when fixing code.', bad: '# print("Hello")  ← this is now a comment — nothing prints!', good: 'print("Hello")    # ← remove the # to make it run again' },
-        practice: { question: 'What is the output?\n\n# print("Line 1")\nprint("Line 2")\n# print("Line 3")', hint: 'Lines starting with # are skipped.', answer: 'Line 2\n\nLines 1 and 3 are commented out (skipped). Only "Line 2" actually runs.' }
+# An empty string just prints a blank line
+print("")`,
+        codeCaption: 'Strings are any text between matching quotes',
+        stepByStep: [
+          '1. Python sees the opening quote — start collecting characters',
+          '2. Keeps collecting every character: letters, numbers, spaces, symbols',
+          '3. Sees the matching closing quote — stops collecting',
+          '4. The collected text becomes the string value passed to print()',
+          '5. print() shows the whole string on screen'
+        ],
+        mistake: {
+          title: 'Mixing quote styles',
+          description: 'A string must open and close with the same kind of quote. Opening with " and closing with \' is a SyntaxError.',
+          bad: 'print("Hello\')      # SyntaxError',
+          good: 'print("Hello")      # both double quotes\nprint(\'Hello\')      # both single quotes'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint("It\'s 5 o\'clock")',
+          hint: 'Single quote inside double quotes is fine.',
+          answer: "It's 5 o'clock\n\nThe string opens and closes with double quotes, so the apostrophes inside are just regular characters."
+        },
+        challenge: {
+          description: 'Mini practice: print exactly  She said "yes"  on one line.',
+          starter: '# one print() statement\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'She said "yes"',
+          solution: 'print(\'She said "yes"\')',
+          hint: 'You need double quotes inside the string, so wrap the string in single quotes.'
+        },
+        quiz: {
+          question: 'Which of these is a valid Python string?',
+          options: [
+            'print(Hello)',
+            'print("Hello\')',
+            'print("Hello")',
+            'print(Hello")'
+          ],
+          correctIndex: 2,
+          explanation: 'A string needs matching quotes on both sides. Only "Hello" with two double quotes is valid here.'
+        },
+        reflection: 'Recap: strings are text in matching quotes. Pick one style and switch only when you need a quote of that style inside.'
       },
       {
-        id: 'l1-3', title: 'Running Your Code',
-        explanation: ['To run Python code, you need either a local Python installation or an online editor. For absolute beginners, an online editor is easiest — no installation needed.', 'The best free online options: replit.com (create an account, make a Python project), python.org/shell (instant, no account), or programiz.com/python-programming/online-compiler. Just paste your code and click Run.', 'If you have Python installed locally, save your file as something.py, open a terminal, navigate to the file\'s folder, and run: python3 hello.py'],
-        code: `# Option 1: Online editor (easiest for beginners)
-# Go to replit.com, create a Python project, type your code, click Run
+        id: 'l1-4', title: 'Comments',
+        explanation: [
+          'A comment is a note for humans that Python ignores. Anything after a # on a line is a comment — Python jumps right past it.',
+          'Why it matters: real code needs to be understood by other people (and your future self). Good comments explain WHY a piece of code exists, not what each line literally does — the code already shows the what.',
+          'Comments also let you temporarily disable a line ("comment it out") without deleting it, which is a common debugging move.'
+        ],
+        code: `# Whole-line comment — Python skips this
+print("Hello")          # end-of-line comment — also skipped
 
-# Option 2: Local Python
-# 1. Save this as: hello.py
-# 2. Open terminal
-# 3. Run: python3 hello.py
+# Comment out a line to disable it temporarily
+# print("This line is off")
+print("This line runs")
 
-# Your first real program to run:
-print("Python is running!")
-print("I wrote this code.")
-print("It actually works!")`,
-        codeCaption: 'Use an online editor to run Python without any installation',
-        mistake: { title: 'Saving as .txt instead of .py', description: 'If you save your file as hello.txt, Python won\'t recognize it as a Python file. Always use .py as the file extension.', bad: '# hello.txt  ← Python won\'t run this', good: '# hello.py   ← Python recognizes this as Python code' },
-        practice: { question: 'Open a Python editor (online or local) and run print("I wrote my first program!"). What do you see?', hint: 'Just type that one line and click Run.', answer: 'You should see:\nI wrote my first program!\n\nIf you see this, Python is working correctly.' }
+# Good comment explains WHY (intent), not WHAT
+# Use a set so duplicate IDs are ignored automatically
+seen_ids = set()`,
+        codeCaption: 'Anything after # on a line is a comment',
+        stepByStep: [
+          '1. Python reads the line normally until it sees a #',
+          '2. From the # onward, the rest of the line is treated as text',
+          '3. Python does not run that text — it moves to the next line',
+          '4. A line starting with # is entirely a comment',
+          '5. A line with code then # has its code run, the # part ignored'
+        ],
+        mistake: {
+          title: 'Commenting out the wrong line by accident',
+          description: 'Adding a # in front of a working line silently disables it. If your output suddenly disappears, check for an accidental #.',
+          bad: '# print("Hello")    # nothing prints!',
+          good: 'print("Hello")     # remove the leading # to re-enable'
+        },
+        practice: {
+          question: 'Predict the output:\n\n# print("A")\nprint("B")\n# print("C")',
+          hint: 'Lines that start with # are skipped.',
+          answer: 'B\n\nLines 1 and 3 are comments (skipped). Only the middle print() runs.'
+        },
+        challenge: {
+          description: 'Mini practice: in your editor, comment out the second line so only "first" and "third" print.',
+          starter: 'print("first")\nprint("second")\nprint("third")\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'first\nthird',
+          solution: 'print("first")\n# print("second")\nprint("third")',
+          hint: 'Add a # at the start of the middle line.'
+        },
+        quiz: {
+          question: 'What is the best use of comments?',
+          options: [
+            'Repeat exactly what each line of code does',
+            'Explain WHY the code exists or any non-obvious choice',
+            'Add filler so the file looks bigger',
+            'Replace the code itself'
+          ],
+          correctIndex: 1,
+          explanation: 'The code already shows the WHAT. Good comments add context — intent, constraints, why a particular approach was chosen.'
+        },
+        reflection: 'Recap: # starts a comment. Python ignores comments. Use them for intent and for temporarily disabling code, not for narrating obvious lines.'
       },
       {
-        id: 'l1-4', title: 'Common Beginner Mistakes',
-        explanation: ['Every beginner makes the same mistakes. Knowing them in advance saves you hours of frustration. Most Python errors beginners encounter come from just a few patterns.', 'The most common: (1) misspelling print, (2) forgetting quotes around text, (3) forgetting closing parenthesis, (4) mixing up single and double quotes incorrectly, (5) wrong indentation.', 'When you get an error, read it carefully. Python tells you the line number and type of error. Fix that specific thing, run again. Programming is a cycle of write → run → fix → repeat.'],
-        code: `# Mistake 1: Misspelling print
-# Print("Hi")    → NameError
-# primt("Hi")    → NameError
+        id: 'l1-5', title: 'Reading Code Line by Line',
+        explanation: [
+          'Python is an interpreted, top-to-bottom language. The interpreter reads your file line by line, runs each line, and only then moves on. There is no skipping ahead.',
+          'Why it matters: most beginner bugs come from misunderstanding the order things happen. If you use a variable before creating it, or print before assigning, the line order is the cause.',
+          'You can run Python code from a file (save as something.py and run python3 something.py in a terminal) or in an online editor like replit.com or programiz.com — both run code in the same line-by-line way.'
+        ],
+        code: `# Watch the order Python reads this:
+print("Step 1")          # runs first  → "Step 1"
 
-# Mistake 2: Missing quotes
-# print(Hello)   → NameError: name 'Hello' is not defined
+x = 10                   # runs second → x is now 10  (no output)
+y = 20                   # runs third  → y is now 20  (no output)
+total = x + y            # runs fourth → total is 30  (no output)
 
-# Mistake 3: Missing closing parenthesis
-# print("Hello"  → SyntaxError: '(' was never closed
+print("Step 5:", total)  # runs fifth  → "Step 5: 30"
 
-# Mistake 4: Mismatched quotes
-# print("Hello') → SyntaxError
+# Output:
+# Step 1
+# Step 5: 30`,
+        codeCaption: 'Only print() lines produce output. Assignment lines run silently.',
+        stepByStep: [
+          '1. Read line 2 → print "Step 1"',
+          '2. Read line 4 → store 10 in x (silent)',
+          '3. Read line 5 → store 20 in y (silent)',
+          '4. Read line 6 → compute x + y, store 30 in total (silent)',
+          '5. Read line 8 → print "Step 5: 30"',
+          '6. End of file → stop'
+        ],
+        mistake: {
+          title: 'Using a variable before defining it',
+          description: 'Python only knows about a variable AFTER the line that creates it. Trying to use it earlier crashes with a NameError.',
+          bad: 'print(name)        # NameError — name doesn\'t exist yet\nname = "Alice"',
+          good: 'name = "Alice"\nprint(name)        # works'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint("A")\nx = 5\nprint(x)\nprint("B")',
+          hint: 'Run each line top to bottom.',
+          answer: 'A\n5\nB\n\nLine 1 prints A. Line 2 stores 5 silently. Line 3 prints x (which is 5). Line 4 prints B.'
+        },
+        challenge: {
+          description: 'Mini practice: write three lines so the program prints  start  then  10  then  end.',
+          starter: '# three lines\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'start\n10\nend',
+          solution: 'print("start")\nprint(10)\nprint("end")',
+          hint: 'Three print() calls in the right order.'
+        },
+        quiz: {
+          question: 'In what order does Python execute the lines of a file?',
+          options: [
+            'Bottom to top',
+            'Top to bottom, one line at a time',
+            'In random order',
+            'All lines simultaneously'
+          ],
+          correctIndex: 1,
+          explanation: 'Python is sequential: line 1, then line 2, then line 3 — unless control-flow statements (which you have not learned yet) tell it otherwise.'
+        },
+        reflection: 'Recap: line order is execution order. Save your file as .py, run it (locally or online), and Python reads it once from top to bottom.'
+      },
+      {
+        id: 'l1-6', title: 'Common First-Code Mistakes',
+        explanation: [
+          'Most early bugs come from a small set of mistakes. Knowing the list saves you hours.',
+          'Why it matters: every Python programmer has hit these. They are not signs that you are bad at coding — they are signs you are coding. The faster you can recognise them, the faster you fix them.',
+          'The big five: misspelling print, forgetting quotes around text, missing a closing parenthesis, mismatched quote styles, and inconsistent indentation.'
+        ],
+        code: `# 1. Misspelling print  →  NameError
+# Print("Hi")
+# primt("Hi")
+
+# 2. Missing quotes  →  NameError
+# print(Hello)
+
+# 3. Missing closing paren  →  SyntaxError
+# print("Hello"
+
+# 4. Mismatched quotes  →  SyntaxError
+# print("Hello')
+
+# 5. Wrong indentation (a leading space)  →  IndentationError
+#  print("Hello")
 
 # All correct:
 print("Hello")
-print('Hello')   # single quotes also work
+print('Hello')
 print("It's fine to have ' inside double quotes")`,
-        codeCaption: 'The five most common beginner syntax mistakes',
-        mistake: { title: 'Giving up after the first error', description: 'An error does not mean you failed. It means Python found something to fix. Read the message, fix the specific issue, and run again.', bad: '# See error → close editor → give up\n# This is how people stop learning', good: '# See error → read the message → find the line → fix it → run again\n# This is how everyone learns to code' },
-        practice: { question: 'Find and fix all 3 bugs:\n\nPrint("hello")\nprint(world)\nprint("bye"', hint: 'Check capitalization, quotes, and parentheses.', answer: 'print("hello")   # Print → print (lowercase)\nprint("world")   # world → "world" (needs quotes)\nprint("bye")     # missing closing parenthesis' }
+        codeCaption: 'The five most common syntax mistakes — recognise them on sight',
+        stepByStep: [
+          '1. Read the LAST line of the error — that is the actual problem',
+          '2. Find the line number it mentions',
+          '3. Identify which of the big five mistakes it matches',
+          '4. Fix that one specific thing',
+          '5. Run again — repeat until clean'
+        ],
+        mistake: {
+          title: 'Giving up after the first error',
+          description: 'An error is a clue, not a verdict. Read it, fix the line it points to, and run again. That loop is how every programmer works.',
+          bad: '# see error → close editor → quit',
+          good: '# see error → read last line → fix the specific issue → re-run'
+        },
+        practice: {
+          question: 'Find ALL the bugs:\n\nPrint("hello")\nprint(world)\nprint("bye"',
+          hint: 'Check capitalization, quotes, parentheses.',
+          answer: 'print("hello")    # Print → print\nprint("world")    # missing quotes around world\nprint("bye")      # missing closing parenthesis'
+        },
+        challenge: {
+          description: 'Mini practice: fix the broken code so it prints  ok.',
+          starter: 'Print("ok"\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'ok',
+          solution: 'print("ok")',
+          hint: 'Two fixes: capitalization of Print, and a missing closing parenthesis.'
+        },
+        quiz: {
+          question: 'You see  NameError: name \'Hello\' is not defined.  What is the most likely cause?',
+          options: [
+            'Python is broken',
+            'You wrote Hello without quotes, so Python thinks it is a variable name',
+            'The file is saved wrong',
+            'You need to restart your computer'
+          ],
+          correctIndex: 1,
+          explanation: 'NameError almost always means you used a name Python does not know about — usually because you forgot quotes around what should be text.'
+        },
+        reflection: 'Recap: most errors are one of five common mistakes. Read the last line of the error, find the line number, fix the specific issue, re-run.'
+      },
+      {
+        id: 'l1-7', title: 'Level 1 Checkpoint',
+        explanation: [
+          'You have written real Python code, used print(), worked with strings, added comments, and learned to read errors. This checkpoint is a quick consolidation before moving on to variables.',
+          'Why it matters: spaced reviews are how you retain skills. Re-running the basics here will save you confusion later when ideas stack on top of each other.',
+          'Below: a small program that uses everything from this level. Read it, predict the output, then try the practice and quiz.'
+        ],
+        code: `# Putting Level 1 together
+# A 4-line program with one comment, prints, and a number
+
+# Greet the user, then show a tiny computation
+print("Welcome to Python")
+print("2 + 3 =", 2 + 3)
+print("Done")
+
+# Output:
+# Welcome to Python
+# 2 + 3 = 5
+# Done`,
+        codeCaption: 'Everything from Level 1 in 4 lines: comment, three prints, a string, a number, a math expression',
+        stepByStep: [
+          '1. Line 1 → comment, skipped',
+          '2. Line 2 → comment, skipped',
+          '3. Line 5 → print "Welcome to Python"',
+          '4. Line 6 → compute 2 + 3 = 5, then print "2 + 3 = 5"',
+          '5. Line 7 → print "Done"'
+        ],
+        mistake: {
+          title: 'Skipping practice and moving on',
+          description: 'Reading is not learning. Run the example, change a value, break it, fix it. That is what builds intuition.',
+          bad: '# read code → keep scrolling',
+          good: '# read code → type it → run it → tweak it → run again'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint("a")\n# print("b")\nprint("c", 1 + 1)',
+          hint: 'Comments are skipped. The comma adds a space.',
+          answer: 'a\nc 2\n\nLine 2 is a comment so it is skipped. Line 3 prints "c" and the value of 1 + 1 separated by a space.'
+        },
+        challenge: {
+          description: 'Mini practice: write a program that prints  Hi  on one line and  10 + 5 = 15  on the next, using a comma in the second print().',
+          starter: '# two print() calls\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'Hi\n10 + 5 = 15',
+          solution: 'print("Hi")\nprint("10 + 5 =", 10 + 5)',
+          hint: 'Use a string AND the math expression separated by a comma in the second print().'
+        },
+        quiz: {
+          question: 'Which statement about Level 1 is TRUE?',
+          options: [
+            'print() can only print strings',
+            'Comments start with // in Python',
+            'Python reads code line by line and runs each line in order',
+            'Capitalization of print does not matter'
+          ],
+          correctIndex: 2,
+          explanation: 'Python is line-by-line and case-sensitive. Comments use #, not //, and print() handles strings, numbers, variables, and combinations.'
+        },
+        reflection: 'Recap of Level 1: code is precise text in a .py file, print() shows output, strings are text in matching quotes, # marks comments, code runs top to bottom, and most errors are one of five common mistakes. You are ready for Level 2: variables.'
       }
     ]
   },
@@ -283,128 +644,697 @@ print("It's fine to have ' inside double quotes")`,
     color: '#3fb950',
     lessons: [
       {
-        id: 'l2-0', title: 'What are Variables?',
-        explanation: ['A variable is a named container for storing data. You pick a name, use the = sign, and put the value on the right. From that point on, you can use the name anywhere in your code to access that value.', 'Variable names can be anything (letters, numbers, underscores) as long as they start with a letter and have no spaces. Use descriptive names: user_age is better than x. Python convention uses_underscores_between_words.', 'The = sign in Python does not mean "equals". It means "store this value in this container". To check if two things are equal, you use == (double equals).'],
-        code: `# Creating variables
+        id: 'l2-0', title: 'What is a Variable?',
+        explanation: [
+          'A variable is a named container for a value. You give it a name on the left of an = sign and put a value on the right. From that line onward, the name refers to the value.',
+          'Why it matters: variables are how programs remember things. Without them, every value would be a one-shot literal you could never reuse. With them, you can compute, label, and pass data around.',
+          'A variable in Python does not have a fixed type — it just points at whatever value you assigned most recently. Reassigning the same name with a new value is normal and expected.'
+        ],
+        analogy: 'A variable is a labeled box. The label is the name (age), the box holds the value (25). You can open the box, change what is inside, and refer to it later by its label.'
+      },
+      {
+        id: 'l2-1', title: 'Creating Variables',
+        explanation: [
+          'You create a variable by writing  name = value. Python sees the =, makes a new container called name, and stores the value inside it.',
+          'Why it matters: this is the single most common line in any program. Almost everything else — math, conditions, loops — operates on variables you have created.',
+          'There is no special keyword (no var, let, or const). Just pick a name, use =, and the variable exists from that line onward.'
+        ],
+        code: `# Create three variables
 name = "Alice"
 age = 25
 is_student = True
 
-# Using variables
-print(name)          # Alice
-print(age)           # 25
-print(is_student)    # True
-
-# Variables can be updated
-age = 26             # overwrite the old value
-print(age)           # 26
-
-# Use descriptive names
-user_score = 100     # good
-x = 100              # bad — what does x mean?`,
-        codeCaption: 'Variables store data that you can reuse anywhere in your program',
-        mistake: { title: 'Using = instead of == for comparison', description: '= stores a value. == checks if two values are equal. Mixing these up is one of the most common bugs.', bad: 'if age = 18:   # SyntaxError! = is assignment, not comparison', good: 'if age == 18:  # correct — == checks equality' },
-        practice: { question: 'Create a variable called city that stores "New York", then print it.', hint: 'Variable = value, then print(variable).', answer: 'city = "New York"\nprint(city)\n\nOutput: New York' }
+# Use them anywhere below
+print(name)         # Alice
+print(age)          # 25
+print(is_student)   # True`,
+        codeCaption: 'Creation is just  name = value. No keywords needed.',
+        stepByStep: [
+          '1. Python reads the left side: a new name (or an existing one)',
+          '2. Reads the = sign as "assign"',
+          '3. Evaluates the value on the right',
+          '4. Stores that value under the given name',
+          '5. The name can now be used in any line below'
+        ],
+        mistake: {
+          title: 'Putting the value on the wrong side',
+          description: 'In Python the variable name goes on the LEFT of =, the value on the RIGHT. Reversing them is a SyntaxError.',
+          bad: '25 = age           # SyntaxError',
+          good: 'age = 25           # correct'
+        },
+        practice: {
+          question: 'Predict the output:\n\ncolor = "blue"\nprint(color)',
+          hint: 'Read the lines top to bottom.',
+          answer: 'blue\n\nLine 1 stores "blue" in color. Line 2 prints whatever color points to.'
+        },
+        challenge: {
+          description: 'Mini practice: create a variable city set to "Paris" and print it.',
+          starter: '# create the variable, then print it\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'Paris',
+          solution: 'city = "Paris"\nprint(city)',
+          hint: 'Two lines: an assignment, then a print of the variable.'
+        },
+        quiz: {
+          question: 'Which line correctly creates a variable named score with value 10?',
+          options: [
+            '10 = score',
+            'score == 10',
+            'score = 10',
+            'let score = 10'
+          ],
+          correctIndex: 2,
+          explanation: 'Python uses  name = value. There is no let/var keyword, and == is for comparing, not assigning.'
+        },
+        reflection: 'Recap: name = value creates a variable. Python figures out the type. The variable exists from that line onward.'
       },
       {
-        id: 'l2-1', title: 'Strings',
-        explanation: ['A string is text — any sequence of characters wrapped in quotes. You can use single quotes or double quotes; they work the same. Strings can contain letters, numbers, spaces, symbols, anything.', 'Strings have a length (number of characters). You can get the length with len(). You can also join strings together with + (called concatenation), though we will cover better ways to do this later.', 'One useful trick: if your text contains a single quote, use double quotes to wrap it (and vice versa). Or use a backslash to "escape" the quote.'],
-        code: `# Both quote styles work
-greeting = "Hello, World!"
+        id: 'l2-2', title: 'Variable Names',
+        explanation: [
+          'Variable names follow a few small rules: start with a letter or underscore, then any mix of letters, digits, or underscores. No spaces. No leading digits. Case matters: age and Age are two different variables.',
+          'Why it matters: clear names are documentation. user_score tells the next reader what the value means; x does not. The Python convention is snake_case — lowercase words separated by underscores.',
+          'A handful of names (called keywords) are reserved by the language and cannot be used as variable names — for, if, while, class, return, etc.'
+        ],
+        code: `# Good names: descriptive, snake_case
+user_age = 25
+total_score = 100
+is_logged_in = True
+
+# Legal but unhelpful — what does x mean?
+x = 25
+
+# Illegal:
+# 1name = "x"      # cannot start with a digit
+# user-age = 25    # hyphens are subtraction, not part of names
+# class = "math"   # class is a reserved keyword
+
+# Case-sensitive — these are TWO variables
+age = 25
+Age = 30
+print(age, Age)   # 25 30`,
+        codeCaption: 'Names should be readable, lowercase, and follow snake_case',
+        stepByStep: [
+          '1. First character must be a letter or _',
+          '2. Remaining characters can be letters, digits, or _',
+          '3. No spaces, no hyphens, no special symbols',
+          '4. Cannot match a Python keyword (for, if, class, return...)',
+          '5. Convention: snake_case for normal variables'
+        ],
+        mistake: {
+          title: 'Using single-letter names everywhere',
+          description: 'x and y might be fine in tiny math expressions but are awful for real values like a person\'s age. Future you will hate past you.',
+          bad: 'x = 25\ny = "Alice"\nz = True',
+          good: 'age = 25\nname = "Alice"\nis_active = True'
+        },
+        practice: {
+          question: 'Which of these names is INVALID?\n\na) user_age\nb) 2nd_place\nc) total_score\nd) _hidden',
+          hint: 'Names cannot start with a digit.',
+          answer: 'b) 2nd_place is invalid — it starts with a digit. The other three are fine.'
+        },
+        challenge: {
+          description: 'Mini practice: rename these variables to good snake_case names and print one.',
+          starter: '# rename x and Y to descriptive names, then print one\nx = 100\nY = "gold"\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: null,
+          solution: 'score = 100\nmedal = "gold"\nprint(score)',
+          hint: 'snake_case, lowercase, descriptive (e.g. score, medal).'
+        },
+        quiz: {
+          question: 'Which of these is the BEST variable name for a user\'s email address?',
+          options: [
+            'e',
+            'EmailAddress',
+            'user_email',
+            'class'
+          ],
+          correctIndex: 2,
+          explanation: 'snake_case + descriptive = user_email. EmailAddress uses the wrong style; e is too short; class is a reserved keyword.'
+        },
+        reflection: 'Recap: names start with letter/underscore, no spaces, no keywords, case-sensitive, snake_case by convention. Clear names are free documentation.'
+      },
+      {
+        id: 'l2-3', title: 'Reassigning Variables',
+        explanation: [
+          'Reassigning a variable means giving it a new value with another  name = value  line. Python overwrites whatever was there before.',
+          'Why it matters: programs are about change over time. Counters, scores, totals, and current state all rely on overwriting old values.',
+          'You can also reassign to a value computed from the old value — score = score + 10 reads "take the current score, add 10, store it back into score".'
+        ],
+        code: `# First assignment
+score = 0
+print(score)         # 0
+
+# Reassign — old value is gone
+score = 100
+print(score)         # 100
+
+# Update based on the old value
+score = score + 50
+print(score)         # 150
+
+# Shorthand for the same thing
+score += 25
+print(score)         # 175
+
+# A variable can switch types too — Python does not mind
+data = 42
+print(data)          # 42 (int)
+data = "forty-two"
+print(data)          # forty-two (str)`,
+        codeCaption: 'Reassignment overwrites the old value. += is shorthand for "add and store".',
+        stepByStep: [
+          '1. Read the line  name = expression',
+          '2. Evaluate the expression on the right (which may use the old value)',
+          '3. Discard whatever name pointed to before',
+          '4. Point name at the new value',
+          '5. From the next line on, name has the new value'
+        ],
+        mistake: {
+          title: 'Confusing = with ==',
+          description: '= stores a value. == checks equality. Mixing them is a top-3 beginner bug.',
+          bad: 'if age = 18:        # SyntaxError',
+          good: 'age = 18            # assign\nif age == 18:       # compare'
+        },
+        practice: {
+          question: 'Predict the output:\n\nx = 5\nx = x + 3\nx += 2\nprint(x)',
+          hint: 'Update x step by step.',
+          answer: '10\n\nStart 5 → x = 5+3 = 8 → x += 2 makes 10. Final value is 10.'
+        },
+        challenge: {
+          description: 'Mini practice: start total at 0, add 10, then double it. Print the final value.',
+          starter: 'total = 0\n# add 10\n# double it\nprint(total)\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: '20',
+          solution: 'total = 0\ntotal += 10\ntotal = total * 2\nprint(total)',
+          hint: 'Two reassignments before the print.'
+        },
+        quiz: {
+          question: 'After  count = 5; count = count + 1  what is count?',
+          options: ['5', '6', '15', 'undefined'],
+          correctIndex: 1,
+          explanation: 'count + 1 evaluates to 6 using the current value (5), and then 6 is stored back into count.'
+        },
+        reflection: 'Recap: reassignment overwrites. count = count + 1 and count += 1 are the same operation. Python does not care if the type changes.'
+      },
+      {
+        id: 'l2-4', title: 'Strings',
+        explanation: [
+          'A string is text in matching quotes. You already used strings inside print(); now you will store them in variables and use them.',
+          'Why it matters: most data a user sees or types — names, messages, paths, choices — is text. Strings are the most-used type in everyday Python.',
+          'Useful operations: len(s) gives the number of characters, + joins two strings together (concatenation), and == compares them character by character.'
+        ],
+        code: `greeting = "Hello"
 name = 'Alice'
 
-# String length
-print(len(greeting))    # 13
-print(len(name))        # 5
+# Length
+print(len(greeting))         # 5
+print(len(name))             # 5
 
-# Join strings with +
-full = "Hello, " + name
-print(full)             # Hello, Alice
+# Concatenation with +
+full = greeting + ", " + name
+print(full)                  # Hello, Alice
 
-# Strings with quotes inside
-sentence = "It's a great day"    # single quote inside double
-sentence2 = 'He said "hello"'    # double quote inside single
+# Comparison is case-sensitive
+print("hi" == "Hi")          # False
+print("hi" == "hi")          # True
 
-# Strings are case-sensitive
-print("hello" == "Hello")   # False — different cases`,
-        codeCaption: 'Strings are text wrapped in single or double quotes',
-        mistake: { title: 'Joining string and number with +', description: 'You cannot add a string and a number with +. Python doesn\'t know if you want math or text joining. You must convert first.', bad: 'print("Age: " + 25)     # TypeError', good: 'print("Age: " + str(25)) # correct: convert 25 to string\nprint("Age:", 25)        # or use comma — easier!' },
-        practice: { question: 'What is the output?\n\nword = "Python"\nprint(len(word))\nprint(word + "!")', hint: 'len() counts characters. + joins strings.', answer: '6\nPython!\n\n"Python" has 6 characters. "Python" + "!" joins to "Python!".' }
+# Quotes inside strings — use the other style or escape
+quote = "She said \\"yes\\""
+print(quote)                 # She said "yes"`,
+        codeCaption: 'Strings: text in quotes, len() for size, + to join, == to compare',
+        stepByStep: [
+          '1. Wrap text in matching quotes to create a string literal',
+          '2. Assign it to a variable to reuse',
+          '3. len(s) returns how many characters s has',
+          '4. s1 + s2 produces a new string by joining',
+          '5. s1 == s2 returns True only if every character matches'
+        ],
+        mistake: {
+          title: 'Joining a string and a number with +',
+          description: 'You cannot use + between a string and a number. Convert the number with str() first, or use commas in print().',
+          bad: 'print("Age: " + 25)             # TypeError',
+          good: 'print("Age: " + str(25))        # convert first\nprint("Age:", 25)              # or use a comma'
+        },
+        practice: {
+          question: 'Predict the output:\n\na = "py"\nb = "thon"\nprint(a + b, len(a + b))',
+          hint: 'Join first, then count.',
+          answer: 'python 6\n\n"py" + "thon" → "python", which has 6 characters.'
+        },
+        challenge: {
+          description: 'Mini practice: combine first = "Ada" and last = "Lovelace" with a space between, store in full_name, and print it.',
+          starter: 'first = "Ada"\nlast = "Lovelace"\n# build full_name and print\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'Ada Lovelace',
+          solution: 'first = "Ada"\nlast = "Lovelace"\nfull_name = first + " " + last\nprint(full_name)',
+          hint: 'Concatenate three pieces: first + " " + last.'
+        },
+        quiz: {
+          question: 'What is len("hello")?',
+          options: ['4', '5', '6', 'It depends on the variable'],
+          correctIndex: 1,
+          explanation: 'len() counts characters: h, e, l, l, o → 5.'
+        },
+        reflection: 'Recap: strings live in matching quotes. Use len() for size, + to join, == to compare. Convert numbers to strings before joining with +.'
       },
       {
-        id: 'l2-2', title: 'Numbers',
-        explanation: ['Python has two main number types: int (integers — whole numbers like 5, -3, 100) and float (decimal numbers like 3.14, -0.5, 2.0). You don\'t need to declare which type — Python figures it out automatically.', 'Basic math works exactly as expected: +, -, *, /. Division always returns a float (10 / 2 gives 2.0, not 2). Use // for integer division (10 // 3 gives 3) and % for remainder (10 % 3 gives 1).', 'Numbers do not need quotes. If you put a number in quotes ("42"), it becomes a string, not a number, and you can\'t do math with it.'],
-        code: `# Integer (int)
-score = 100
-lives = 3
-temperature = -5
+        id: 'l2-5', title: 'Integers',
+        explanation: [
+          'An integer (int) is a whole number — positive, negative, or zero. No decimal point. Examples: 5, -3, 0, 1000, 999999999.',
+          'Why it matters: integers are how programs count, index, and measure discrete things — number of users, lives in a game, items in a list, days in a month.',
+          'You can do all the usual math: + - * /, plus // (integer division — drops the decimal) and % (remainder). The result of / is always a float in Python 3.'
+        ],
+        code: `lives = 3
+score = 1500
+temperature = -10
 
-# Float (decimal)
-pi = 3.14159
+# Standard math
+print(10 + 3)        # 13
+print(10 - 3)        # 7
+print(10 * 3)        # 30
+
+# Division: / is float, // drops the decimal
+print(10 / 3)        # 3.3333333333333335   (float)
+print(10 // 3)       # 3                    (int)
+print(10 % 3)        # 1                    (remainder)
+print(2 ** 8)        # 256                  (2 to the 8th)`,
+        codeCaption: 'Integers are whole numbers. // is integer division, % is remainder, ** is power.',
+        stepByStep: [
+          '1. Write a whole number with no decimal point — that is an int',
+          '2. + - * work as in normal math',
+          '3. / always returns a float, even when the answer is whole',
+          '4. // returns an int by chopping off the decimal',
+          '5. % gives the remainder of the integer division'
+        ],
+        mistake: {
+          title: 'Mixing up / and //',
+          description: 'In Python 3, 10 / 2 is 5.0 (float), not 5. If you need an integer result, use // — but be aware it discards the fractional part.',
+          bad: 'page = 10 / 2        # 5.0  — a float',
+          good: 'page = 10 // 2       # 5    — an int'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint(17 // 5)\nprint(17 % 5)',
+          hint: '17 = 5 × 3 + 2.',
+          answer: '3\n2\n\n17 // 5 is 3 (how many full 5s fit). 17 % 5 is 2 (what is left over).'
+        },
+        challenge: {
+          description: 'Mini practice: store 100 and 7 in two variables and print quotient (//) and remainder (%).',
+          starter: 'a = 100\nb = 7\n# print quotient and remainder on two lines\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: '14\n2',
+          solution: 'a = 100\nb = 7\nprint(a // b)\nprint(a % b)',
+          hint: 'Two prints, one with //, one with %.'
+        },
+        quiz: {
+          question: 'What is the type of  10 / 2  in Python 3?',
+          options: ['int', 'float', 'str', 'bool'],
+          correctIndex: 1,
+          explanation: '/ always returns a float in Python 3. To get an int, use // (which would give 5).'
+        },
+        reflection: 'Recap: integers are whole numbers. + - * work as expected, / is float, // is int division, % is remainder, ** is power.'
+      },
+      {
+        id: 'l2-6', title: 'Floats',
+        explanation: [
+          'A float is a number with a decimal point: 3.14, -0.5, 2.0, 1e6 (which is 1,000,000.0). Use floats whenever a value can be fractional — money, measurements, ratios.',
+          'Why it matters: real-world quantities almost always involve fractions. The moment you compute a percentage or an average, you usually have a float.',
+          'A subtle gotcha: 0.1 + 0.2 in Python prints 0.30000000000000004. Floats are stored in binary and a few decimal numbers cannot be represented exactly. For money, prefer rounding or a dedicated decimal library.'
+        ],
+        code: `pi = 3.14159
 price = 9.99
+zero_point_zero = 0.0
 
-# Math operations
-print(10 + 3)    # 13  (addition)
-print(10 - 3)    # 7   (subtraction)
-print(10 * 3)    # 30  (multiplication)
-print(10 / 3)    # 3.3333... (always float)
-print(10 // 3)   # 3   (integer division — drops decimal)
-print(10 % 3)    # 1   (remainder: 10 = 3×3 + 1)
-print(2 ** 10)   # 1024 (power: 2 to the 10th)`,
-        codeCaption: 'Python handles integers and floats automatically',
-        mistake: { title: 'Numbers in quotes are not numbers', description: '"42" is a string, not a number. You cannot do math with it.', bad: 'x = "5"\ny = "3"\nprint(x + y)    # "53" — string joining, not addition!', good: 'x = 5\ny = 3\nprint(x + y)    # 8 — actual addition' },
-        practice: { question: 'What is the output?\n\nprint(17 % 5)\nprint(17 // 5)', hint: '% gives the remainder. // drops the decimal.', answer: '2\n3\n\n17 = 5×3 + 2, so 17 % 5 = 2 (remainder) and 17 // 5 = 3 (how many times 5 fits).' }
+# Basic math works with floats too
+print(2.5 + 0.5)      # 3.0
+print(7.5 / 2)        # 3.75
+
+# Mixing int and float yields a float
+print(3 + 0.5)        # 3.5
+
+# The classic float surprise
+print(0.1 + 0.2)      # 0.30000000000000004
+
+# Round to fix display
+print(round(0.1 + 0.2, 2))   # 0.3`,
+        codeCaption: 'Floats handle fractions. Be aware they can have tiny precision quirks.',
+        stepByStep: [
+          '1. Any number with a decimal point is a float',
+          '2. Mixing int and float in math gives a float result',
+          '3. The arithmetic operators work the same as for ints',
+          '4. round(value, n) rounds to n decimal places',
+          '5. Tiny binary-precision errors are normal — round when displaying'
+        ],
+        mistake: {
+          title: 'Comparing floats with ==',
+          description: '0.1 + 0.2 == 0.3 is False because of float precision. Compare with a small tolerance instead, or use round().',
+          bad: 'print(0.1 + 0.2 == 0.3)        # False',
+          good: 'print(round(0.1 + 0.2, 2) == 0.3)   # True'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint(2 + 0.5)\nprint(round(3.14159, 2))',
+          hint: 'int + float → float. round(x, 2) keeps two decimals.',
+          answer: '2.5\n3.14\n\nMixing 2 (int) with 0.5 (float) gives 2.5. round(3.14159, 2) gives 3.14.'
+        },
+        challenge: {
+          description: 'Mini practice: compute the average of 4, 7, and 10. Print the result rounded to one decimal.',
+          starter: '# average and round\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: '7.0',
+          solution: 'avg = (4 + 7 + 10) / 3\nprint(round(avg, 1))',
+          hint: 'Sum, divide, then round(value, 1).'
+        },
+        quiz: {
+          question: 'What is the type of 3.0?',
+          options: ['int', 'float', 'str', 'bool'],
+          correctIndex: 1,
+          explanation: 'Any number written with a decimal point is a float — even if its fractional part is zero.'
+        },
+        reflection: 'Recap: floats are decimals. Mixing int and float gives a float. Beware tiny precision errors; use round() when comparing or displaying.'
       },
       {
-        id: 'l2-3', title: 'Booleans',
-        explanation: ['A boolean is either True or False — that\'s it, just two values. The capital letters matter: True and False, not true or false.', 'Booleans are the result of comparisons. Is 5 > 3? Yes → True. Is 5 > 10? No → False. Every if statement and while loop ultimately works with booleans.', 'You can also store booleans directly in variables: is_logged_in = True, has_password = False. This makes your code very readable.'],
-        code: `# Boolean values
-is_raining = True
-is_sunny = False
+        id: 'l2-7', title: 'Booleans',
+        explanation: [
+          'A boolean (bool) has only two possible values: True and False. The capital T and F matter — true and false are not booleans in Python.',
+          'Why it matters: every yes/no decision in your code is a boolean. if, while, and any condition ultimately reduces to True or False.',
+          'Comparisons produce booleans automatically: 5 > 3 is True, 5 == 4 is False. You can also store booleans directly: is_logged_in = True.'
+        ],
+        code: `is_open = True
+is_admin = False
 
-print(is_raining)   # True
-print(is_sunny)     # False
+print(is_open)        # True
+print(is_admin)       # False
 
-# Comparisons produce booleans
-print(5 > 3)        # True
-print(5 > 10)       # False
-print(5 == 5)       # True  (== checks equality)
-print(5 != 3)       # True  (not equal)
-print(10 >= 10)     # True  (greater than or equal)
+# Comparisons return booleans
+print(5 > 3)          # True
+print(5 > 10)         # False
+print(5 == 5)         # True
+print(5 != 5)         # False
 
-# type() shows what kind of data something is
-print(type(True))   # <class 'bool'>
-print(type(5))      # <class 'int'>
-print(type("hi"))   # <class 'str'>`,
-        codeCaption: 'Booleans are True or False — the foundation of all decisions in code',
-        mistake: { title: 'Lowercase true/false', description: 'Python\'s booleans MUST be capitalized: True and False. lowercase true and false are not booleans — Python treats them as variable names.', bad: 'is_valid = true    # NameError: name \'true\' is not defined', good: 'is_valid = True    # correct — capital T' },
-        practice: { question: 'What is the output?\n\nprint(10 == 10)\nprint(10 == 11)\nprint(type(True))', hint: '== checks if values are equal.', answer: 'True\nFalse\n<class \'bool\'>\n\n10 equals 10 (True), 10 does not equal 11 (False), True is of type bool.' }
+# Combine with and / or / not
+print(True and False)   # False
+print(True or False)    # True
+print(not True)         # False`,
+        codeCaption: 'Booleans drive every decision: True or False, nothing else.',
+        stepByStep: [
+          '1. Bool literals are True and False (capitalised)',
+          '2. Comparison operators (>, <, ==, !=, >=, <=) return booleans',
+          '3. and is True only if both sides are True',
+          '4. or is True if at least one side is True',
+          '5. not flips True to False and vice versa'
+        ],
+        mistake: {
+          title: 'Lowercase true/false',
+          description: 'Python booleans must be capitalised. true is interpreted as a variable name, not a boolean — and Python crashes if no such variable exists.',
+          bad: 'is_done = true        # NameError',
+          good: 'is_done = True        # capital T'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint(10 == 10)\nprint(10 > 20)\nprint(not False)',
+          hint: 'Evaluate each comparison.',
+          answer: 'True\nFalse\nTrue\n\n10 equals 10 → True. 10 is not greater than 20 → False. not False → True.'
+        },
+        challenge: {
+          description: 'Mini practice: store age = 20, then print whether age is between 18 and 65 inclusive.',
+          starter: 'age = 20\n# print True if 18 <= age <= 65 else False\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'True',
+          solution: 'age = 20\nprint(18 <= age <= 65)',
+          hint: 'Python supports chained comparisons: 18 <= age <= 65.'
+        },
+        quiz: {
+          question: 'Which expression evaluates to False?',
+          options: [
+            '5 > 3',
+            '5 == 5',
+            '5 != 5',
+            'not False'
+          ],
+          correctIndex: 2,
+          explanation: '5 != 5 reads "5 is not equal to 5", which is False.'
+        },
+        reflection: 'Recap: booleans are True or False. Comparisons produce booleans. and/or/not combine them. Use them as the foundation of every decision.'
       },
       {
-        id: 'l2-4', title: 'The type() Function',
-        explanation: ['type() is a built-in Python function that tells you what kind of data a value is. It returns the "type" — str for strings, int for integers, float for decimals, bool for booleans.', 'This is incredibly useful for debugging. When you get a TypeError, you can use type() to check what Python thinks something is. Often you find that a number is actually stored as a string, or vice versa.', 'You can also convert between types: int("42") converts the string "42" to the number 42. str(100) converts the number 100 to the string "100". float("3.14") converts to a decimal.'],
-        code: `# Check the type of any value
-print(type("hello"))      # <class 'str'>
+        id: 'l2-8', title: 'Using type()',
+        explanation: [
+          'type(value) is a built-in function that tells you what kind of data a value is. It returns the type — str, int, float, or bool for the basic types you have seen.',
+          'Why it matters: most TypeError bugs come from a value being a different type than you expected. type() is the fastest way to check what Python actually thinks something is.',
+          'You can also convert between types: int("42") makes the integer 42 from the string "42"; str(100) makes "100" from the int; float("3.14") makes 3.14 from the string.'
+        ],
+        code: `print(type("hello"))      # <class 'str'>
 print(type(42))           # <class 'int'>
 print(type(3.14))         # <class 'float'>
 print(type(True))         # <class 'bool'>
 
 # Convert between types
-age_string = "25"
-age_number = int(age_string)    # "25" → 25
-print(age_number + 1)           # 26 (math works now)
+n = int("42")             # "42" -> 42
+s = str(100)              # 100 -> "100"
+f = float("3.14")         # "3.14" -> 3.14
 
-number = 100
-text = str(number)              # 100 → "100"
-print("Score: " + text)         # "Score: 100"
+print(type(n), type(s), type(f))
+# <class 'int'> <class 'str'> <class 'float'>
 
-# Check before converting
-user_input = "42"
-print(type(user_input))         # <class 'str'>
-print(type(int(user_input)))    # <class 'int'>`,
-        codeCaption: 'type() tells you what kind of data you have — essential for debugging',
-        mistake: { title: 'Forgetting that input() always returns a string', description: 'When you get user input with input(), it is always a string — even if they type a number. You must convert it.', bad: 'age = input("Age: ")  # "25" — a string!\nage + 1               # TypeError!', good: 'age = int(input("Age: "))  # convert to int immediately\nage + 1                    # 26 — works!' },
-        practice: { question: 'What does int("7") + int("3") equal?', hint: 'Convert both strings to integers first.', answer: '10\n\nint("7") converts "7" to 7, int("3") converts "3" to 3, and 7 + 3 = 10.' }
+# Common gotcha: numbers in quotes are strings
+maybe_num = "5"
+print(type(maybe_num))    # <class 'str'>
+print(int(maybe_num) + 1) # 6  (now an int)`,
+        codeCaption: 'type() reveals what something is. int(), str(), float() convert between types.',
+        stepByStep: [
+          '1. Pass any value to type() to see its type',
+          '2. The result looks like  <class \'str\'>',
+          '3. int(x) converts to integer (where possible)',
+          '4. str(x) converts to string',
+          '5. float(x) converts to float'
+        ],
+        mistake: {
+          title: 'Forgetting input() returns a string',
+          description: 'Even if the user types digits, input() gives you a string. You must convert before doing math.',
+          bad: 'age = input("Age: ")\nprint(age + 1)        # TypeError',
+          good: 'age = int(input("Age: "))\nprint(age + 1)        # works'
+        },
+        practice: {
+          question: 'Predict the output:\n\nprint(type("5"))\nprint(type(5))\nprint(type(5.0))',
+          hint: 'Quotes mean string. Decimal point means float.',
+          answer: "<class 'str'>\n<class 'int'>\n<class 'float'>\n\nQuotes around 5 make it a string. 5 alone is an int. 5.0 has a decimal point so it is a float."
+        },
+        challenge: {
+          description: 'Mini practice: a value comes in as the string "20". Convert it to an int, add 5, and print the result.',
+          starter: 'value = "20"\n# convert and add\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: '25',
+          solution: 'value = "20"\nprint(int(value) + 5)',
+          hint: 'Wrap value with int(), then add 5.'
+        },
+        quiz: {
+          question: 'What is type("3") in Python?',
+          options: [
+            "<class 'int'>",
+            "<class 'float'>",
+            "<class 'str'>",
+            "<class 'bool'>"
+          ],
+          correctIndex: 2,
+          explanation: 'The quotes make it a string, even though the character inside is a digit.'
+        },
+        reflection: 'Recap: type() checks. int(), str(), float() convert. Anything from input() starts as a string.'
+      },
+      {
+        id: 'l2-9', title: 'Assigning Multiple Values',
+        explanation: [
+          'Python lets you assign several variables at once on a single line. This is called multiple (or tuple) assignment, and it is a clean shortcut.',
+          'Why it matters: you will use it a lot for swapping, unpacking pairs, and grabbing two return values from a function. It is also more readable than three separate lines for related values.',
+          'You can also assign the same value to several names at once: a = b = c = 0 sets all three to 0 in a single line.'
+        ],
+        code: `# Assign three names to three values in one line
+x, y, z = 1, 2, 3
+print(x, y, z)             # 1 2 3
+
+# Same value to several names
+a = b = c = 0
+print(a, b, c)             # 0 0 0
+
+# Classic Python swap — no temp variable needed
+left, right = "L", "R"
+left, right = right, left
+print(left, right)         # R L
+
+# Number of names must match the number of values
+# x, y = 1, 2, 3           # ValueError: too many values to unpack`,
+        codeCaption: 'Multiple assignment: many names, many values, one line — and a clean swap.',
+        stepByStep: [
+          '1. Comma-separated names on the left, comma-separated values on the right',
+          '2. Python evaluates ALL the values first',
+          '3. Then assigns them in order to the names',
+          '4. Counts must match (3 names = 3 values)',
+          '5. Same value to many names: chain with = ('  + 'a = b = c = 0)'
+        ],
+        mistake: {
+          title: 'Mismatched count',
+          description: 'If the number of names does not match the number of values, Python raises a ValueError. Both sides must line up.',
+          bad: 'x, y = 1, 2, 3        # ValueError: too many values',
+          good: 'x, y, z = 1, 2, 3     # counts match'
+        },
+        practice: {
+          question: 'Predict the output:\n\na, b = 10, 20\na, b = b, a\nprint(a, b)',
+          hint: 'The right side is evaluated first.',
+          answer: '20 10\n\nThe right side captures the current (10, 20) as a pair, then unpacks it into (a, b) reversed — so a becomes 20 and b becomes 10.'
+        },
+        challenge: {
+          description: 'Mini practice: in one line, assign first=1, second=2, third=3. Print them on one line separated by spaces.',
+          starter: '# one assignment, one print\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: '1 2 3',
+          solution: 'first, second, third = 1, 2, 3\nprint(first, second, third)',
+          hint: 'Three names, three values, separated by commas.'
+        },
+        quiz: {
+          question: 'What does  x, y = 5, 10  do?',
+          options: [
+            'Sets x to 10 and y to 5',
+            'Sets both x and y to 5',
+            'Sets x to 5 and y to 10',
+            'Raises an error'
+          ],
+          correctIndex: 2,
+          explanation: 'Multiple assignment pairs them in order: first name with first value, second with second.'
+        },
+        reflection: 'Recap: multiple assignment lets you set several variables in one line. Counts must match. Use it for swaps and clean unpacking.'
+      },
+      {
+        id: 'l2-10', title: 'Outputting Variables',
+        explanation: [
+          'You already know print() — now you will use it with variables. The pattern is the same: pass the variable, optionally with text, and Python shows the current value.',
+          'Why it matters: programs that only print fixed text are not very useful. Real programs build messages from variables — "Welcome, " + name, or "Score:", score.',
+          'You have three main options: pass the variable directly, join with + for strings, or use an f-string (a string with f in front and {variable} placeholders) — the most readable option once you have it.'
+        ],
+        code: `name = "Alice"
+score = 95
+
+# Option A: pass values separated by commas (auto-spaced)
+print("Hello,", name)              # Hello, Alice
+print("Score:", score)             # Score: 95
+
+# Option B: + concatenation (strings only — convert numbers!)
+print("Hello, " + name)            # Hello, Alice
+print("Score: " + str(score))      # Score: 95
+
+# Option C: f-string (best for readability)
+print(f"Hello, {name}")            # Hello, Alice
+print(f"{name} scored {score}")    # Alice scored 95
+
+# f-strings can include expressions
+print(f"Next: {score + 1}")        # Next: 96`,
+        codeCaption: 'Three ways to output variables — f-strings are the cleanest.',
+        stepByStep: [
+          '1. Comma form: print("label", variable) — Python auto-inserts a space',
+          '2. + form: works only with strings; convert numbers via str()',
+          '3. f-string form: prefix the string with f and put {variable} where you want the value',
+          '4. f-strings can also evaluate small expressions inside braces',
+          '5. f-strings are usually the most readable for mixed text + variables'
+        ],
+        mistake: {
+          title: 'Forgetting the f on f-strings',
+          description: 'Without the leading f, the braces are just text. The variable is not substituted.',
+          bad: 'print("Hello, {name}")        # prints literally: Hello, {name}',
+          good: 'print(f"Hello, {name}")       # prints: Hello, Alice'
+        },
+        practice: {
+          question: 'Predict the output:\n\nname = "Sam"\nage = 30\nprint(f"{name} is {age}")',
+          hint: 'f-strings substitute {variable} with its value.',
+          answer: 'Sam is 30\n\nThe f-string fills in name and age, joined by the literal text " is ".'
+        },
+        challenge: {
+          description: 'Mini practice: given title="Python" and year=1991, print  Python was created in 1991  using an f-string.',
+          starter: 'title = "Python"\nyear = 1991\n# one print() with an f-string\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'Python was created in 1991',
+          solution: 'title = "Python"\nyear = 1991\nprint(f"{title} was created in {year}")',
+          hint: 'Wrap the message with f"..." and put {title} and {year} in the right spots.'
+        },
+        quiz: {
+          question: 'Which line correctly outputs  Hi Alice  given name = "Alice"?',
+          options: [
+            'print("Hi {name}")',
+            'print(f"Hi {name}")',
+            'print("Hi" + name)',
+            'print(Hi, name)'
+          ],
+          correctIndex: 1,
+          explanation: 'The f prefix is required for {name} to be substituted. Option C would print "HiAlice" with no space.'
+        },
+        reflection: 'Recap: print(var), print("text", var), print("text " + str(var)), or print(f"text {var}"). f-strings are the modern, readable choice.'
+      },
+      {
+        id: 'l2-11', title: 'Variables Checkpoint',
+        explanation: [
+          'You can now create variables, name them well, reassign them, store strings/ints/floats/bools, check types, assign multiple values, and print them in several styles. This checkpoint is a quick consolidation before Level 3 (operations).',
+          'Why it matters: variables are the foundation of every program. Solid intuition here makes everything that follows — conditions, loops, functions — much easier.',
+          'Below: a small program that uses everything. Read it, predict the output, then try the practice and the quiz.'
+        ],
+        code: `# Putting Level 2 together
+name = "Ada"
+year_born = 1815
+is_pioneer = True
+
+print(type(name), type(year_born), type(is_pioneer))
+# <class 'str'> <class 'int'> <class 'bool'>
+
+age_at_death = 1852 - year_born          # int math
+print(f"{name} lived {age_at_death} years")
+# Ada lived 37 years
+
+# Reassign and reprint
+year_born = 1900
+print(f"After update: {name}, {year_born}, pioneer? {is_pioneer}")
+# After update: Ada, 1900, pioneer? True`,
+        codeCaption: 'Everything from Level 2: assignment, types, math, reassignment, and f-strings',
+        stepByStep: [
+          '1. Three variables created: a string, an int, a bool',
+          '2. type() shows each one\'s type',
+          '3. age_at_death is computed from an int math expression',
+          '4. f-string interpolates name and the computed age',
+          '5. year_born is reassigned and the new value is shown'
+        ],
+        mistake: {
+          title: 'Reading without running',
+          description: 'Predict the output BEFORE you run the code, then run it and check. That gap between prediction and reality is where learning happens.',
+          bad: '# scroll past the code',
+          good: '# guess the output → run → compare → understand any difference'
+        },
+        practice: {
+          question: 'Predict the output:\n\nx = 4\ny = 1.5\nprint(type(x + y), x + y)',
+          hint: 'int + float gives a float.',
+          answer: "<class 'float'> 5.5\n\nMixing int and float yields a float, so x + y is 5.5 of type float."
+        },
+        challenge: {
+          description: 'Mini practice: build a one-line introduction. Given name="Lin" and city="Tokyo", print  Lin is from Tokyo  using an f-string.',
+          starter: 'name = "Lin"\ncity = "Tokyo"\n# one print()\n',
+          tests: [],
+          runMode: 'output',
+          expectedOutput: 'Lin is from Tokyo',
+          solution: 'name = "Lin"\ncity = "Tokyo"\nprint(f"{name} is from {city}")',
+          hint: 'Use an f-string with two placeholders.'
+        },
+        quiz: {
+          question: 'Which of these is TRUE about Python variables?',
+          options: [
+            'You must declare a type with int, str, etc.',
+            'A variable name can start with a digit',
+            'Reassigning is allowed and can change the type',
+            '== is used to assign values'
+          ],
+          correctIndex: 2,
+          explanation: 'Python is dynamically typed: a variable can be reassigned to a different type at any time. = is assign, == is compare.',
+        },
+        reflection: 'Recap of Level 2: variables hold values you can reuse and update. Names follow snake_case, values can be strings, ints, floats, or booleans, and you have several clean ways to output them. Onward to operations.'
       }
     ]
   },
