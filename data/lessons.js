@@ -1335,6 +1335,132 @@ print(f"After update: {name}, {year_born}, pioneer? {is_pioneer}")
           explanation: 'Python is dynamically typed: a variable can be reassigned to a different type at any time. = is assign, == is compare.',
         },
         reflection: 'Recap of Level 2: variables hold values you can reuse and update. Names follow snake_case, values can be strings, ints, floats, or booleans, and you have several clean ways to output them. Onward to operations.'
+      },
+      {
+        id: 'l2-12', title: 'Data Types Review: What is a Data Type?',
+        explanation: [
+          'A data type is the kind of value something is. The text "hello" is a different kind of thing than the number 7, and Python treats them differently.',
+          'Why it matters: most beginner errors come from mixing types — adding a number to text, or trying to do math on something that is actually text. Knowing the type tells you what operations are allowed.',
+          'Recap: Python has a few core types you will use every day — str (text), int (whole numbers), float (decimals), bool (True/False), and None (nothing).'
+        ],
+        analogy: 'Data types are like categories at a grocery store. You can mix apples with apples (numbers with numbers), but you cannot literally add a banana to a loaf of bread — it does not mean anything.',
+        code: `# Each value below is a different data type
+print("hello")    # str  — text
+print(7)          # int  — whole number
+print(3.14)       # float — decimal
+print(True)       # bool — True or False
+print(None)       # None — nothing / empty`,
+        codeCaption: 'Five core Python types you will see constantly',
+        stepByStep: [
+          '1. "hello" is wrapped in quotes → str (text)',
+          '2. 7 has no decimal point and no quotes → int',
+          '3. 3.14 has a decimal point → float',
+          '4. True is a special word (capital T) → bool',
+          '5. None is the empty value → NoneType'
+        ],
+        mistake: { title: 'Treating numbers and text the same', description: 'The number 7 and the text "7" look alike but behave differently. 7 + 1 is 8, but "7" + 1 crashes.', bad: 'print("7" + 1)   # TypeError', good: 'print(int("7") + 1)   # 8' },
+        practice: { question: 'Predict: which line crashes?\n\nprint(2 + 3)\nprint("a" + "b")\nprint("a" + 3)', hint: 'Mixing str and int with + does not work.', answer: 'The third line crashes with TypeError. The first prints 5, the second prints "ab".' }
+      },
+      {
+        id: 'l2-13', title: 'Data Types Review: None',
+        explanation: [
+          'None is a special value that means "nothing" or "no value yet". It is its own type — NoneType — and you will see it often as the result of functions that do not return anything.',
+          'Why it matters: when a function quietly returns None, beginners are confused why their variable does not behave like a number. Knowing None exists helps you read errors.',
+          'Recap: None means empty. It is not zero, not "", not False — it is its own thing.'
+        ],
+        code: `result = None
+print(result)              # None
+print(type(result))        # <class 'NoneType'>
+
+# print() itself returns None
+x = print("hi")            # prints "hi"
+print(x)                   # None  — print() gave nothing back
+
+# Check for None with "is"
+if result is None:
+    print("no value yet")`,
+        codeCaption: 'None is the "nothing" value — print() returns it, many functions do too',
+        mistake: { title: 'Using == None instead of is None', description: 'Python style prefers "is None" for checking None. Both work, but "is None" is the conventional way.', bad: 'if x == None:    # works but not preferred', good: 'if x is None:    # preferred Python style' },
+        practice: { question: 'What does this print?\n\nx = print("hi")\nprint(x)', hint: 'What does print() give back?', answer: 'hi\nNone\n\nprint() shows "hi" then returns None, which is stored in x.' }
+      },
+      {
+        id: 'l2-14', title: 'Data Types Review: Why Data Types Matter',
+        explanation: [
+          'Every operation in Python depends on the type of the values involved. + means "add" for numbers and "join" for strings. Comparing 5 to "5" gives False. Indexing only works on strings and lists, not numbers.',
+          'Why it matters: most "weird" Python behavior is just type behavior. Once you read the types in a line, the output becomes predictable.',
+          'Recap: always ask, "what type is this?" before predicting what a line will do.'
+        ],
+        analogy: 'A type is like a passport. The same word "+" gets you different treatment depending on the passport of the values around it.',
+        code: `# + behaves differently per type
+print(2 + 3)         # 5      (int + int  → addition)
+print("2" + "3")     # "23"   (str + str  → concatenation)
+
+# == cares about type
+print(5 == "5")      # False  (int vs str)
+print(5 == 5.0)      # True   (int and float compare numerically)
+
+# len() works on strings, not ints
+print(len("hello"))  # 5
+# print(len(5))      # TypeError`,
+        codeCaption: 'The same operator does very different things depending on type',
+        mistake: { title: 'Ignoring the type when reading code', description: 'If you skim past the type, you cannot predict what + or == will do. Slow down and label each value.', bad: 'print("3" + 4)   # crash — did not notice "3" is a string', good: 'print(int("3") + 4)   # 7 — converted first' },
+        practice: { question: 'Predict each line:\n\nprint(1 + 1)\nprint("1" + "1")\nprint(1 == "1")', hint: 'Label the types first.', answer: '2\n11\nFalse\n\nint+int=2, str+str="11", int==str is always False.' }
+      },
+      {
+        id: 'l2-15', title: 'Data Types Review: Common Type Mistakes',
+        explanation: [
+          'There are a handful of type mistakes that beginners make over and over. Recognizing them on sight is one of the biggest skill jumps in your first weeks of Python.',
+          'Why it matters: knowing the shape of these errors means you can fix them in seconds instead of staring at the screen.',
+          'Recap: when in doubt, print the value and its type() — the truth always shows up there.'
+        ],
+        code: `# Mistake 1: forgetting input() returns a string
+age = input("age? ")
+# print(age + 1)        # TypeError
+print(int(age) + 1)     # fix: convert
+
+# Mistake 2: joining text and number with +
+score = 100
+# print("score: " + score)        # TypeError
+print("score: " + str(score))     # fix: convert to str
+print(f"score: {score}")          # cleaner — f-string
+
+# Mistake 3: lowercase true/false
+# done = true            # NameError
+done = True              # correct — capital T
+
+# Mistake 4: thinking 5 and "5" are the same
+print(5 == "5")          # False`,
+        codeCaption: 'The four type mistakes you will make most often as a beginner',
+        mistake: { title: 'Guessing instead of checking', description: 'When a type error appears, do not guess. Print type(x) for each variable involved — the answer is right there.', bad: '# stare at code, guess randomly', good: 'print(type(x), type(y))   # see the types, fix accordingly' },
+        practice: { question: 'Which two lines crash?\n\na = "5" + 5\nb = "5" + "5"\nc = 5 + 5\nd = True + 1', hint: 'Mixing str with int crashes; True acts like 1.', answer: 'Only line a crashes. b → "55", c → 10, d → 2 (True counts as 1).' }
+      },
+      {
+        id: 'l2-16', title: 'Data Types Checkpoint',
+        explanation: [
+          'Quick review before moving on. You should now be able to look at any value and name its type, and predict what + and == will do.',
+          'Why it matters: every later chapter — input, conversion, comparisons, conditions — builds directly on these five types.',
+          'Recap: str, int, float, bool, None. Five types, one tool to check them: type().'
+        ],
+        code: `# Name the type of each value
+print(type("Python"))   # <class 'str'>
+print(type(42))         # <class 'int'>
+print(type(3.0))        # <class 'float'>
+print(type(False))      # <class 'bool'>
+print(type(None))       # <class 'NoneType'>`,
+        codeCaption: 'type() is the universal type-checking tool',
+        mistake: { title: 'Skipping checkpoints', description: 'Checkpoint lessons feel optional but they cement the basics. Skipping them means later chapters feel harder than they should.', bad: '# scroll past, move on', good: '# answer the quiz, run the code, then continue' },
+        practice: { question: 'What type is each?\n\n"42"\n42\n42.0\nTrue\nNone', hint: 'Look at quotes, decimals, capital letters.', answer: 'str, int, float, bool, NoneType.' },
+        quiz: {
+          question: 'Which line is FALSE?',
+          options: [
+            'type(7) is int',
+            'type("7") is str',
+            'type(7.0) is float',
+            'type(True) is str'
+          ],
+          correctIndex: 3,
+          explanation: 'True is a bool, not a str. The other three are correct.'
+        }
       }
     ]
   },
@@ -1443,6 +1569,660 @@ print(not is_raining)   # False`,
         codeCaption: 'and, or, not combine conditions — essential for if statements',
         mistake: { title: 'Writing conditions without repeating the variable', description: 'Each side of "and"/"or" must be a complete comparison. Shortcuts like "x == 1 or 2" don\'t work in Python.', bad: 'if x == 1 or 2:     # always True! "2" alone is truthy', good: 'if x == 1 or x == 2:  # correct — both sides are comparisons' },
         practice: { question: 'What prints?\n\nx = 7\nprint(x > 5 and x < 10)\nprint(x < 0 or x > 5)', hint: 'Evaluate each comparison, then apply and/or.', answer: 'True\nTrue\n\n(7>5 is True AND 7<10 is True) → True\n(7<0 is False OR 7>5 is True) → True' }
+      },
+      {
+        id: 'l3-4', title: 'Math: What is an Operator?',
+        explanation: [
+          'An operator is a small symbol that does a job on one or two values. + adds, - subtracts, * multiplies. The values on each side are called operands.',
+          'Why it matters: every math, comparison, and logic action in Python is just an operator with operands. Naming the parts makes the rest of this chapter easy.',
+          'Recap: operator = the symbol. Operands = the values it works on.'
+        ],
+        analogy: 'An operator is like a verb in a tiny sentence: "5 + 3" reads as "five PLUS three". The numbers are the nouns, the + is the verb.',
+        code: `# operator: +     operands: 2 and 3
+print(2 + 3)      # 5
+
+# operator: *     operands: 4 and 5
+print(4 * 5)      # 20
+
+# operator can also work on text
+print("hi" + "!") # hi!`,
+        codeCaption: 'Two values + one operator = a tiny expression',
+        mistake: { title: 'Confusing operator with operand', description: 'The symbol is the operator; the values are the operands. Saying "the operator is 5" mixes them up.', bad: '# "the operator here is 5"  — wrong', good: '# "the operator is +, the operands are 5 and 3"' },
+        practice: { question: 'In 10 * 2, what is the operator and what are the operands?', hint: 'Symbol vs values.', answer: 'Operator: *. Operands: 10 and 2.' }
+      },
+      {
+        id: 'l3-5', title: 'Math: Addition (+)',
+        explanation: [
+          'The + operator adds two numbers together. On strings it joins them. We focus here on numbers.',
+          'Why it matters: addition shows up everywhere — totals, counters, scores, distances.',
+          'Recap: + on numbers gives a number; + on strings glues text together.'
+        ],
+        code: `print(2 + 3)        # 5
+print(10 + 7)       # 17
+print(1.5 + 2.5)    # 4.0   (float result)
+print(-5 + 5)       # 0
+
+# Adding a variable
+score = 100
+print(score + 50)   # 150`,
+        codeCaption: 'Plain + with numbers — the result type matches the inputs',
+        mistake: { title: 'Adding text and numbers with +', description: '"5" is text, 5 is a number. Mixing them with + crashes. Convert first.', bad: 'print("5" + 3)   # TypeError', good: 'print(int("5") + 3)   # 8' },
+        practice: { question: 'What is 12 + 8 + 5?', hint: 'Left to right.', answer: '25.' }
+      },
+      {
+        id: 'l3-6', title: 'Math: Subtraction (-)',
+        explanation: [
+          'The - operator subtracts the right value from the left. It also makes numbers negative when written in front: -5.',
+          'Why it matters: differences, countdowns, balances — anything that decreases uses subtraction.',
+          'Recap: a - b means "a minus b". Order matters.'
+        ],
+        code: `print(10 - 3)      # 7
+print(3 - 10)      # -7    (order matters)
+print(5 - 5)       # 0
+print(2.5 - 1.0)   # 1.5
+
+balance = 100
+balance = balance - 20
+print(balance)     # 80`,
+        codeCaption: 'Subtraction respects order: a - b is not the same as b - a',
+        mistake: { title: 'Forgetting order matters', description: 'Unlike addition, swapping the sides of - changes the sign of the answer.', bad: '# expect 7 from "3 - 10"', good: '# 3 - 10 = -7, not 7' },
+        practice: { question: 'Predict: print(20 - 7 - 3)', hint: 'Left to right.', answer: '10. (20 - 7 = 13, then 13 - 3 = 10.)' }
+      },
+      {
+        id: 'l3-7', title: 'Math: Multiplication (*)',
+        explanation: [
+          'The * operator multiplies two numbers. On strings it repeats the text: "ab" * 3 → "ababab".',
+          'Why it matters: scaling, area, totals, and many algorithms use multiplication.',
+          'Recap: number * number is product; string * int is repetition.'
+        ],
+        code: `print(4 * 5)        # 20
+print(7 * 0)        # 0
+print(2.0 * 3)      # 6.0   (any float makes result float)
+print(-2 * 3)       # -6
+
+# String repetition
+print("ha" * 3)     # hahaha
+print("-" * 10)     # ----------`,
+        codeCaption: 'Multiplication on numbers; repetition on strings',
+        mistake: { title: 'Multiplying two strings', description: 'You cannot multiply "a" by "b" — Python only allows string * integer.', bad: 'print("a" * "b")   # TypeError', good: 'print("a" * 3)      # aaa' },
+        practice: { question: 'What does "ok" * 4 print?', hint: 'Repeat the text.', answer: 'okokokok.' }
+      },
+      {
+        id: 'l3-8', title: 'Math: Division (/)',
+        explanation: [
+          'The / operator divides the left value by the right. In Python 3, / ALWAYS returns a float, even when the answer is a whole number.',
+          'Why it matters: rates, averages, fractions, and many formulas use division. Knowing it always returns a float saves confusion.',
+          'Recap: / → float. Always.'
+        ],
+        code: `print(10 / 2)     # 5.0   (float, not 5)
+print(9 / 4)      # 2.25
+print(7 / 7)      # 1.0
+print(0 / 5)      # 0.0
+
+# Divide by zero is an error
+# print(5 / 0)   # ZeroDivisionError`,
+        codeCaption: '/ always gives a float, even 10 / 2 = 5.0',
+        mistake: { title: 'Expecting an int from /', description: 'Beginners expect 10 / 2 to be the integer 5. It is 5.0. Use // if you want a whole number.', bad: 'x = 10 / 2\n# expecting int, getting float', good: 'x = 10 // 2   # 5 (int)' },
+        practice: { question: 'What is the type of 8 / 4?', hint: 'Run type() on it.', answer: 'float (the value is 2.0).' }
+      },
+      {
+        id: 'l3-9', title: 'Math: Floor Division (//)',
+        explanation: [
+          'The // operator divides and throws away the decimal part. 7 // 2 is 3, not 3.5. This is called floor division.',
+          'Why it matters: when you only care about how many whole groups fit (pages, rows, full hours), // is the right tool.',
+          'Recap: // chops off the decimal toward negative infinity.'
+        ],
+        code: `print(7 // 2)      # 3
+print(8 // 2)      # 4
+print(9 // 4)      # 2
+print(-7 // 2)     # -4   (rounds DOWN, not toward zero)
+print(7.0 // 2)    # 3.0  (still float if any operand is float)`,
+        codeCaption: '// gives the whole-number part; on floats it returns a float',
+        mistake: { title: 'Thinking // rounds toward zero', description: '// rounds DOWN. For negative numbers that is away from zero: -7 // 2 = -4, not -3.', bad: '# expecting -7 // 2 == -3', good: '# -7 // 2 == -4   (floor, not truncate)' },
+        practice: { question: 'Predict: 23 // 5', hint: 'How many whole 5s fit in 23?', answer: '4. (4 fives = 20, with 3 left over.)' }
+      },
+      {
+        id: 'l3-10', title: 'Math: Modulo (%)',
+        explanation: [
+          'The % operator gives the remainder of division. 10 % 3 is 1 because 3 fits into 10 three times with 1 left over.',
+          'Why it matters: modulo is the standard trick for "is this even?", "every Nth item", and wrapping around (e.g. clock arithmetic).',
+          'Recap: a % b = what is left after b divides into a as many times as it can.'
+        ],
+        code: `print(10 % 3)     # 1
+print(10 % 2)     # 0   (even)
+print(11 % 2)     # 1   (odd)
+print(20 % 5)     # 0
+print(7 % 10)     # 7   (7 is less than 10)
+
+# The classic even-check
+n = 8
+print(n % 2 == 0)   # True → n is even`,
+        codeCaption: '% is the remainder — and the go-to tool for even/odd checks',
+        mistake: { title: 'Confusing % with /', description: '/ gives the quotient (how many). % gives the remainder (what is left).', bad: 'print(10 / 3)   # 3.333 (quotient)\n# but you wanted remainder', good: 'print(10 % 3)   # 1 (remainder)' },
+        practice: { question: 'Is 15 % 4 odd or even?', hint: 'Compute it first.', answer: '15 % 4 = 3, which is odd.' }
+      },
+      {
+        id: 'l3-11', title: 'Math: Exponents (**)',
+        explanation: [
+          'The ** operator raises a number to a power. 2 ** 3 is 2 × 2 × 2 = 8.',
+          'Why it matters: squares, cubes, areas, growth — anything that multiplies a number by itself uses **.',
+          'Recap: a ** b means "a to the power of b".'
+        ],
+        code: `print(2 ** 3)     # 8
+print(5 ** 2)     # 25   (5 squared)
+print(10 ** 0)    # 1    (anything ** 0 is 1)
+print(2 ** 10)    # 1024
+print(9 ** 0.5)   # 3.0  (square root)`,
+        codeCaption: 'Powers of numbers with ** — including fractional powers like 0.5 for square roots',
+        mistake: { title: 'Using ^ for exponents', description: 'In math class ^ means power. In Python ^ is a different operator (bitwise XOR). Always use **.', bad: 'print(2 ^ 3)    # 1 — NOT 8', good: 'print(2 ** 3)   # 8' },
+        practice: { question: 'What is 3 ** 4?', hint: '3 × 3 × 3 × 3.', answer: '81.' }
+      },
+      {
+        id: 'l3-12', title: 'Math: Order of Operations (PEMDAS)',
+        explanation: [
+          'Python follows the same order of operations you learned in math: parentheses first, then exponents, then multiplication and division, then addition and subtraction.',
+          'Why it matters: 2 + 3 * 4 is 14, not 20. If you want 20 you must write (2 + 3) * 4. Misreading order causes silent bugs.',
+          'Recap: parentheses always win. When unsure, add them.'
+        ],
+        code: `print(2 + 3 * 4)       # 14   (3*4 first, then +2)
+print((2 + 3) * 4)     # 20   (parens first)
+print(10 - 2 - 3)      # 5    (left to right)
+print(2 ** 3 ** 2)     # 512  (** is right-to-left: 3**2=9, 2**9)
+print((2 ** 3) ** 2)   # 64`,
+        codeCaption: 'When in doubt, use parentheses — they always make order explicit',
+        mistake: { title: 'Trusting your eyes over the rules', description: 'Code reads left to right but math does not always work that way. Always check whether * or / is hiding inside an expression.', bad: '# read "2 + 3 * 4" left to right → 20 (wrong)', good: '# multiply first → 12, then add 2 → 14' },
+        practice: { question: 'Predict: 6 + 4 / 2', hint: '/ before +.', answer: '8.0. (4/2 = 2.0, then 6 + 2.0 = 8.0.)' }
+      },
+      {
+        id: 'l3-13', title: 'Math: Math with Variables',
+        explanation: [
+          'You do not need raw numbers — variables work anywhere a number would. Python looks up the value, then runs the operation.',
+          'Why it matters: real programs almost never hard-code numbers. They store values in variables and combine them.',
+          'Recap: variable name → value lookup → math runs as normal.'
+        ],
+        code: `a = 10
+b = 3
+
+print(a + b)     # 13
+print(a - b)     # 7
+print(a * b)     # 30
+print(a / b)     # 3.333...
+print(a % b)     # 1
+
+# Store the result
+total = a + b
+print(total)     # 13`,
+        codeCaption: 'Variables hold the values; math operates on the looked-up numbers',
+        mistake: { title: 'Using a variable before assigning it', description: 'If a variable has not been given a value, math on it crashes with NameError.', bad: 'print(a + 1)   # NameError if a was never set', good: 'a = 5\nprint(a + 1)   # 6' },
+        practice: { question: 'Given x = 4 and y = 5, what is x * y + 1?', hint: 'Multiply first.', answer: '21. (4*5 = 20, +1 = 21.)' }
+      },
+      {
+        id: 'l3-14', title: 'Math: Assignment Operators (+= -= *= /=)',
+        explanation: [
+          'x += 1 is a shortcut for x = x + 1. The same shortcut exists for -, *, /, //, %, and **.',
+          'Why it matters: counters, totals, and running balances are everywhere. The shortcut is shorter and clearer.',
+          'Recap: op= means "do the op with the right side and store the result back".'
+        ],
+        code: `score = 0
+score += 10       # score = score + 10 → 10
+score += 5        # 15
+score -= 3        # 12
+score *= 2        # 24
+score //= 2       # 12   (integer divide and store)
+print(score)      # 12
+
+# Works on strings too
+greeting = "hi"
+greeting += "!"
+print(greeting)   # hi!`,
+        codeCaption: '+= and friends are the standard way to update a running value',
+        mistake: { title: 'Writing =+ instead of +=', description: '"x =+ 1" parses as "x = +1" (assigns positive 1, wiping the old value). Always write +=.', bad: 'x = 5\nx =+ 1\nprint(x)   # 1 — original value lost', good: 'x = 5\nx += 1\nprint(x)   # 6' },
+        practice: { question: 'After: n = 3; n *= 4; n -= 2 — what is n?', hint: 'Apply each step.', answer: '10. (3*4 = 12, 12 - 2 = 10.)' }
+      },
+      {
+        id: 'l3-15', title: 'Math: String Addition vs Number Addition',
+        explanation: [
+          '+ does two completely different jobs. With numbers it ADDS. With strings it JOINS. Mixing the two crashes.',
+          'Why it matters: this is the single most common beginner error. Reading the type of each operand prevents it.',
+          'Recap: "2" + "3" = "23". 2 + 3 = 5. "2" + 3 → TypeError.'
+        ],
+        code: `# Number addition
+print(2 + 3)         # 5
+
+# String concatenation (joining)
+print("2" + "3")     # "23"
+print("Hello, " + "world")   # Hello, world
+
+# Mixing them crashes
+# print("Age: " + 25)        # TypeError
+
+# Fix: convert one side
+print("Age: " + str(25))     # Age: 25
+print(f"Age: {25}")          # Age: 25  (cleaner)`,
+        codeCaption: '+ adds numbers and joins strings — never crosses the line',
+        mistake: { title: 'Trusting that + "just figures it out"', description: 'Python will not silently convert types. You must convert with str() or use an f-string.', bad: 'print("Total: " + 10)   # TypeError', good: 'print(f"Total: {10}")   # Total: 10' },
+        practice: { question: 'Predict each line:\n\nprint(1 + 2)\nprint("1" + "2")', hint: 'Numbers vs text.', answer: '3 (numbers add) and 12 (strings join into "12").' }
+      },
+      {
+        id: 'l3-16', title: 'Math Checkpoint',
+        explanation: [
+          'You now know all the math operators Python ships with: + - * / // % **, plus assignment operators and PEMDAS.',
+          'Why it matters: every later chapter relies on these. Counters, conditions, loops, and LeetCode problems all reduce to small math expressions.',
+          'Recap: when reading any math line — types first, parentheses second, then evaluate.'
+        ],
+        code: `# Quick sweep of everything in this section
+print(2 + 3)           # 5
+print(10 - 4)          # 6
+print(3 * 5)           # 15
+print(10 / 4)          # 2.5
+print(10 // 4)         # 2
+print(10 % 4)          # 2
+print(2 ** 5)          # 32
+print((1 + 2) * 3)     # 9
+
+n = 10
+n += 5
+n //= 3
+print(n)               # 5`,
+        codeCaption: 'A whirlwind tour of every operator in this section',
+        mistake: { title: 'Skipping practice', description: 'You learn math by doing it, not reading it. Predict, run, compare.', bad: '# read past', good: '# cover the output, predict, then check' },
+        practice: { question: 'What does this print?\n\nx = 7\nx += 3\nx %= 4\nprint(x)', hint: '7+3=10, then 10 % 4.', answer: '2.' },
+        quiz: {
+          question: 'Which result is correct?',
+          options: [
+            '10 / 3 evaluates to 3',
+            '10 // 3 evaluates to 3.33',
+            '10 % 3 evaluates to 1',
+            '2 ** 3 evaluates to 6'
+          ],
+          correctIndex: 2,
+          explanation: '10 % 3 is 1 (remainder). / gives 3.333…, // gives 3, ** gives 8.'
+        }
+      },
+      {
+        id: 'l3-17', title: 'Comparison: What is Comparison?',
+        explanation: [
+          'A comparison asks a yes/no question about two values: is A equal to B? Is A bigger? Smaller? The answer is always True or False.',
+          'Why it matters: every decision in code is a comparison. if statements, while loops, and almost every LeetCode problem hinge on them.',
+          'Recap: comparisons turn two values into one boolean.'
+        ],
+        analogy: 'A comparison is a tiny referee. Show it two values, and it raises a True flag or a False flag — never anything else.',
+        code: `print(5 == 5)     # True
+print(5 == 6)     # False
+print(7 > 3)      # True
+print(2 < 1)      # False`,
+        codeCaption: 'Every comparison answers a yes/no question',
+        mistake: { title: 'Expecting a comparison to return a number', description: 'A comparison is not a calculation. It is a question. The only answers are True and False.', bad: 'x = 5 > 3\n# expecting x to be 2', good: 'x = 5 > 3\n# x is True' },
+        practice: { question: 'Predict: print(10 > 100)', hint: 'Is 10 greater than 100?', answer: 'False.' }
+      },
+      {
+        id: 'l3-18', title: 'Comparison: = vs ==',
+        explanation: [
+          '= assigns: it stores a value in a variable. == compares: it asks "are these equal?" and gives True or False.',
+          'Why it matters: confusing them is the #1 beginner mistake in if statements. The two symbols look almost the same but mean opposite things.',
+          'Recap: one = stores. Two == ask.'
+        ],
+        code: `# Assignment
+x = 5
+print(x)         # 5
+
+# Comparison
+print(x == 5)    # True
+print(x == 6)    # False
+
+# Using = inside an if is a SyntaxError
+# if x = 5:        # SyntaxError
+# if x == 5:       # correct`,
+        codeCaption: 'One symbol stores, two symbols ask',
+        mistake: { title: 'Writing = inside an if', description: 'Python catches this with a SyntaxError. Some languages do not — and the bug becomes silent.', bad: 'if score = 100:    # SyntaxError', good: 'if score == 100:   # correct' },
+        practice: { question: 'Which line stores a value, and which asks a question?\n\na = 7\nprint(a == 7)', hint: 'Count the equals signs.', answer: 'a = 7 stores; a == 7 asks (and is True here).' }
+      },
+      {
+        id: 'l3-19', title: 'Comparison: == and !=',
+        explanation: [
+          '== checks equality: True if the two values are the same, False otherwise. != checks INequality: True if they are different.',
+          'Why it matters: most "is this the case?" questions use == or !=.',
+          'Recap: == means equal, != means not equal.'
+        ],
+        code: `print(5 == 5)         # True
+print(5 == 6)         # False
+print("hi" == "hi")   # True
+print("Hi" == "hi")   # False  (case-sensitive)
+
+print(5 != 6)         # True
+print(5 != 5)         # False`,
+        codeCaption: '== for equal, != for not equal',
+        mistake: { title: 'Forgetting strings are case-sensitive', description: '"YES" == "yes" is False. If you need to ignore case, convert both with .lower() first.', bad: 'print("YES" == "yes")          # False', good: 'print("YES".lower() == "yes")  # True' },
+        practice: { question: 'Predict: print("cat" != "dog")', hint: 'They are different.', answer: 'True.' }
+      },
+      {
+        id: 'l3-20', title: 'Comparison: > and <',
+        explanation: [
+          '> means "greater than". < means "less than". Both return True or False.',
+          'Why it matters: thresholds, sorting, filters — all need >/<.',
+          'Recap: the pointy end of < and > points to the smaller side.'
+        ],
+        code: `print(7 > 3)      # True
+print(3 > 7)      # False
+print(5 > 5)      # False (strictly greater — not equal)
+print(3 < 7)      # True
+print(7 < 3)      # False`,
+        codeCaption: '> and < are strict — equal values give False',
+        mistake: { title: 'Reading > as "greater than or equal"', description: 'a > b is False when a equals b. Use >= if you want to include equal.', bad: 'print(5 > 5)    # False — surprising if you forgot "strict"', good: 'print(5 >= 5)   # True' },
+        practice: { question: 'Predict each:\n\nprint(8 > 8)\nprint(8 < 9)', hint: 'Strictly greater / less.', answer: 'False (not strictly greater) and True.' }
+      },
+      {
+        id: 'l3-21', title: 'Comparison: >= and <=',
+        explanation: [
+          '>= means "greater than OR equal to". <= means "less than OR equal to". Both include the equal case.',
+          'Why it matters: "is the user at least 18?" → age >= 18 is the correct form, not age > 18.',
+          'Recap: add = to include the boundary.'
+        ],
+        code: `print(5 >= 5)    # True
+print(5 >= 6)    # False
+print(5 <= 5)    # True
+print(5 <= 4)    # False
+
+age = 18
+print(age >= 18)   # True — adult check`,
+        codeCaption: '>= and <= include the boundary value',
+        mistake: { title: 'Writing => or =< instead of >= or <=', description: 'Python only accepts >= and <= (the = comes second). => is a SyntaxError.', bad: 'if age => 18:    # SyntaxError', good: 'if age >= 18:    # correct' },
+        practice: { question: 'Which are True?\n\n5 >= 5\n5 <= 4\n0 <= 0', hint: 'Check each.', answer: 'First (True), second (False), third (True).' }
+      },
+      {
+        id: 'l3-22', title: 'Comparison: Comparing Numbers',
+        explanation: [
+          'Numbers compare in the obvious way: by their values. int and float compare together fine — 5 == 5.0 is True.',
+          'Why it matters: most comparisons in real code are numeric — counts, scores, ages, prices.',
+          'Recap: numbers compare numerically. Type does not block int/float comparison.'
+        ],
+        code: `print(10 > 3)         # True
+print(2.5 < 3)        # True
+print(5 == 5.0)       # True  (int and float compare by value)
+print(-1 < 0)         # True
+print(100 >= 99.9)    # True`,
+        codeCaption: 'int vs float comparisons just work — they compare by numeric value',
+        mistake: { title: 'Comparing a number string to a number', description: '"5" is a string, not a number. "5" == 5 is False.', bad: 'print("5" == 5)   # False', good: 'print(int("5") == 5)   # True' },
+        practice: { question: 'Predict: print(7.0 == 7)', hint: 'Same numeric value.', answer: 'True.' }
+      },
+      {
+        id: 'l3-23', title: 'Comparison: Comparing Strings',
+        explanation: [
+          'Strings compare alphabetically, character by character. "apple" < "banana" is True because "a" comes before "b". Comparison is case-sensitive: capital letters come before lowercase.',
+          'Why it matters: sorting names, validating passwords, filtering text — all rely on string comparison.',
+          'Recap: strings compare like a dictionary — letter by letter, capitals first.'
+        ],
+        code: `print("apple" < "banana")  # True
+print("cat" == "cat")      # True
+print("Cat" == "cat")      # False  (case-sensitive)
+print("Z" < "a")           # True   (capitals come BEFORE lowercase)
+print("abc" < "abd")       # True   (third letter decides)`,
+        codeCaption: 'String comparison is alphabetical and case-sensitive',
+        mistake: { title: 'Assuming "10" > "9"', description: 'As strings, "10" < "9" because "1" comes before "9" in the character table. Compare as numbers for numeric order.', bad: 'print("10" > "9")        # False (string compare!)', good: 'print(int("10") > int("9"))   # True' },
+        practice: { question: 'Predict: print("dog" < "doll")', hint: 'Compare letter by letter.', answer: 'False. "dog" vs "doll": d=d, o=o, then "g" vs "l" — g comes BEFORE l, so "dog" < "doll" is True... wait let me reconsider. g (103) < l (108) so "dog" < "doll" is True.' }
+      },
+      {
+        id: 'l3-24', title: 'Comparison: Comparing Variables',
+        explanation: [
+          'You can compare variables just like raw values. Python looks up each value, then asks the question.',
+          'Why it matters: real code rarely compares hard-coded numbers. It compares values stored in variables.',
+          'Recap: comparison sees through the variable to its current value.'
+        ],
+        code: `a = 7
+b = 10
+
+print(a < b)        # True
+print(a == b)       # False
+print(a + 3 == b)   # True   (compute first, then compare)
+
+name = "Lin"
+print(name == "Lin")    # True`,
+        codeCaption: 'Variables resolve to their values, then comparison runs',
+        mistake: { title: 'Comparing before assigning', description: 'If a variable has not been defined yet, the comparison crashes with NameError.', bad: 'print(score > 50)   # NameError if score not set', good: 'score = 80\nprint(score > 50)   # True' },
+        practice: { question: 'Given a = 5, b = 5, what is a == b?', hint: 'Look up both values.', answer: 'True.' }
+      },
+      {
+        id: 'l3-25', title: 'Comparison: They Return True or False',
+        explanation: [
+          'Every comparison returns a boolean — True or False. You can store it in a variable, print it, or use it in an if.',
+          'Why it matters: this is how decisions in code are made. The comparison produces a boolean; the if reads the boolean.',
+          'Recap: comparison → boolean. That is the bridge between data and decisions.'
+        ],
+        code: `is_adult = age >= 18
+print(is_adult)         # True or False
+
+is_match = ("hi" == "hi")
+print(is_match)         # True
+
+# Print the comparison directly
+print(10 > 3)           # True`,
+        codeCaption: 'Store the boolean result in a variable for clarity',
+        mistake: { title: 'Comparing inside an if without realizing it returns a bool', description: 'if age >= 18: works because the comparison returns True or False, and if reads booleans.', bad: '# write if without understanding what it reads', good: '# remember: if reads a True/False produced by a comparison' },
+        practice: { question: 'What type is the value of (3 > 1)?', hint: 'Comparison result.', answer: 'bool (the value is True).' }
+      },
+      {
+        id: 'l3-26', title: 'Comparison Checkpoint',
+        explanation: [
+          'You can now ask Python any yes/no question about two values: equal, not equal, greater, less, and the with-equal variants.',
+          'Why it matters: every condition in every if statement is one of these comparisons (or several joined with and/or/not).',
+          'Recap: == != > < >= <=. Six operators. All return True or False.'
+        ],
+        code: `# Sweep of all six
+print(5 == 5)     # True
+print(5 != 6)     # True
+print(7 > 3)      # True
+print(3 < 7)      # True
+print(5 >= 5)     # True
+print(5 <= 6)     # True`,
+        codeCaption: 'All six comparison operators in one place',
+        mistake: { title: 'Forgetting case sensitivity', description: '"Hi" == "hi" is False. Always remember strings care about capitalization.', bad: 'print("Yes" == "yes")   # False', good: 'print("Yes".lower() == "yes")   # True' },
+        practice: { question: 'Predict each:\n\nprint(10 == 10.0)\nprint("a" < "b")\nprint(5 != 5)', hint: 'Numeric, alphabetical, equality.', answer: 'True, True, False.' },
+        quiz: {
+          question: 'Which line is a SyntaxError?',
+          options: [
+            'if x == 5:',
+            'if x = 5:',
+            'if x >= 5:',
+            'if x != 5:'
+          ],
+          correctIndex: 1,
+          explanation: '= is assignment and cannot be used in an if condition. == is the comparison.'
+        }
+      },
+      {
+        id: 'l3-27', title: 'Boolean: What is a Boolean?',
+        explanation: [
+          'A boolean is the simplest data type: it can only be True or False. That is it. Two possible values, nothing else.',
+          'Why it matters: every decision your code makes ends up as a boolean — yes/no, on/off, allowed/blocked.',
+          'Recap: bool = True or False.'
+        ],
+        analogy: 'A boolean is a light switch with exactly two positions: on (True) or off (False). No dimmer.',
+        code: `print(True)
+print(False)
+print(type(True))     # <class 'bool'>
+
+is_open = True
+is_locked = False
+print(is_open)        # True`,
+        codeCaption: 'Two values, one tiny type',
+        mistake: { title: 'Using lowercase true/false', description: 'Python is case-sensitive. true is not a value; True is. Same for False.', bad: 'done = true    # NameError', good: 'done = True    # correct' },
+        practice: { question: 'What are the only two values a bool can have?', hint: 'Capital letters.', answer: 'True and False.' }
+      },
+      {
+        id: 'l3-28', title: 'Boolean: True and False',
+        explanation: [
+          'True and False are special built-in values. They are spelled with a capital first letter. You can store them in variables, print them, and combine them with logical operators.',
+          'Why it matters: knowing exactly what counts as True vs False keeps your conditions honest.',
+          'Recap: True and False are not strings. They are their own type.'
+        ],
+        code: `a = True
+b = False
+
+print(a)            # True
+print(b)            # False
+print(type(a))      # <class 'bool'>
+
+# Not strings!
+print("True" == True)    # False — string is not bool`,
+        codeCaption: 'True and False are values of type bool — not text',
+        mistake: { title: 'Quoting True or False', description: '"True" is a string, not a boolean. They look similar but behave very differently.', bad: 'done = "True"\nif done == True:\n    print("done")   # this never runs', good: 'done = True\nif done == True:\n    print("done")   # runs' },
+        practice: { question: 'Predict: print(True == "True")', hint: 'bool vs str.', answer: 'False.' }
+      },
+      {
+        id: 'l3-29', title: 'Boolean: How Comparisons Create Booleans',
+        explanation: [
+          'Every comparison produces a boolean. That is how data becomes a decision.',
+          'Why it matters: when you write if age >= 18, Python first computes age >= 18 (a True or False), then the if reads the boolean.',
+          'Recap: comparison runs, produces True/False, then anything else reads it.'
+        ],
+        code: `age = 20
+is_adult = age >= 18
+print(is_adult)          # True
+print(type(is_adult))    # <class 'bool'>
+
+# You can use the comparison directly in if
+if age >= 18:
+    print("adult")`,
+        codeCaption: 'Comparison → boolean → decision',
+        mistake: { title: 'Treating the comparison as the action', description: 'A comparison is just a question. To DO something with the answer you still need an if (or store it in a variable).', bad: 'age >= 18\n# nothing happened — answer was thrown away', good: 'if age >= 18:\n    print("adult")' },
+        practice: { question: 'What is the type of the value returned by (5 < 10)?', hint: 'Comparison result.', answer: 'bool (the value is True).' }
+      },
+      {
+        id: 'l3-30', title: 'Boolean: and',
+        explanation: [
+          '"and" combines two booleans into one. The result is True only if BOTH sides are True. Otherwise False.',
+          'Why it matters: most real conditions involve more than one rule — "user is logged in AND has permission", "age >= 18 AND has ID".',
+          'Recap: and = both must be True.'
+        ],
+        code: `print(True and True)     # True
+print(True and False)    # False
+print(False and True)    # False
+print(False and False)   # False
+
+age = 20
+has_id = True
+print(age >= 18 and has_id)    # True`,
+        codeCaption: 'and is strict — one False breaks the chain',
+        mistake: { title: 'Using & instead of and', description: '& is a different operator (bitwise). For boolean logic, use the word "and".', bad: 'if a & b:        # works on bools but wrong style and surprises with numbers', good: 'if a and b:      # correct' },
+        practice: { question: 'Predict: print(5 > 1 and 5 < 10)', hint: 'Evaluate each side.', answer: 'True (both sides are True).' }
+      },
+      {
+        id: 'l3-31', title: 'Boolean: or',
+        explanation: [
+          '"or" combines two booleans. The result is True if AT LEAST ONE side is True. Only False if both are False.',
+          'Why it matters: "is it the weekend OR a holiday?" — either is enough.',
+          'Recap: or = at least one True.'
+        ],
+        code: `print(True or True)      # True
+print(True or False)     # True
+print(False or True)     # True
+print(False or False)    # False
+
+is_weekend = False
+is_holiday = True
+print(is_weekend or is_holiday)   # True`,
+        codeCaption: 'or is generous — one True is enough',
+        mistake: { title: 'Reading "or" as exclusive', description: 'In Python, or is inclusive: True or True is True, not False. English sometimes means exclusive ("soup or salad") but Python never does.', bad: '# expect "True or True" to be False', good: '# True or True is True' },
+        practice: { question: 'Predict: print(False or False or True)', hint: 'Any True wins.', answer: 'True.' }
+      },
+      {
+        id: 'l3-32', title: 'Boolean: not',
+        explanation: [
+          '"not" flips a boolean. not True is False. not False is True. It takes one value, not two.',
+          'Why it matters: sometimes the cleanest way to express a rule is by negating another rule.',
+          'Recap: not = the opposite.'
+        ],
+        code: `print(not True)      # False
+print(not False)     # True
+
+is_raining = True
+print(not is_raining)    # False
+
+# Often paired with a comparison
+age = 15
+print(not age >= 18)     # True — not an adult`,
+        codeCaption: 'not is the unary flip — one value in, the opposite out',
+        mistake: { title: 'Reading "not x == 5" as "x is not 5"', description: 'It does mean that — but it is clearer to write x != 5. "not" before a comparison can be hard to read.', bad: 'if not score == 100:    # works but awkward', good: 'if score != 100:        # clearer' },
+        practice: { question: 'Predict: print(not (5 > 10))', hint: '5 > 10 is False, then not.', answer: 'True.' }
+      },
+      {
+        id: 'l3-33', title: 'Boolean: Combining Multiple Conditions',
+        explanation: [
+          'You can chain and/or/not as long as you want. Use parentheses to make the grouping clear — Python evaluates not first, then and, then or, but readers should not have to remember that.',
+          'Why it matters: real conditions can get long. Writing them clearly keeps bugs out.',
+          'Recap: parentheses are free. Use them.'
+        ],
+        code: `age = 20
+has_id = True
+is_member = False
+
+# Without parens
+print(age >= 18 and has_id or is_member)
+# With parens — clearer
+print((age >= 18 and has_id) or is_member)
+
+# Three-way check
+score = 75
+print(score >= 0 and score <= 100)   # True — score is in range`,
+        codeCaption: 'Parentheses turn long conditions from puzzles into sentences',
+        mistake: { title: 'Forgetting not binds tighter than and/or', description: 'not x and y is (not x) and y, not not (x and y). When in doubt, use parens.', bad: 'if not a and b:       # not a, then AND b', good: 'if not (a and b):     # NOT the whole thing' },
+        practice: { question: 'For x = 7, predict:\n\nprint(x > 0 and x < 10)', hint: 'Both must be True.', answer: 'True.' }
+      },
+      {
+        id: 'l3-34', title: 'Boolean: Common Logic Mistakes',
+        explanation: [
+          'A few logic patterns trip up almost everyone. Knowing them by name lets you catch them in your own code.',
+          'Why it matters: silent logic bugs are the hardest kind. They never crash — they just produce the wrong answer.',
+          'Recap: each side of and/or must be a complete comparison.'
+        ],
+        code: `x = 5
+
+# Mistake 1: shortcut that does not work
+# if x == 1 or 2:   # ALWAYS True (because 2 is truthy)
+# Correct:
+print(x == 1 or x == 2)   # False
+
+# Mistake 2: using = instead of ==
+# if x = 5:    # SyntaxError
+print(x == 5)             # True
+
+# Mistake 3: forgetting case
+print("YES" == "yes")     # False
+print("YES".lower() == "yes")   # True`,
+        codeCaption: 'The handful of logic mistakes you will see in your own code',
+        mistake: { title: '"x == 1 or 2" is always True', description: 'Python evaluates 2 as truthy, so the whole or is True. Repeat the variable on each side: x == 1 or x == 2.', bad: 'if x == 1 or 2:     # always True', good: 'if x == 1 or x == 2:   # correct' },
+        practice: { question: 'Fix: if name == "Lin" or "Sam": print("hi")', hint: 'Repeat name on both sides.', answer: 'if name == "Lin" or name == "Sam": print("hi")' }
+      },
+      {
+        id: 'l3-35', title: 'Boolean / Logic Checkpoint',
+        explanation: [
+          'You can now build any logical condition: True/False values, comparisons that produce them, and and/or/not to combine them.',
+          'Why it matters: every if, while, and filter in Python is one of these expressions.',
+          'Recap: comparisons make booleans; and/or/not combine booleans; if/while read booleans.'
+        ],
+        code: `age = 25
+has_id = True
+
+is_adult = age >= 18
+can_enter = is_adult and has_id
+
+print(is_adult)     # True
+print(can_enter)    # True
+print(not can_enter)  # False`,
+        codeCaption: 'Booleans, comparisons, and logical operators working together',
+        mistake: { title: 'Mixing up and/or', description: 'and is stricter (both), or is looser (either). Read the English sentence first to pick the right one.', bad: '# "must be 18 OR have ID"  → wrote "and"', good: '# match the English: "or" → or, "and" → and' },
+        practice: { question: 'Predict:\n\nx = 5\nprint(x > 0 and x < 10)\nprint(x < 0 or x > 3)', hint: 'Evaluate each comparison.', answer: 'True and True.' },
+        quiz: {
+          question: 'Which expression is True when x = 7?',
+          options: [
+            'x < 0 and x > 10',
+            'x > 0 or x > 100',
+            'not (x == 7)',
+            'x == "7"'
+          ],
+          correctIndex: 1,
+          explanation: 'x > 0 is True, so the whole "or" is True. The others are False (or compare against a string).'
+        }
       }
     ]
   },
@@ -1525,6 +2305,359 @@ else:
         codeCaption: 'Your first real program — input, conversion, math, and output together',
         mistake: { title: 'Dividing by zero', description: 'If b is 0 and you do a / b, Python crashes with ZeroDivisionError. Always check before dividing.', bad: 'result = a / b  # crashes if b is 0', good: 'if b != 0:\n    result = a / b\nelse:\n    print("Cannot divide by zero")' },
         practice: { question: 'Extend the calculator to also print the remainder (a % b).', hint: 'Add a new print line using the % operator.', answer: 'print(f"{a} % {b} = {a % b}")\n\nNote: also check b != 0 before modulo, same as division.' }
+      },
+      {
+        id: 'l4-3', title: 'Type Conversion: What is Type Conversion?',
+        explanation: [
+          'Type conversion (also called casting) means turning a value of one type into another type. "42" → 42 turns text into a number. 3 → "3" turns a number into text.',
+          'Why it matters: input() always gives you text, and + only works on matching types. You will be converting almost every time you take input.',
+          'Recap: conversion is a deliberate choice — Python does not do it automatically.'
+        ],
+        analogy: 'Conversion is like exchanging currency. The value is the same, but the form changes so it can be used in a different place.',
+        code: `# str → int
+n = int("42")
+print(n, type(n))     # 42 <class 'int'>
+
+# int → str
+s = str(42)
+print(s, type(s))     # 42 <class 'str'>
+
+# str → float
+f = float("3.14")
+print(f, type(f))     # 3.14 <class 'float'>`,
+        codeCaption: 'Three core conversions you will use constantly',
+        mistake: { title: 'Forgetting that conversion does not change the original', description: 'int("42") returns a NEW int. The original string is unchanged. You must store the result.', bad: 'x = "42"\nint(x)\nprint(x)   # still "42" — int() result was thrown away', good: 'x = "42"\nx = int(x)\nprint(x)   # 42 (int)' },
+        practice: { question: 'What does int("7") + 1 produce?', hint: 'Convert first, then add.', answer: '8 (an int).' }
+      },
+      {
+        id: 'l4-4', title: 'Type Conversion: str()',
+        explanation: [
+          'str(value) converts any value into its text form. str(42) becomes "42". str(True) becomes "True".',
+          'Why it matters: when joining text and numbers with +, you need a str. f-strings do it for you, but str() is the explicit tool.',
+          'Recap: str() turns anything into text.'
+        ],
+        code: `print(str(42))        # "42"
+print(str(3.14))      # "3.14"
+print(str(True))      # "True"
+print(str(None))      # "None"
+
+age = 25
+print("Age: " + str(age))   # Age: 25`,
+        codeCaption: 'str() lets you glue a number into text with +',
+        mistake: { title: 'Skipping str() with +', description: 'Without str() (or an f-string), "Age: " + 25 crashes.', bad: 'print("Age: " + 25)         # TypeError', good: 'print("Age: " + str(25))    # Age: 25' },
+        practice: { question: 'Predict: print(type(str(100)))', hint: 'Convert then type.', answer: "<class 'str'>." }
+      },
+      {
+        id: 'l4-5', title: 'Type Conversion: int()',
+        explanation: [
+          'int(value) turns a value into a whole number. int("42") gives 42. int(3.9) gives 3 (it CHOPS, it does not round).',
+          'Why it matters: int(input(...)) is the standard pattern for asking the user for a number.',
+          'Recap: int() truncates floats and rejects non-numeric strings.'
+        ],
+        code: `print(int("42"))     # 42
+print(int(3.9))      # 3   (truncates, does not round)
+print(int(-3.9))     # -3
+print(int(True))     # 1
+print(int(False))    # 0
+
+# int() on a non-numeric string crashes
+# print(int("hello"))    # ValueError`,
+        codeCaption: 'int() truncates and only accepts numeric strings',
+        mistake: { title: 'Assuming int() rounds', description: 'int(3.9) is 3, not 4. Use round() if you want rounding.', bad: 'print(int(3.9))      # 3', good: 'print(round(3.9))    # 4' },
+        practice: { question: 'Predict: print(int(7.7))', hint: 'Truncate.', answer: '7.' }
+      },
+      {
+        id: 'l4-6', title: 'Type Conversion: float()',
+        explanation: [
+          'float(value) turns a value into a decimal number. float("3.14") → 3.14. float(5) → 5.0.',
+          'Why it matters: when the user might enter a decimal, use float() instead of int().',
+          'Recap: float() accepts both decimal and whole-number strings.'
+        ],
+        code: `print(float("3.14"))    # 3.14
+print(float("42"))      # 42.0   (still a float)
+print(float(5))         # 5.0
+print(float(True))      # 1.0
+
+# float() on a non-numeric string crashes
+# print(float("hello"))   # ValueError`,
+        codeCaption: 'float() handles both "3.14" and "42" — int() would reject "3.14"',
+        mistake: { title: 'Using int() when input might have a decimal', description: 'int("3.14") crashes. If decimals are possible, use float().', bad: 'price = int(input("Price: "))   # crashes on "9.99"', good: 'price = float(input("Price: "))  # 9.99 works' },
+        practice: { question: 'Predict: print(float("2"))', hint: 'Convert.', answer: '2.0.' }
+      },
+      {
+        id: 'l4-7', title: 'Type Conversion: bool()',
+        explanation: [
+          'bool(value) turns a value into True or False. Most values are True. Only a few "empty" values are False: 0, 0.0, "", None, and empty containers.',
+          'Why it matters: knowing what counts as False lets you write cleaner if statements.',
+          'Recap: empty/zero → False. Everything else → True.'
+        ],
+        code: `print(bool(0))        # False
+print(bool(1))        # True
+print(bool(-5))       # True   (any non-zero number)
+print(bool(""))       # False  (empty string)
+print(bool("hi"))     # True
+print(bool(None))     # False
+print(bool([]))       # False  (empty list)`,
+        codeCaption: 'Only "empty" or zero values are False',
+        mistake: { title: 'Assuming bool("False") is False', description: 'bool("False") is True because the string is not empty. Only empty strings are falsy.', bad: 'print(bool("False"))   # True!', good: 'print("False" == "True")   # compare strings if that is what you mean' },
+        practice: { question: 'Predict each:\n\nprint(bool(0))\nprint(bool("0"))', hint: 'Number zero vs the string "0".', answer: 'False (zero is falsy) and True (non-empty string).' }
+      },
+      {
+        id: 'l4-8', title: 'Type Conversion: int("42") vs int("3.14")',
+        explanation: [
+          'int() accepts strings that look like whole numbers. It does NOT accept strings that contain a decimal point.',
+          'Why it matters: this is the single most common ValueError beginners hit. Knowing the rule prevents it.',
+          'Recap: int("42") works. int("3.14") crashes. Use float() first if needed.'
+        ],
+        code: `print(int("42"))         # 42 — fine
+# print(int("3.14"))      # ValueError!
+
+# Workaround: float() first, then int() if you must
+print(int(float("3.14")))   # 3
+
+# int() also strips a sign and whitespace
+print(int("  -7 "))         # -7`,
+        codeCaption: 'int() refuses decimal strings — float() handles them',
+        mistake: { title: 'int() on a decimal string', description: 'int("3.14") crashes. Decide: do you want truncation? int(float("3.14")). Do you want to keep the decimal? float("3.14").', bad: 'x = int("3.14")    # ValueError', good: 'x = float("3.14")   # 3.14\nx = int(float("3.14"))   # 3' },
+        practice: { question: 'Which crashes: int("12") or int("12.0")?', hint: 'Decimal point inside a string.', answer: 'int("12.0") crashes. int("12") gives 12.' }
+      },
+      {
+        id: 'l4-9', title: 'Type Conversion: ValueError',
+        explanation: [
+          'A ValueError happens when a function gets the right TYPE but a value that does not make sense. int("hello") is a ValueError because "hello" is a string but not a number-shaped one.',
+          'Why it matters: you will see this often with user input. Reading the error name tells you what went wrong.',
+          'Recap: ValueError = right type, wrong value. TypeError = wrong type entirely.'
+        ],
+        code: `# These crash with ValueError
+# int("hello")        → ValueError
+# int("3.14")         → ValueError
+# float("abc")        → ValueError
+
+# These work
+print(int("42"))      # 42
+print(float("3.14"))  # 3.14
+
+# To handle gracefully (later: try/except)
+# For now: trust the user types a number`,
+        codeCaption: 'ValueError = the function got the right type but a junk value',
+        mistake: { title: 'Confusing ValueError with TypeError', description: 'TypeError = wrong KIND of thing. ValueError = right kind, bad content. int(None) is a TypeError; int("abc") is a ValueError.', bad: '# "they are the same"', good: '# read the error name carefully — they point to different fixes' },
+        practice: { question: 'Which error: int("3.14") or int(None)?', hint: 'Type vs value.', answer: 'int("3.14") → ValueError. int(None) → TypeError.' }
+      },
+      {
+        id: 'l4-10', title: 'Type Conversion: Why Conversion Matters',
+        explanation: [
+          'Conversion is the bridge between input and math. Without it, every user-entered number is text and cannot be added, compared numerically, or used in formulas.',
+          'Why it matters: nearly every beginner program needs at least one int() or float() to work correctly.',
+          'Recap: input → convert → compute → display. That is the shape of most beginner programs.'
+        ],
+        code: `# Without conversion
+x = input("Number: ")      # "5"
+# print(x + 3)             # TypeError
+
+# With conversion
+x = int(input("Number: "))   # 5
+print(x + 3)                 # 8
+
+# Display result back as text (f-string does conversion automatically)
+print(f"Result is {x + 3}")`,
+        codeCaption: 'Input → convert → compute. Skip the convert and the math breaks.',
+        mistake: { title: 'Hoping Python will guess', description: 'Python will not guess that "5" should be a number. You always have to say so.', bad: 'x = input("n: ")\nprint(x + 1)   # TypeError', good: 'x = int(input("n: "))\nprint(x + 1)   # ok' },
+        practice: { question: 'Fix this: age = input("age: "); print(age + 1)', hint: 'Convert.', answer: 'age = int(input("age: ")); print(age + 1)' }
+      },
+      {
+        id: 'l4-11', title: 'Type Conversion Checkpoint',
+        explanation: [
+          'You can now move freely between str, int, float, and bool. You know which conversions can crash and why.',
+          'Why it matters: the rest of beginner Python (input, comparisons, conditions, loops) leans on this constantly.',
+          'Recap: str() / int() / float() / bool() — four tools. Two errors to watch for: ValueError and TypeError.'
+        ],
+        code: `# Sweep
+print(str(42))             # "42"
+print(int("42"))           # 42
+print(float("3.14"))       # 3.14
+print(bool(0))             # False
+print(int(float("3.14")))  # 3`,
+        codeCaption: 'A quick tour of the four conversion functions',
+        mistake: { title: 'Skipping checkpoints', description: 'Conversion is a small topic but it is load-bearing for everything that follows.', bad: '# scroll past', good: '# do the quiz, predict, then continue' },
+        practice: { question: 'Predict each:\n\nprint(int("10"))\nprint(int("10.0"))\nprint(float("10"))', hint: 'Decimal string is special.', answer: '10 (int), ValueError, 10.0.' },
+        quiz: {
+          question: 'Which line crashes?',
+          options: [
+            'int("42")',
+            'float("3.14")',
+            'int("3.14")',
+            'str(3.14)'
+          ],
+          correctIndex: 2,
+          explanation: 'int() refuses strings with decimal points — that is a ValueError. The others all work.'
+        }
+      },
+      {
+        id: 'l4-12', title: 'Input: What input() Does',
+        explanation: [
+          'input() pauses your program, waits for the user to type something and press Enter, then gives that text back to you as a string.',
+          'Why it matters: input() is how your programs become interactive — instead of guessing values, they ask.',
+          'Recap: input() = pause, read a line, return text.'
+        ],
+        code: `name = input("Your name: ")
+print("Hello,", name)
+
+# input() with no prompt (less friendly)
+x = input()
+print("You typed:", x)`,
+        codeCaption: 'input() always pauses and always returns text',
+        mistake: { title: 'Forgetting the prompt', description: 'Without a prompt, the user has no idea what to type. Always include a clear question inside the parentheses.', bad: 'x = input()              # blank prompt — confusing', good: 'x = input("Your age: ")  # clear' },
+        practice: { question: 'What does input() return — a number or text?', hint: 'Recap.', answer: 'Always text (str), no matter what the user types.' }
+      },
+      {
+        id: 'l4-13', title: 'Input: input() Always Returns a String',
+        explanation: [
+          'No matter what the user types — 42, 3.14, hello — input() gives you a string. Type 42 and you get the text "42", not the number.',
+          'Why it matters: this single rule causes more beginner errors than any other. If you forget it, every math operation on input crashes.',
+          'Recap: input() → always str. Convert if you need a number.'
+        ],
+        code: `x = input("Type a number: ")
+print(x)           # whatever they typed
+print(type(x))     # always <class 'str'>
+
+# To do math, convert
+n = int(x)
+print(n + 1)`,
+        codeCaption: 'input() returns text — confirm with type()',
+        mistake: { title: 'Treating input as a number', description: 'input() never returns a number. Even "42" is the string "42", which cannot be added to 1.', bad: 'x = input("n: ")\nprint(x + 1)   # TypeError', good: 'x = int(input("n: "))\nprint(x + 1)' },
+        practice: { question: 'If the user types 7, what does type(input(...)) return?', hint: 'Always the same.', answer: "<class 'str'>." }
+      },
+      {
+        id: 'l4-14', title: 'Input: Storing input() in a Variable',
+        explanation: [
+          'Whatever input() returns must be stored in a variable, or you cannot use it. The pattern is name = input("prompt").',
+          'Why it matters: a value that is not stored is gone the moment the next line runs.',
+          'Recap: always store the result of input().'
+        ],
+        code: `# Bad — value is thrown away
+input("Type something: ")
+
+# Good — value is captured
+answer = input("Type something: ")
+print("You said:", answer)`,
+        codeCaption: 'Capture the value or it is lost',
+        mistake: { title: 'Calling input() without storing the result', description: 'The user types something, the program ignores it. Always assign to a variable.', bad: 'input("name: ")\nprint(name)   # NameError', good: 'name = input("name: ")\nprint(name)' },
+        practice: { question: 'Write code that asks for a city and stores it in a variable called city.', hint: 'name = input(...).', answer: 'city = input("Your city: ")' }
+      },
+      {
+        id: 'l4-15', title: 'Input: Combining input() with int()',
+        explanation: [
+          'The standard pattern for asking the user for a whole number is: n = int(input("prompt: ")). The input runs first, then int() converts the result.',
+          'Why it matters: any time you want a counter, age, score, or quantity from the user, this is the line.',
+          'Recap: int(input(...)) — one line, two functions, one whole number.'
+        ],
+        code: `age = int(input("Your age: "))
+print(f"Next year you'll be {age + 1}.")
+
+# Two numbers
+a = int(input("First: "))
+b = int(input("Second: "))
+print(f"Sum: {a + b}")`,
+        codeCaption: 'int(input(...)) is the standard pattern for numeric input',
+        mistake: { title: 'Putting int() in the wrong place', description: 'int() must wrap input(), not the variable name. int(name) would try to convert the prompt itself if you put it wrong.', bad: 'int(input("age: "))\nprint(age + 1)   # NameError — never stored', good: 'age = int(input("age: "))\nprint(age + 1)' },
+        practice: { question: 'Write a line that asks for a score and stores it as an int.', hint: 'Wrap input with int.', answer: 'score = int(input("Score: "))' }
+      },
+      {
+        id: 'l4-16', title: 'Input: Combining input() with float()',
+        explanation: [
+          'When the user might type a decimal (price, height, weight), use float(input(...)) instead of int(input(...)).',
+          'Why it matters: int("9.99") crashes. float("9.99") works.',
+          'Recap: float for decimals, int for whole numbers.'
+        ],
+        code: `price = float(input("Price: "))
+print(f"With tax: {price * 1.1:.2f}")
+
+height = float(input("Height in meters: "))
+print(f"Half height: {height / 2}")`,
+        codeCaption: 'float(input(...)) for any value that might have a decimal',
+        mistake: { title: 'Using int() for money', description: 'Prices have decimals. int("9.99") crashes. Always use float() for money or measurements.', bad: 'price = int(input("Price: "))   # crashes on "9.99"', good: 'price = float(input("Price: "))' },
+        practice: { question: 'Ask for a temperature and store it as a float.', hint: 'float(input(...)).', answer: 'temp = float(input("Temperature: "))' }
+      },
+      {
+        id: 'l4-17', title: 'Input: Tiny Calculator Drill',
+        explanation: [
+          'Time to put it together: ask for two numbers and show their sum. This is the shortest "real" program in Python.',
+          'Why it matters: this small loop of input → convert → compute → print is the skeleton of dozens of beginner exercises and many later projects.',
+          'Recap: four lines. Four jobs. One useful program.'
+        ],
+        code: `a = float(input("First number: "))
+b = float(input("Second number: "))
+total = a + b
+print(f"Sum: {total}")`,
+        codeCaption: 'Four lines: ask, ask, compute, show',
+        stepByStep: [
+          '1. Ask for the first number, convert to float, store in a',
+          '2. Ask for the second number, convert to float, store in b',
+          '3. Add them, store the result in total',
+          '4. Print the result with an f-string'
+        ],
+        mistake: { title: 'Skipping the conversion', description: 'Without float(), a + b is "5" + "3" which becomes "53" instead of 8.', bad: 'a = input("First: ")\nb = input("Second: ")\nprint(a + b)   # "53"', good: 'a = float(input(...))\nb = float(input(...))\nprint(a + b)   # 8.0' },
+        practice: { question: 'Extend it: also print the product (a * b).', hint: 'Add a print line.', answer: 'print(f"Product: {a * b}")' }
+      },
+      {
+        id: 'l4-18', title: 'Input: Common Input Mistakes',
+        explanation: [
+          'A short list of mistakes that show up over and over with input(). Memorizing this list saves a lot of debugging.',
+          'Why it matters: the same three mistakes account for the majority of input-related bugs you will write.',
+          'Recap: store the result, convert if you want a number, use float() for decimals.'
+        ],
+        code: `# 1. Not storing the result
+# input("name? ")
+# print(name)            # NameError
+
+# 2. Doing math without converting
+# x = input("n? ")
+# print(x + 1)           # TypeError
+
+# 3. Using int() on a decimal string
+# price = int(input(...))   # crashes on "9.99"
+
+# Correct
+name = input("name? ")
+print(name)
+
+x = int(input("n? "))
+print(x + 1)
+
+price = float(input("price? "))
+print(price + 1)`,
+        codeCaption: 'The three input mistakes that account for most beginner bugs',
+        mistake: { title: 'Repeating the same input bug', description: 'Once you have hit "input is a string" twice, write the conversion immediately every time.', bad: '# debug the same TypeError again and again', good: '# always type int( or float( BEFORE input(' },
+        practice: { question: 'Spot the bug: n = input("n? "); print(n * 2)\nIf the user types 4, what prints?', hint: 'String * int.', answer: '"44" — the string "4" is repeated twice. To get 8, convert: int(n) * 2.' }
+      },
+      {
+        id: 'l4-19', title: 'Input / Output Checkpoint',
+        explanation: [
+          'You can now ask the user for any kind of value, convert it to the right type, and use it in math or text.',
+          'Why it matters: every interactive program you write — calculators, quizzes, mini-games — uses this exact pattern.',
+          'Recap: input() returns text. Convert with int() or float(). Then compute. Then print.'
+        ],
+        code: `name = input("Your name: ")
+age = int(input("Your age: "))
+height = float(input("Your height (m): "))
+
+print(f"Hi {name}.")
+print(f"Next year you'll be {age + 1}.")
+print(f"Half your height is {height / 2:.2f} m.")`,
+        codeCaption: 'A small interactive program using everything from this chapter',
+        mistake: { title: 'Forgetting that input always returns a string', description: 'If only one rule sticks, let it be this one.', bad: 'age = input("age: ")\nprint(age + 1)', good: 'age = int(input("age: "))\nprint(age + 1)' },
+        practice: { question: 'Write a 2-line program that asks for a number and prints its square.', hint: 'int(input(...)) ** 2.', answer: 'n = int(input("n: "))\nprint(n ** 2)' },
+        quiz: {
+          question: 'What is the type of the value returned by input()?',
+          options: [
+            'int',
+            'float',
+            'str',
+            'It depends on what the user types'
+          ],
+          correctIndex: 2,
+          explanation: 'input() ALWAYS returns a str, no matter what the user types. Convert it if you want a number.'
+        }
       }
     ]
   },
