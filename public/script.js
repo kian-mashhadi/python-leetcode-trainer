@@ -64,7 +64,30 @@ function isComplete(lessonId) {
 // ============================================================
 // NAVIGATION
 // ============================================================
-const PAGE_TITLES = { home: 'Home', problems: 'Practice Problems' };
+const PAGE_TITLES = { home: 'Home', problems: 'Practice Problems', lab: 'Practice Lab' };
+
+let __internalHashChange = false;
+let __currentRoute = '#/home';
+
+function persistRoute(hash) {
+  __currentRoute = hash;
+  try { localStorage.setItem('last-route', hash); } catch (e) {}
+  if (location.hash !== hash) {
+    __internalHashChange = true;
+    location.hash = hash;
+  }
+  setActiveTopNav(hash);
+}
+
+function setActiveTopNav(hash) {
+  let target = 'home';
+  if (hash.startsWith('#/level/') || hash.startsWith('#/lesson/')) target = 'learn';
+  else if (hash === '#/lab') target = 'lab';
+  else if (hash === '#/problems') target = null;
+  document.querySelectorAll('.top-nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.target === target);
+  });
+}
 
 function navigateTo(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -79,7 +102,9 @@ function navigateTo(pageId) {
 
   setBreadcrumb([PAGE_TITLES[pageId] || pageId]);
   closeSidebar();
+  if (pageId === 'lab') setTimeout(renderLabIndex, 30);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  persistRoute('#/' + pageId);
 }
 
 function openLevel(levelId) {
@@ -96,6 +121,8 @@ function openLevel(levelId) {
   setBreadcrumb(level ? [`Level ${level.id}`, level.title] : [`Level ${levelId}`]);
   closeSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  try { localStorage.setItem('last-level-id', String(levelId)); } catch (e) {}
+  persistRoute('#/level/' + levelId);
 }
 
 function openLesson(lessonId) {
@@ -112,11 +139,47 @@ function openLesson(lessonId) {
   if (level) {
     const link = document.querySelector(`.level-nav-link[data-level="${level.id}"]`);
     if (link) link.classList.add('active');
+    try { localStorage.setItem('last-level-id', String(level.id)); } catch (e) {}
   }
 
   closeSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  persistRoute('#/lesson/' + lessonId);
 }
+
+function openLearn() {
+  const savedLevel = parseInt(localStorage.getItem('last-level-id') || '', 10);
+  if (!Number.isNaN(savedLevel) && COURSE.some(l => l.id === savedLevel)) {
+    openLevel(savedLevel);
+  } else if (COURSE.length) {
+    openLevel(COURSE[0].id);
+  } else {
+    navigateTo('home');
+  }
+}
+
+function applyRouteFromHash() {
+  let hash = location.hash || '';
+  if (!hash) {
+    try { hash = localStorage.getItem('last-route') || ''; } catch (e) {}
+  }
+  if (hash.startsWith('#/lesson/')) {
+    const id = hash.slice('#/lesson/'.length);
+    if (ALL_LESSONS.some(l => l.id === id)) { openLesson(id); return; }
+  }
+  if (hash.startsWith('#/level/')) {
+    const id = parseInt(hash.slice('#/level/'.length), 10);
+    if (COURSE.some(l => l.id === id)) { openLevel(id); return; }
+  }
+  if (hash === '#/lab')      { navigateTo('lab'); return; }
+  if (hash === '#/problems') { navigateTo('problems'); return; }
+  navigateTo('home');
+}
+
+window.addEventListener('hashchange', () => {
+  if (__internalHashChange) { __internalHashChange = false; return; }
+  applyRouteFromHash();
+});
 
 // Mobile sidebar
 const menuToggle = document.getElementById('menuToggle');
@@ -154,6 +217,16 @@ document.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', e => { e.preventDefault(); navigateTo(link.dataset.page); });
 });
 
+// Top-nav (header) clicks
+document.querySelectorAll('.top-nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.target;
+    if (target === 'home') navigateTo('home');
+    else if (target === 'lab') navigateTo('lab');
+    else if (target === 'learn') openLearn();
+  });
+});
+
 // ============================================================
 // LOAD COURSE
 // ============================================================
@@ -169,6 +242,7 @@ async function loadCourse() {
     document.getElementById('level-nav-list').innerHTML =
       '<li><span class="nav-loading" style="color:var(--red)">Failed to load</span></li>';
   }
+  applyRouteFromHash();
 }
 
 // ============================================================
@@ -750,27 +824,74 @@ function answerQuiz(lessonId, chosenIdx, correctIdx) {
   const lesson = ALL_LESSONS.find(l => l.id === lessonId);
   if (!lesson || !lesson.quiz) return;
 
-  options.forEach((btn, i) => {
-    btn.disabled = true;
-    btn.classList.remove('correct', 'incorrect');
-    if (i === correctIdx) btn.classList.add('correct');
-    else if (i === chosenIdx) btn.classList.add('incorrect');
-  });
-
   const isCorrect = chosenIdx === correctIdx;
-  feedback.style.display = '';
-  feedback.classList.remove('correct', 'incorrect');
-  feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
-  feedback.innerHTML = isCorrect
-    ? `<strong>&#x2713; Correct!</strong> ${escapeHtml(lesson.quiz.explanation)}`
-    : `<strong>&#x2717; Not quite.</strong> ${escapeHtml(lesson.quiz.explanation)} <button class="hint-pill" style="margin-left:0.5rem" onclick="retryQuiz('${lessonId}')">Try again</button>`;
 
-  if (isCorrect) markQuizPassed(lessonId);
+  if (isCorrect) {
+    options.forEach((btn, i) => {
+      btn.disabled = true;
+      btn.classList.remove('correct', 'incorrect');
+      if (i === correctIdx) btn.classList.add('correct');
+    });
+    feedback.style.display = '';
+    feedback.classList.remove('incorrect');
+    feedback.classList.add('correct');
+    feedback.innerHTML = `<strong>&#x2713; Correct!</strong> ${escapeHtml(lesson.quiz.explanation)}`;
+    markQuizPassed(lessonId);
+    return;
+  }
+
+  // Wrong answer: disable only the chosen option, do NOT highlight or reveal the correct one.
+  const chosenBtn = options[chosenIdx];
+  if (chosenBtn) {
+    chosenBtn.disabled = true;
+    chosenBtn.classList.add('incorrect');
+  }
+
+  const chosenText = lesson.quiz.options[chosenIdx] || '';
+  feedback.style.display = '';
+  feedback.classList.remove('correct');
+  feedback.classList.add('incorrect');
+  feedback.innerHTML =
+    `<strong>&#x2717; Not quite.</strong> "${escapeHtml(chosenText)}" isn&rsquo;t the best answer here &mdash; re-read the question and think about what it is really asking.` +
+    `<div style="margin-top:0.5rem;font-size:0.85rem;color:var(--muted)"><strong>Hint:</strong> Eliminate options that are clearly wrong first, then pick the one that most precisely matches the question.</div>` +
+    `<div style="margin-top:0.6rem;display:flex;gap:0.5rem;flex-wrap:wrap">` +
+      `<button class="hint-pill" onclick="retryQuiz('${lessonId}')">Try Again</button>` +
+      `<button class="hint-pill" onclick="revealQuizAnswer('${lessonId}', ${correctIdx})">Reveal Answer</button>` +
+    `</div>`;
 }
 
 function retryQuiz(lessonId) {
-  // Re-render the lesson page to reset quiz state
-  renderLessonPage(lessonId);
+  const card = document.getElementById('quiz-card');
+  if (!card) { renderLessonPage(lessonId); return; }
+  card.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove('correct', 'incorrect');
+  });
+  const feedback = document.getElementById('quiz-feedback');
+  if (feedback) {
+    feedback.style.display = 'none';
+    feedback.classList.remove('correct', 'incorrect');
+    feedback.innerHTML = '';
+  }
+}
+
+function revealQuizAnswer(lessonId, correctIdx) {
+  const card = document.getElementById('quiz-card');
+  if (!card) return;
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  if (!lesson || !lesson.quiz) return;
+  const options = card.querySelectorAll('.quiz-option');
+  options.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correctIdx) btn.classList.add('correct');
+  });
+  const feedback = document.getElementById('quiz-feedback');
+  if (feedback) {
+    feedback.style.display = '';
+    feedback.classList.remove('incorrect');
+    feedback.classList.add('correct');
+    feedback.innerHTML = `<strong>Answer:</strong> ${escapeHtml(lesson.quiz.options[correctIdx])}<div style="margin-top:0.4rem">${escapeHtml(lesson.quiz.explanation)}</div>`;
+  }
 }
 
 // ============================================================
