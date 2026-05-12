@@ -3273,6 +3273,7 @@ print(mystery(10, 4))`,
     id: 13, slug: 'pre-lab-checkpoint', title: 'Before Practice Lab',
     subtitle: 'Prove every beginner skill before bigger problems',
     color: '#f0883e',
+    badgeLabel: 'Check',
     lessons: [
       {
         id: 'l13-0', title: 'Checkpoint 1: Print and Variables',

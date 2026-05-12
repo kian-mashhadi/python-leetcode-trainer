@@ -255,11 +255,12 @@ function renderSidebarLevels() {
     const completedCount = level.lessons.filter(l => done.has(l.id)).length;
     const total = level.lessons.length;
     const allDone = completedCount === total;
-    const tooltip = `L${level.id}: ${level.title} — ${completedCount}/${total}`;
+    const badgeText = level.badgeLabel || `L${level.id}`;
+    const tooltip = `${badgeText}: ${level.title} — ${completedCount}/${total}`;
     return `
       <li>
         <button class="level-nav-link" data-level="${level.id}" data-tooltip="${escapeHtml(tooltip)}" onclick="openLevel(${level.id})">
-          <span class="level-nav-badge" style="background:${level.color}22;color:${level.color}">L${level.id}</span>
+          <span class="level-nav-badge" style="background:${level.color}22;color:${level.color}">${escapeHtml(badgeText)}</span>
           <span class="level-nav-title">${escapeHtml(level.title)}</span>
           <span class="level-nav-progress ${allDone ? 'done' : ''}">${completedCount}/${total}</span>
         </button>
@@ -281,7 +282,7 @@ function renderHomePreview() {
     return `
       <div class="home-level-card ${allDone ? 'complete' : ''}" style="--level-color:${level.color}" onclick="openLevel(${level.id})">
         <div class="hlc-top">
-          <span class="hlc-badge" style="background:${level.color}22;color:${level.color}">${allDone ? '✓' : `L${level.id}`}</span>
+          <span class="hlc-badge" style="background:${level.color}22;color:${level.color}">${allDone ? '✓' : escapeHtml(level.badgeLabel || `L${level.id}`)}</span>
           <span class="hlc-title">${escapeHtml(level.title)}</span>
         </div>
         <div class="hlc-count">${allDone ? '<span style="color:var(--green);font-weight:600">✓ Complete</span>' : `${completedCount}/${total} lessons`}</div>
@@ -314,7 +315,7 @@ function refreshProgress() {
     const allDone = c === t;
     const prog = link.querySelector('.level-nav-progress');
     if (prog) { prog.textContent = `${c}/${t}`; prog.className = `level-nav-progress ${allDone ? 'done' : ''}`; }
-    link.setAttribute('data-tooltip', `L${level.id}: ${level.title} — ${c}/${t}`);
+    link.setAttribute('data-tooltip', `${level.badgeLabel || `L${level.id}`}: ${level.title} — ${c}/${t}`);
   });
 
   // Re-render home preview if visible
@@ -360,15 +361,15 @@ function renderLevelPage(levelId) {
 
   const navButtons = `
     <div class="level-nav-buttons">
-      ${prevLevel ? `<button class="btn-ghost" onclick="openLevel(${prevLevel.id})">&larr; L${prevLevel.id}: ${escapeHtml(prevLevel.title)}</button>` : ''}
-      ${level.lessons.length > 0 ? `<button class="next-btn" onclick="openLesson('${level.lessons[0].id}')">Start Level ${level.id} &rarr;</button>` : ''}
-      ${nextLevel ? `<button class="btn-ghost" onclick="openLevel(${nextLevel.id})">L${nextLevel.id}: ${escapeHtml(nextLevel.title)} &rarr;</button>` : ''}
+      ${prevLevel ? `<button class="btn-ghost" onclick="openLevel(${prevLevel.id})">&larr; ${escapeHtml(prevLevel.badgeLabel || `L${prevLevel.id}`)}: ${escapeHtml(prevLevel.title)}</button>` : ''}
+      ${level.lessons.length > 0 ? `<button class="next-btn" onclick="openLesson('${level.lessons[0].id}')">Start ${escapeHtml(level.badgeLabel ? level.title : `Level ${level.id}`)} &rarr;</button>` : ''}
+      ${nextLevel ? `<button class="btn-ghost" onclick="openLevel(${nextLevel.id})">${escapeHtml(nextLevel.badgeLabel || `L${nextLevel.id}`)}: ${escapeHtml(nextLevel.title)} &rarr;</button>` : ''}
     </div>`;
 
   document.getElementById('level-content').innerHTML = `
     <button class="back-btn" onclick="navigateTo('home')" style="margin-bottom:1.5rem">&larr; All Levels</button>
     <div class="level-page-header">
-      <div class="level-page-badge" style="background:${level.color}22;color:${level.color}">L${level.id}</div>
+      <div class="level-page-badge" style="background:${level.color}22;color:${level.color}">${escapeHtml(level.badgeLabel || `L${level.id}`)}</div>
       <div class="level-page-info">
         <h1>${escapeHtml(level.title)}</h1>
         <p>${escapeHtml(level.subtitle)}</p>
@@ -543,7 +544,7 @@ function renderLessonPage(lessonId) {
       <div class="lesson-progress-strip">${dotsHtml}</div>
 
       <div class="lesson-header">
-        ${level ? `<div class="lesson-level-tag" style="background:${level.color}22;color:${level.color}">Level ${level.id} &bull; ${escapeHtml(level.title)}</div>` : ''}
+        ${level ? `<div class="lesson-level-tag" style="background:${level.color}22;color:${level.color}">${escapeHtml(level.badgeLabel ? level.title : `Level ${level.id} • ${level.title}`)}</div>` : ''}
         <h1 class="lesson-title">${escapeHtml(lesson.title)}</h1>
         <div class="lesson-nav-row">
           <span>Lesson ${levelIdx + 1} of ${level ? level.lessons.length : '?'}</span>
