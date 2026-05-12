@@ -1,3 +1,153 @@
+===== FILE TREE =====
+./server.js
+./website-audit-updated.txt
+./public/index.html
+./public/script.js
+./public/style.css
+./.gitignore
+./package-lock.json
+./package.json
+./data/lessons.js
+./data/practice-problems.js
+
+===== package.json =====
+{
+  "name": "python-leetcode-trainer",
+  "version": "1.0.0",
+  "description": "Beginner-friendly website to learn Python for LeetCode",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
+
+===== server.js =====
+const express = require('express');
+const path = require('path');
+const levels = require('./data/lessons');
+const practiceProblems = require('./data/practice-problems');
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+const problems = [
+  {
+    id: 1,
+    title: 'Two Sum',
+    difficulty: 'Easy',
+    concept: 'Hash Maps (Dictionaries)',
+    tags: ['Array', 'Hash Table'],
+    whatYouLearn: 'How to use a dictionary for O(1) lookups instead of nested loops',
+    explanation: 'Given a list of numbers and a target value, find the two numbers that add up to the target and return their positions (indices).\n\nExample:\n  nums = [2, 7, 11, 15], target = 9\n  Answer: [0, 1]  →  nums[0] + nums[1] = 2 + 7 = 9\n\nThe brute force approach checks every pair (O(n²)). With a dictionary, we can solve it in a single pass — O(n).',
+    starterCode: 'def two_sum(nums, target):\n    # Your code here\n    pass\n\n# Test your solution\nprint(two_sum([2, 7, 11, 15], 9))  # Expected: [0, 1]\nprint(two_sum([3, 2, 4], 6))       # Expected: [1, 2]',
+    hint1: 'As you loop through the list, store each number in a dictionary where key = number and value = its index. This lets you check in O(1) if a number exists.',
+    hint2: 'For each number num, calculate what you need: complement = target - num.\nCheck if complement is already in your dictionary.\nIf yes, return [seen[complement], current_index].',
+    solution: 'def two_sum(nums, target):\n    seen = {}  # stores {number: index}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i',
+    solutionExplanation: 'Step 1: Create an empty dictionary called "seen" to track numbers we\'ve visited.\n\nStep 2: Loop through nums using enumerate() to get both the index (i) and value (num).\n\nStep 3: Calculate complement = target - num. This is the number we need to find.\n\nStep 4: Check if complement is in "seen". If it is, we found our pair — return [seen[complement], i].\n\nStep 5: If complement isn\'t found yet, store seen[num] = i and move on.\n\nWhy this works: Dictionary lookups are O(1), so instead of checking all pairs (O(n²)), we do a single pass — O(n) total.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)'
+  },
+  {
+    id: 2,
+    title: 'Contains Duplicate',
+    difficulty: 'Easy',
+    concept: 'Sets',
+    tags: ['Array', 'Hash Table', 'Sorting'],
+    whatYouLearn: 'How to use a set to detect duplicates in O(n) time',
+    explanation: 'Given a list of numbers, return True if any number appears more than once. Return False if all numbers are unique.\n\nExample 1: nums = [1, 2, 3, 1]  →  True  (1 appears twice)\nExample 2: nums = [1, 2, 3, 4]  →  False (all unique)\n\nA Python set only stores unique values. Adding a duplicate to a set has no effect — we can use this to detect duplicates instantly.',
+    starterCode: 'def contains_duplicate(nums):\n    # Your code here\n    pass\n\n# Test your solution\nprint(contains_duplicate([1, 2, 3, 1]))  # Expected: True\nprint(contains_duplicate([1, 2, 3, 4]))  # Expected: False',
+    hint1: 'Python sets don\'t allow duplicates. As you loop through the numbers, check if the current number is already in your set before adding it.',
+    hint2: 'If you find a number that\'s already in the set, return True immediately.\nIf you finish the entire loop without finding a duplicate, return False.',
+    solution: 'def contains_duplicate(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False\n\n# Pythonic one-liner:\n# return len(nums) != len(set(nums))',
+    solutionExplanation: 'Step 1: Create an empty set called "seen".\n\nStep 2: Loop through each number in nums.\n\nStep 3: Before adding a number, check if it\'s already in the set. If yes, we found a duplicate — return True immediately.\n\nStep 4: If the number is new, add it to the set with seen.add(num).\n\nStep 5: If the loop finishes without finding duplicates, return False.\n\nBonus one-liner: Converting a list to a set removes duplicates. If len(set(nums)) < len(nums), duplicates existed.\n\nTime: O(n) — single pass. Space: O(n) — the set stores up to n elements.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)'
+  },
+  {
+    id: 3,
+    title: 'Valid Anagram',
+    difficulty: 'Easy',
+    concept: 'Hash Maps / Character Counting',
+    tags: ['Hash Table', 'String', 'Sorting'],
+    whatYouLearn: 'How to count character frequencies using a dictionary',
+    explanation: 'Given two strings s and t, return True if t is an anagram of s.\n\nAn anagram uses the exact same letters, just in a different order.\n\nExample 1: s = "anagram", t = "nagaram"  →  True\nExample 2: s = "rat",     t = "car"      →  False\n\nApproach: Count how many times each character appears in both strings. If the counts match exactly, they\'re anagrams.',
+    starterCode: 'def is_anagram(s, t):\n    # Your code here\n    pass\n\n# Test your solution\nprint(is_anagram("anagram", "nagaram"))  # Expected: True\nprint(is_anagram("rat", "car"))          # Expected: False',
+    hint1: 'If the two strings have different lengths, they can\'t be anagrams — return False early.\n\nThen try building a dictionary that counts each character in string s.',
+    hint2: 'Build a count dictionary from s (count[char] += 1 for each char).\nThen loop through t, decrementing the count for each character.\nIf a character doesn\'t exist in count or its count reaches 0 before you\'re done, return False.',
+    solution: 'def is_anagram(s, t):\n    if len(s) != len(t):\n        return False\n\n    count = {}\n    for char in s:\n        count[char] = count.get(char, 0) + 1\n\n    for char in t:\n        if char not in count or count[char] == 0:\n            return False\n        count[char] -= 1\n\n    return True\n\n# Alternative using sorting (O(n log n)):\n# return sorted(s) == sorted(t)',
+    solutionExplanation: 'Step 1: If lengths differ, return False immediately — anagrams must have the same length.\n\nStep 2: Build a frequency dictionary from string s.\n  count.get(char, 0) returns 0 if the char isn\'t in the dict yet, then we add 1.\n\nStep 3: Loop through string t. For each character:\n  - If it\'s not in count → t has a char that s doesn\'t → return False\n  - If count[char] == 0 → t uses this char more times than s → return False\n  - Otherwise, decrement count[char] by 1\n\nStep 4: If we finish both loops cleanly, return True.\n\nAlternative: sorted(s) == sorted(t) works but is O(n log n) due to sorting.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) — at most 26 unique characters'
+  },
+  {
+    id: 4,
+    title: 'Reverse String',
+    difficulty: 'Easy',
+    concept: 'Two Pointers',
+    tags: ['Two Pointers', 'String'],
+    whatYouLearn: 'The two-pointer technique for in-place array manipulation',
+    explanation: 'Given a list of characters s, reverse it in-place.\nYou must modify the input directly — you cannot allocate a new list.\n\nExample:\n  Input:  ["h","e","l","l","o"]\n  Output: ["o","l","l","e","h"]\n\nThe two-pointer technique: one pointer starts at the left end, one at the right end. They swap elements and move toward each other until they meet in the middle.',
+    starterCode: 'def reverse_string(s):\n    # Use two pointers\n    # left starts at 0, right starts at the last index\n    # Swap and move them toward each other\n    pass\n\n# Test your solution\ns = ["h","e","l","l","o"]\nreverse_string(s)\nprint(s)  # Expected: ["o","l","l","e","h"]',
+    hint1: 'Start with left = 0 and right = len(s) - 1.\nThese are your two pointers. Keep looping as long as left < right.',
+    hint2: 'Inside the loop:\n  1. Swap s[left] and s[right]:\n     s[left], s[right] = s[right], s[left]\n  2. Move pointers inward:\n     left += 1\n     right -= 1',
+    solution: 'def reverse_string(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        s[left], s[right] = s[right], s[left]\n        left += 1\n        right -= 1',
+    solutionExplanation: 'Step 1: Initialize two pointers — left at index 0, right at index len(s) - 1.\n\nStep 2: Loop while left < right. When left >= right, the pointers have crossed and we\'re done.\n\nStep 3: Swap the elements at both pointers using Python\'s simultaneous assignment:\n  s[left], s[right] = s[right], s[left]\n  (This is a Python trick — no temporary variable needed!)\n\nStep 4: Move left pointer right (left += 1) and right pointer left (right -= 1).\n\nStep 5: When left >= right, we\'ve reversed the entire list in-place.\n\nThis is the classic two-pointer pattern. You\'ll see it again in palindrome checks, pair-sum problems, and sorting algorithms.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1) — in-place, no extra memory'
+  },
+  {
+    id: 5,
+    title: 'Best Time to Buy and Sell Stock',
+    difficulty: 'Easy',
+    concept: 'Sliding Window / Greedy',
+    tags: ['Array', 'Dynamic Programming', 'Greedy'],
+    whatYouLearn: 'How to track a running minimum to find the best opportunity in one pass',
+    explanation: 'Given a list of stock prices where prices[i] is the price on day i, find the maximum profit you can make by buying on one day and selling on a later day.\n\nReturn 0 if no profit is possible.\n\nExample:\n  prices = [7, 1, 5, 3, 6, 4]\n  Buy on day 1 (price=1), sell on day 4 (price=6)  →  profit = 5\n\nKey rule: You must buy BEFORE you sell.',
+    starterCode: 'def max_profit(prices):\n    # Track the minimum price seen so far\n    # Track the maximum profit seen so far\n    pass\n\n# Test your solution\nprint(max_profit([7, 1, 5, 3, 6, 4]))  # Expected: 5\nprint(max_profit([7, 6, 4, 3, 1]))     # Expected: 0 (no profit possible)',
+    hint1: 'Keep track of the lowest price you\'ve seen so far as you loop through the prices.\nThe best day to buy is always the lowest price seen so far.',
+    hint2: 'At each price, calculate the profit if you sold today:\n  profit = current_price - min_price_so_far\nUpdate your max_profit if this is the best profit you\'ve seen yet.',
+    solution: 'def max_profit(prices):\n    min_price = float("inf")\n    max_profit = 0\n\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        elif price - min_price > max_profit:\n            max_profit = price - min_price\n\n    return max_profit',
+    solutionExplanation: 'Step 1: Initialize min_price to float("inf") so any real price will be smaller. Initialize max_profit to 0.\n\nStep 2: Loop through each price.\n\nStep 3: If the current price is lower than min_price, update min_price. This represents finding a better buying opportunity.\n\nStep 4: Otherwise, calculate the profit if we sold today: price - min_price. If it beats our current max_profit, update it.\n\nStep 5: Return max_profit. If prices only decrease, max_profit stays 0 (no profitable trade).\n\nWhy float("inf")? It\'s a common trick to initialize a minimum tracker. Any real number will be smaller, so the first price always sets min_price.\n\nThis is a greedy approach: at each step, we always assume we bought at the cheapest price seen so far.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)'
+  }
+];
+
+app.get('/api/course', (req, res) => {
+  res.json(levels);
+});
+
+app.get('/api/practice-problems', (req, res) => {
+  res.json(practiceProblems);
+});
+
+app.get('/api/problems', (req, res) => {
+  const summary = problems.map(({ id, title, difficulty, concept, tags, whatYouLearn }) => ({
+    id, title, difficulty, concept, tags, whatYouLearn
+  }));
+  res.json(summary);
+});
+
+app.get('/api/problems/:id', (req, res) => {
+  const problem = problems.find(p => p.id === parseInt(req.params.id));
+  if (!problem) return res.status(404).json({ error: 'Problem not found' });
+  res.json(problem);
+});
+
+app.listen(PORT, () => {
+  console.log(`Python LeetCode Trainer running at http://localhost:${PORT}`);
+});
+
+===== data/lessons.js =====
 module.exports = [
   {
     id: 0, slug: 'intro', title: 'What is Coding?',
@@ -2658,28 +2808,6 @@ print(f"Half your height is {height / 2:.2f} m.")`,
           correctIndex: 2,
           explanation: 'input() ALWAYS returns a str, no matter what the user types. Convert it if you want a number.'
         }
-      },
-      {
-        id: 'l4-20', title: 'Boss Fight: Next Year Calculator',
-        explanation: ['Final challenge for this level. Combine string input, int conversion, math, and return into one tiny function.', 'In a real interactive program you would read this from input(). Here we pass the string directly so the tests are repeatable.'],
-        code: `# Pseudocode:
-# 1. Take a digit STRING like "25"
-# 2. Convert it to an int
-# 3. Add 1 to get next year's age
-# 4. Return the int result`,
-        codeCaption: 'Strings in, ints out — the classic input pattern',
-        challenge: {
-          description: 'Write next_age(age_text) that takes a digit string like "25" and returns the integer for next year\'s age (26). The input is always a valid digit string.',
-          starter: 'def next_age(age_text):\n    # convert age_text to int, then add 1\n    pass',
-          tests: [
-            { call: 'next_age("25")', expected: 26 },
-            { call: 'next_age("0")', expected: 1 },
-            { call: 'next_age("99")', expected: 100 },
-            { call: 'next_age("1")', expected: 2 }
-          ],
-          hint: 'return int(age_text) + 1. Remember: the input is a string, you must convert before doing math.',
-          solution: 'def next_age(age_text):\n    return int(age_text) + 1'
-        }
       }
     ]
   },
@@ -2790,84 +2918,6 @@ if age >= 18 and has_ticket:
         codeCaption: 'Nested conditions — each level adds 4 more spaces',
         mistake: { title: 'Over-nesting — too many levels', description: 'Deeply nested code is hard to read and debug. Try to flatten it with and/or when possible.', bad: 'if a:\n    if b:\n        if c:\n            print("all true")  # 3 levels deep', good: 'if a and b and c:\n    print("all true")  # cleaner — same result' },
         practice: { question: 'Write nested conditions: if age >= 16, check if they have a license. If yes, print "Can drive". If no, print "Need a license".', hint: 'Outer if for age, inner if for license.', answer: 'if age >= 16:\n    if has_license:\n        print("Can drive")\n    else:\n        print("Need a license")\nelse:\n    print("Too young to drive")' }
-      },
-      {
-        id: 'l5-4', title: 'Predict the Output: if / elif / else',
-        explanation: ['Trace the code below in your head before clicking Reveal. Read each condition top to bottom and find the FIRST one that is True.', 'This is the same skill you will use in every LeetCode problem: simulating code on paper.'],
-        code: `x = 12
-if x > 20:
-    print("A")
-elif x > 10:
-    print("B")
-elif x > 5:
-    print("C")
-else:
-    print("D")`,
-        codeCaption: 'Only the first True branch runs — the rest are skipped',
-        practice: { question: 'What does the code above print? Decide before revealing.', hint: 'x > 20 is False; x > 10 is True (12 > 10). The first True wins.', answer: 'B\n\nx > 20 is False (skip). x > 10 is True — print "B" and stop. The remaining branches are skipped entirely.' }
-      },
-      {
-        id: 'l5-5', title: 'Fix the Bug: Wrong Operator',
-        explanation: ['The code below was supposed to check if age is at least 18, but the operator is wrong. Find the bug before revealing the fix.'],
-        mistake: { title: 'Confusing = with ==', description: '= assigns a value to a variable. == compares two values. Inside an if condition you want a comparison (==, >, <, >=, <=) — never a plain =.', bad: 'age = 20\nif age = 18:\n    print("adult")\n# SyntaxError: cannot assign in condition', good: 'age = 20\nif age >= 18:\n    print("adult")\n# correct: comparison, not assignment' },
-        practice: { question: 'Why does the broken version crash? Try to answer before revealing.', hint: 'Look closely at the operator inside the if.', answer: '= is assignment, not comparison. Python expects a True/False expression after if. Use ==, >=, <=, > or < depending on what you want to check.' }
-      },
-      {
-        id: 'l5-6', title: 'Tiny Drill: Even or Odd',
-        explanation: ['Small coding task. Write a function that decides whether a number is even or odd. Run the tests to confirm.'],
-        challenge: {
-          description: 'Write even_or_odd(n) — return the string "even" if n is divisible by 2, otherwise return the string "odd".',
-          starter: 'def even_or_odd(n):\n    # your code here\n    pass',
-          tests: [
-            { call: 'even_or_odd(4)', expected: 'even' },
-            { call: 'even_or_odd(7)', expected: 'odd' },
-            { call: 'even_or_odd(0)', expected: 'even' },
-            { call: 'even_or_odd(-3)', expected: 'odd' }
-          ],
-          hint: 'Use n % 2 — if it equals 0 the number is even. Otherwise it is odd.',
-          solution: 'def even_or_odd(n):\n    if n % 2 == 0:\n        return "even"\n    else:\n        return "odd"'
-        }
-      },
-      {
-        id: 'l5-7', title: 'Check Understanding: Conditions',
-        explanation: ['Short conceptual question. Wrong answers will give you a hint instead of revealing the right one — re-read the question and try again.'],
-        quiz: {
-          question: 'In an if / elif / elif / else chain, how many of the blocks run when SEVERAL conditions are True?',
-          options: [
-            'All of them, top to bottom',
-            'Only the first True one — then the chain stops',
-            'Only the else block',
-            'None — you must use multiple separate ifs'
-          ],
-          correctIndex: 1,
-          explanation: 'Python checks each condition top to bottom. The FIRST True branch runs, and every other branch in the chain is skipped — even if it would also be True.'
-        }
-      },
-      {
-        id: 'l5-8', title: 'Boss Fight: Grade Checker',
-        explanation: ['Final challenge for this level. Combine if / elif / else and comparisons into a grade-checker function.', 'This is a classic beginner exercise. You should be able to do it without help — but a hint and solution are there if you need them.'],
-        code: `# Cutoffs:
-#   90+   -> "A"
-#   80-89 -> "B"
-#   70-79 -> "C"
-#   60-69 -> "D"
-#   <60   -> "F"`,
-        codeCaption: 'Standard letter-grade cutoffs',
-        challenge: {
-          description: 'Write grade(score) that returns "A", "B", "C", "D", or "F" using the cutoffs in the code example above.',
-          starter: 'def grade(score):\n    # your code here\n    pass',
-          tests: [
-            { call: 'grade(95)', expected: 'A' },
-            { call: 'grade(85)', expected: 'B' },
-            { call: 'grade(72)', expected: 'C' },
-            { call: 'grade(60)', expected: 'D' },
-            { call: 'grade(40)', expected: 'F' },
-            { call: 'grade(100)', expected: 'A' },
-            { call: 'grade(59)', expected: 'F' }
-          ],
-          hint: 'Start with the highest cutoff: if score >= 90 return "A". Then elif >= 80, elif >= 70, elif >= 60, else "F".',
-          solution: 'def grade(score):\n    if score >= 90:\n        return "A"\n    elif score >= 80:\n        return "B"\n    elif score >= 70:\n        return "C"\n    elif score >= 60:\n        return "D"\n    else:\n        return "F"'
-        }
       }
     ]
   },
@@ -3019,70 +3069,6 @@ print(f"Evens: {evens}")     # [2, 8, 4, 6]`,
         codeCaption: 'These four patterns — max, sum, count, collect — appear in most LeetCode problems',
         mistake: { title: 'Starting max/min with 0', description: 'If all numbers are negative, starting max_val = 0 gives a wrong answer. Start with the first element, or use float("-inf").', bad: 'max_val = 0\n# wrong if all numbers are negative!', good: 'max_val = numbers[0]\n# or: max_val = float("-inf")\n# handles any set of numbers' },
         practice: { question: 'Write a loop that finds the minimum value in: nums = [5, 3, 8, 1, 9, 2]', hint: 'Same as max, but track the smallest instead.', answer: 'nums = [5, 3, 8, 1, 9, 2]\nmin_val = nums[0]\nfor n in nums:\n    if n < min_val:\n        min_val = n\nprint(min_val)  # 1' }
-      },
-      {
-        id: 'l6-5', title: 'Predict the Output: Summing in a Loop',
-        explanation: ['Trace this loop one iteration at a time. Write the value of total after each step before clicking Reveal.', 'Loop tracing is the single most useful debugging skill in your toolbox — slow down and do it on paper.'],
-        code: `total = 0
-for i in range(4):
-    total += i
-print(total)`,
-        codeCaption: 'range(4) gives 0, 1, 2, 3',
-        practice: { question: 'What does the code above print?', hint: 'After each iteration, what is total? Start at 0.', answer: '6\n\ni = 0 → total = 0 + 0 = 0. i = 1 → total = 0 + 1 = 1. i = 2 → total = 1 + 2 = 3. i = 3 → total = 3 + 3 = 6. Then prints 6.' }
-      },
-      {
-        id: 'l6-6', title: 'Fix the Bug: Infinite Loop',
-        explanation: ['The code below was supposed to print 1 through 5, but it runs forever. Find the bug before revealing the fix.'],
-        mistake: { title: 'Forgetting to update the loop variable', description: 'Inside a while loop, you MUST do something that eventually makes the condition False. If the condition never changes, the loop runs forever.', bad: 'i = 1\nwhile i <= 5:\n    print(i)\n# never stops — i is always 1', good: 'i = 1\nwhile i <= 5:\n    print(i)\n    i += 1   # eventually makes i <= 5 False' },
-        practice: { question: 'Why does the broken loop run forever?', hint: 'What is changing inside the loop body?', answer: 'Nothing inside the loop changes i, so i <= 5 stays True forever. Adding i += 1 inside the loop makes the condition eventually become False so the loop ends.' }
-      },
-      {
-        id: 'l6-7', title: 'Tiny Drill: Sum 1 to N',
-        explanation: ['Classic loop pattern: add every integer from 1 to n. Pyodide will run your code against several test cases.'],
-        challenge: {
-          description: 'Write sum_to(n) that returns 1 + 2 + 3 + ... + n. Assume n >= 1.',
-          starter: 'def sum_to(n):\n    # your code here\n    pass',
-          tests: [
-            { call: 'sum_to(1)', expected: 1 },
-            { call: 'sum_to(3)', expected: 6 },
-            { call: 'sum_to(5)', expected: 15 },
-            { call: 'sum_to(10)', expected: 55 }
-          ],
-          hint: 'Start total = 0. Loop i over range(1, n + 1) and do total += i. Remember: range stop is exclusive.',
-          solution: 'def sum_to(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total'
-        }
-      },
-      {
-        id: 'l6-8', title: 'Check Understanding: range()',
-        explanation: ['Short check on how range() actually works. Wrong answers will not reveal the correct one — re-read the question and try again.'],
-        quiz: {
-          question: 'How many times does the body of `for i in range(1, 5):` run?',
-          options: [
-            '5 — i goes from 0 to 4',
-            '4 — i goes from 1 to 4 (stop is exclusive)',
-            '5 — i goes from 1 to 5 inclusive',
-            'It does not run because 1 < 5'
-          ],
-          correctIndex: 1,
-          explanation: 'range(start, stop) includes start but EXCLUDES stop. So range(1, 5) gives 1, 2, 3, 4 — four values, so the body runs 4 times.'
-        }
-      },
-      {
-        id: 'l6-9', title: 'Boss Fight: Count Evens',
-        explanation: ['Combine loops + conditions + counting. Given a list of integers, return how many are even.', 'This is the same shape as dozens of beginner LeetCode problems — the difference is what you decide to count.'],
-        challenge: {
-          description: 'Write count_evens(nums) that returns how many numbers in the list nums are even. An empty list should return 0.',
-          starter: 'def count_evens(nums):\n    # your code here\n    pass',
-          tests: [
-            { call: 'count_evens([1, 2, 3, 4, 5, 6])', expected: 3 },
-            { call: 'count_evens([1, 3, 5])', expected: 0 },
-            { call: 'count_evens([])', expected: 0 },
-            { call: 'count_evens([0, 2, 4, 6])', expected: 4 },
-            { call: 'count_evens([-2, -1, 0, 1])', expected: 2 }
-          ],
-          hint: 'Start a counter at 0. Loop n through nums. If n % 2 == 0, add 1 to the counter. Return the counter.',
-          solution: 'def count_evens(nums):\n    count = 0\n    for n in nums:\n        if n % 2 == 0:\n            count += 1\n    return count'
-        }
       }
     ]
   },
@@ -3195,183 +3181,6 @@ print(result)   # [0, 1]
         codeCaption: 'Every LeetCode problem is a function that takes input and returns output',
         mistake: { title: 'Using print instead of return in LeetCode', description: 'LeetCode checks your function\'s return value. If you print instead of return, it gets None back and all tests fail.', bad: 'def two_sum(nums, target):\n    # ...\n    print([i, j])   # wrong — LeetCode checks return value', good: 'def two_sum(nums, target):\n    # ...\n    return [i, j]   # correct' },
         practice: { question: 'Write a function called max_of_two(a, b) that returns the larger of two numbers (without using Python\'s built-in max()).', hint: 'Use an if/else with return in each branch.', answer: 'def max_of_two(a, b):\n    if a >= b:\n        return a\n    else:\n        return b\n\nprint(max_of_two(5, 9))   # 9' }
-      },
-      {
-        id: 'l7-4', title: 'Predict the Output: Functions',
-        explanation: ['Trace the function calls below. What does each call return, and what does Python print?'],
-        code: `def mystery(a, b):
-    if a > b:
-        return a
-    return b
-
-print(mystery(3, 8))
-print(mystery(10, 4))`,
-        codeCaption: 'Two return paths — whichever is hit first wins',
-        practice: { question: 'What does the code above print?', hint: 'mystery returns whichever of a and b is larger.', answer: '8\n10\n\nmystery(3, 8): 3 > 8 is False, so return b → 8. mystery(10, 4): 10 > 4 is True, so return a → 10.' }
-      },
-      {
-        id: 'l7-5', title: 'Fix the Bug: print vs return',
-        explanation: ['The function below was supposed to return a squared number, but using it in math crashes with TypeError.'],
-        mistake: { title: 'Printing instead of returning', description: 'print() displays output but the function still returns None (the default). To send the value back to the caller, use return.', bad: 'def square(n):\n    print(n * n)\n\nx = square(5) + 1\n# TypeError: NoneType + int', good: 'def square(n):\n    return n * n\n\nx = square(5) + 1\n# x = 26' },
-        practice: { question: 'Why does x = square(5) + 1 crash in the broken version?', hint: 'What does the function actually give back?', answer: 'square() prints but never returns, so the function returns None. None + 1 is a TypeError. Replace print with return to give the value back to the caller.' }
-      },
-      {
-        id: 'l7-6', title: 'Tiny Drill: Greet Function',
-        explanation: ['Define a small function that takes a name and returns a greeting string.'],
-        challenge: {
-          description: 'Write greet(name) that returns "Hello, " followed by name and then "!". For example, greet("Alice") returns "Hello, Alice!".',
-          starter: 'def greet(name):\n    # your code here\n    pass',
-          tests: [
-            { call: 'greet("Alice")', expected: 'Hello, Alice!' },
-            { call: 'greet("Bob")', expected: 'Hello, Bob!' },
-            { call: 'greet("")', expected: 'Hello, !' }
-          ],
-          hint: 'Use return with an f-string: return f"Hello, {name}!". Make sure to return — do not print.',
-          solution: 'def greet(name):\n    return f"Hello, {name}!"'
-        }
-      },
-      {
-        id: 'l7-7', title: 'Check Understanding: Return Values',
-        explanation: ['One short conceptual question. Wrong answers will not reveal the right one — re-read and retry.'],
-        quiz: {
-          question: 'What does a Python function return if you NEVER write a return statement?',
-          options: [
-            'The last value printed inside it',
-            'Nothing — calling it crashes',
-            'None',
-            '0'
-          ],
-          correctIndex: 2,
-          explanation: 'Every Python function returns None by default if no return statement is written. LeetCode tests fail silently when this happens because they check the return value.'
-        }
-      },
-      {
-        id: 'l7-8', title: 'Boss Fight: Leap Year',
-        explanation: ['Combine everything: parameters, return, comparisons, and logical operators. Decide whether a given year is a leap year.', 'This is a real classic — small but combines several beginner skills at once.'],
-        code: `# A year is a leap year if:
-#   - it is divisible by 4 AND NOT divisible by 100, OR
-#   - it is divisible by 400`,
-        codeCaption: 'The Gregorian leap-year rule',
-        challenge: {
-          description: 'Write is_leap(year) that returns True if year is a leap year, False otherwise. Use the rule shown in the code example above.',
-          starter: 'def is_leap(year):\n    # your code here\n    pass',
-          tests: [
-            { call: 'is_leap(2024)', expected: true },
-            { call: 'is_leap(2023)', expected: false },
-            { call: 'is_leap(2000)', expected: true },
-            { call: 'is_leap(1900)', expected: false },
-            { call: 'is_leap(2100)', expected: false },
-            { call: 'is_leap(2400)', expected: true }
-          ],
-          hint: 'Return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0).',
-          solution: 'def is_leap(year):\n    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)'
-        }
-      }
-    ]
-  },
-  {
-    id: 13, slug: 'pre-lab-checkpoint', title: 'Before Practice Lab',
-    subtitle: 'Prove every beginner skill before bigger problems',
-    color: '#f0883e',
-    lessons: [
-      {
-        id: 'l13-0', title: 'Checkpoint 1: Print and Variables',
-        explanation: ['Quick skill check. Can you store values in variables and return a formatted string? This confirms the most basic skill before moving on.', 'If this drill is hard, go back to Level 2 (Variables) and re-run those lessons before continuing.'],
-        challenge: {
-          description: 'Write make_label(name, age) that returns a string in the EXACT format: "name=Alice age=25" — using whatever name and age the caller passes in.',
-          starter: 'def make_label(name, age):\n    # your code here\n    pass',
-          tests: [
-            { call: 'make_label("Alice", 25)', expected: 'name=Alice age=25' },
-            { call: 'make_label("Bob", 7)', expected: 'name=Bob age=7' },
-            { call: 'make_label("", 0)', expected: 'name= age=0' }
-          ],
-          hint: 'Use an f-string: return f"name={name} age={age}".',
-          solution: 'def make_label(name, age):\n    return f"name={name} age={age}"'
-        }
-      },
-      {
-        id: 'l13-1', title: 'Checkpoint 2: Data Types',
-        explanation: ['Quick type quiz. If you cannot recognize types fluently, the rest of the course will keep tripping you up.'],
-        quiz: {
-          question: 'What is the type of the value 3.0 in Python?',
-          options: ['int', 'float', 'str', 'bool'],
-          correctIndex: 1,
-          explanation: 'Any number written with a decimal point is a float — even if the decimal is .0. Compare with 3 (int) and "3.0" (str).'
-        }
-      },
-      {
-        id: 'l13-2', title: 'Checkpoint 3: Math',
-        explanation: ['Arithmetic plus integer division. The // operator divides and throws away the remainder.'],
-        challenge: {
-          description: 'Write averages(a, b) that returns the integer average of a and b using floor division (//). For example, averages(3, 6) returns 4 because (3 + 6) // 2 = 4.',
-          starter: 'def averages(a, b):\n    # your code here\n    pass',
-          tests: [
-            { call: 'averages(3, 6)', expected: 4 },
-            { call: 'averages(10, 20)', expected: 15 },
-            { call: 'averages(7, 7)', expected: 7 },
-            { call: 'averages(1, 2)', expected: 1 }
-          ],
-          hint: 'return (a + b) // 2',
-          solution: 'def averages(a, b):\n    return (a + b) // 2'
-        }
-      },
-      {
-        id: 'l13-3', title: 'Checkpoint 4: Type Conversion',
-        explanation: ['Strings and numbers behave differently. Make sure you can move between them with int() and friends.'],
-        challenge: {
-          description: 'Write to_int_doubled(text) that takes a digit string like "7", converts it to an int, doubles it, and returns the int result.',
-          starter: 'def to_int_doubled(text):\n    # your code here\n    pass',
-          tests: [
-            { call: 'to_int_doubled("7")', expected: 14 },
-            { call: 'to_int_doubled("0")', expected: 0 },
-            { call: 'to_int_doubled("100")', expected: 200 }
-          ],
-          hint: 'return int(text) * 2',
-          solution: 'def to_int_doubled(text):\n    return int(text) * 2'
-        }
-      },
-      {
-        id: 'l13-4', title: 'Checkpoint 5: Compare and Decide',
-        explanation: ['Comparisons plus if / else: the brain of nearly every problem you will solve.'],
-        challenge: {
-          description: 'Write status(score) that returns "pass" if score is at least 60, and "fail" otherwise.',
-          starter: 'def status(score):\n    # your code here\n    pass',
-          tests: [
-            { call: 'status(75)', expected: 'pass' },
-            { call: 'status(60)', expected: 'pass' },
-            { call: 'status(59)', expected: 'fail' },
-            { call: 'status(0)', expected: 'fail' }
-          ],
-          hint: 'if score >= 60: return "pass" else: return "fail".',
-          solution: 'def status(score):\n    if score >= 60:\n        return "pass"\n    else:\n        return "fail"'
-        }
-      },
-      {
-        id: 'l13-5', title: 'Checkpoint 6: Final Readiness',
-        explanation: ['Final boss for the beginner phase: loops + conditions + functions together. Pass this and you are genuinely ready for the Practice Lab.', 'If you struggle here, do not push forward — go back and replay Levels 5, 6, and 7 first.'],
-        challenge: {
-          description: 'Write sum_evens(nums) that returns the sum of every even number in the list nums. An empty list should return 0.',
-          starter: 'def sum_evens(nums):\n    # your code here\n    pass',
-          tests: [
-            { call: 'sum_evens([1, 2, 3, 4, 5])', expected: 6 },
-            { call: 'sum_evens([])', expected: 0 },
-            { call: 'sum_evens([1, 3, 5])', expected: 0 },
-            { call: 'sum_evens([2, 4, 6, 8])', expected: 20 }
-          ],
-          hint: 'total = 0. Loop n through nums. If n % 2 == 0, total += n. Return total.',
-          solution: 'def sum_evens(nums):\n    total = 0\n    for n in nums:\n        if n % 2 == 0:\n            total += n\n    return total'
-        },
-        quiz: {
-          question: 'You passed every checkpoint. What is the single most important habit to bring into the Practice Lab?',
-          options: [
-            'Read the problem carefully and return the EXACT expected value — print is for debugging only',
-            'Solve everything in one line of code',
-            'Use print() instead of return — the grader reads stdout',
-            'Copy the hint verbatim and submit it as the answer'
-          ],
-          correctIndex: 0,
-          explanation: 'Lab problems test your function\'s return value, not what you print. Read carefully, decide what to return, then code. print() is fine while developing, but the final answer must come from return.'
-        }
       }
     ]
   },
@@ -4369,3 +4178,1729 @@ def two_sum(nums, target):
     ]
   }
 ];
+
+===== data/practice-problems.js =====
+// Practice problems for the in-browser Python lab.
+// Each problem has starter code, test cases, and a solution.
+// Tests are evaluated by running user code in Pyodide and comparing
+// the result of calling the named function with each test input.
+
+module.exports = [
+  {
+    id: 'pp-1', title: 'Print Your Name',
+    concept: 'print() and strings', difficulty: 'Beginner',
+    instructions: 'Use print() to display your name on the screen.\n\nThis problem has no test cases — just run your code and check the output.',
+    starter: '# Use print() to show your name\nprint("Your name here")',
+    example: 'Output: Alice',
+    hint1: 'The print() function shows whatever is inside the parentheses on the screen.',
+    hint2: 'Wrap your name in quotes ("...") because it is text, not a variable.',
+    solution: 'print("Alice")',
+    explanation: 'print() takes a value and shows it on the screen. Strings (text) need quotes around them.',
+    tests: [],
+    runMode: 'output',
+    expectedOutput: null
+  },
+  {
+    id: 'pp-2', title: 'Store Your Age in a Variable',
+    concept: 'Variables and integers', difficulty: 'Beginner',
+    instructions: 'Create a variable called "age" and store your age in it (use any number).\nThen print the variable.',
+    starter: '# Create a variable called age\n# Then print it\n',
+    example: 'Output: 25',
+    hint1: 'Use the = sign to store a value: age = 25',
+    hint2: 'Then print the variable WITHOUT quotes: print(age)',
+    solution: 'age = 25\nprint(age)',
+    explanation: 'A variable holds a value you can reuse. age = 25 stores the number 25, and print(age) shows it.',
+    tests: [],
+    runMode: 'output',
+    expectedOutput: '25'
+  },
+  {
+    id: 'pp-3', title: 'Add Two Numbers',
+    concept: 'Functions and arithmetic', difficulty: 'Beginner',
+    instructions: 'Write a function called add(a, b) that returns the sum of a and b.',
+    starter: 'def add(a, b):\n    # return a + b\n    pass',
+    example: 'add(2, 3)  →  5\nadd(10, 20)  →  30',
+    hint1: 'Use the + operator to add two numbers.',
+    hint2: 'Replace "pass" with: return a + b',
+    solution: 'def add(a, b):\n    return a + b',
+    explanation: 'Functions take inputs (parameters) and return a result. + adds two numbers.',
+    tests: [
+      { call: 'add(2, 3)', expected: 5 },
+      { call: 'add(10, 20)', expected: 30 },
+      { call: 'add(-1, 1)', expected: 0 },
+      { call: 'add(100, 250)', expected: 350 }
+    ],
+    runMode: 'function'
+  },
+  {
+    id: 'pp-4', title: 'Check if a Number is Positive',
+    concept: 'Booleans and comparisons', difficulty: 'Beginner',
+    instructions: 'Write a function is_positive(n) that returns True if n is greater than 0, otherwise False.',
+    starter: 'def is_positive(n):\n    # return True if n > 0, else False\n    pass',
+    example: 'is_positive(5)   →  True\nis_positive(-3)  →  False\nis_positive(0)   →  False',
+    hint1: 'You can compare with > and the result is already True or False.',
+    hint2: 'Just return the comparison directly: return n > 0',
+    solution: 'def is_positive(n):\n    return n > 0',
+    explanation: 'Comparisons (>, <, ==) return True or False directly, so you can return them.',
+    tests: [
+      { call: 'is_positive(5)', expected: true },
+      { call: 'is_positive(-3)', expected: false },
+      { call: 'is_positive(0)', expected: false },
+      { call: 'is_positive(100)', expected: true }
+    ],
+    runMode: 'function'
+  },
+  {
+    id: 'pp-5', title: 'Print Numbers 1 to 5',
+    concept: 'for loops and range()', difficulty: 'Beginner',
+    instructions: 'Use a for loop and range() to print the numbers 1, 2, 3, 4, 5 — each on its own line.',
+    starter: '# Use a for loop to print 1 through 5\n',
+    example: 'Output:\n1\n2\n3\n4\n5',
+    hint1: 'range(1, 6) gives 1, 2, 3, 4, 5 (the end number is not included).',
+    hint2: 'Loop through the range and print each value: for i in range(1, 6): print(i)',
+    solution: 'for i in range(1, 6):\n    print(i)',
+    explanation: 'range(1, 6) generates 1 to 5 (the second number is exclusive). The for loop runs once for each value.',
+    tests: [],
+    runMode: 'output',
+    expectedOutput: '1\n2\n3\n4\n5'
+  },
+  {
+    id: 'pp-6', title: 'Sum a List of Numbers',
+    concept: 'Lists and loops', difficulty: 'Beginner',
+    instructions: 'Write a function sum_list(nums) that returns the sum of all numbers in the list.',
+    starter: 'def sum_list(nums):\n    total = 0\n    # loop through nums and add to total\n    return total',
+    example: 'sum_list([1, 2, 3])     →  6\nsum_list([10, 20, 30])  →  60',
+    hint1: 'Loop with: for n in nums:',
+    hint2: 'Inside the loop, add to total: total += n',
+    solution: 'def sum_list(nums):\n    total = 0\n    for n in nums:\n        total += n\n    return total',
+    explanation: 'Start with 0, loop through the list, and add each number to a running total. (Python also has the built-in sum() — but writing the loop teaches the pattern.)',
+    tests: [
+      { call: 'sum_list([1, 2, 3])', expected: 6 },
+      { call: 'sum_list([10, 20, 30])', expected: 60 },
+      { call: 'sum_list([])', expected: 0 },
+      { call: 'sum_list([-1, 1, -2, 2])', expected: 0 }
+    ],
+    runMode: 'function'
+  },
+  {
+    id: 'pp-7', title: 'Find the Largest Number',
+    concept: 'Lists and tracking max', difficulty: 'Beginner',
+    instructions: 'Write a function find_max(nums) that returns the largest number in the list. Assume the list has at least one element.',
+    starter: 'def find_max(nums):\n    # track the largest number seen so far\n    pass',
+    example: 'find_max([3, 1, 4, 1, 5, 9, 2])  →  9',
+    hint1: 'Start by assuming the first element is the largest: largest = nums[0]',
+    hint2: 'Loop through each number — if it is larger than largest, update largest.',
+    solution: 'def find_max(nums):\n    largest = nums[0]\n    for n in nums:\n        if n > largest:\n            largest = n\n    return largest',
+    explanation: 'Track the biggest number as you scan the list. Update it whenever you find something larger. This pattern shows up everywhere in coding interviews.',
+    tests: [
+      { call: 'find_max([3, 1, 4, 1, 5, 9, 2])', expected: 9 },
+      { call: 'find_max([10])', expected: 10 },
+      { call: 'find_max([-5, -1, -10])', expected: -1 },
+      { call: 'find_max([0, 0, 0])', expected: 0 }
+    ],
+    runMode: 'function'
+  },
+  {
+    id: 'pp-8', title: 'Count a Word',
+    concept: 'Lists and counting', difficulty: 'Beginner',
+    instructions: 'Write a function count_word(words, target) that returns how many times target appears in the words list.',
+    starter: 'def count_word(words, target):\n    count = 0\n    # loop and count matches\n    return count',
+    example: 'count_word(["a","b","a","c","a"], "a")  →  3',
+    hint1: 'Loop through words and check each one with == target.',
+    hint2: 'When you find a match, do count += 1.',
+    solution: 'def count_word(words, target):\n    count = 0\n    for w in words:\n        if w == target:\n            count += 1\n    return count',
+    explanation: 'Counting is just looping + an if check + incrementing a counter. Python also has list.count(target) — but the loop pattern works for any condition, not just exact matches.',
+    tests: [
+      { call: 'count_word(["a","b","a","c","a"], "a")', expected: 3 },
+      { call: 'count_word(["x","y","z"], "a")', expected: 0 },
+      { call: 'count_word([], "a")', expected: 0 },
+      { call: 'count_word(["hi","hi","hi"], "hi")', expected: 3 }
+    ],
+    runMode: 'function'
+  },
+  {
+    id: 'pp-9', title: 'Palindrome Check',
+    concept: 'Strings and comparison', difficulty: 'Beginner',
+    instructions: 'Write a function is_palindrome(s) that returns True if the string reads the same forwards and backwards.',
+    starter: 'def is_palindrome(s):\n    # compare s with its reverse\n    pass',
+    example: 'is_palindrome("racecar")  →  True\nis_palindrome("hello")    →  False',
+    hint1: 'You can reverse a string with s[::-1]',
+    hint2: 'Return whether s equals its reverse: return s == s[::-1]',
+    solution: 'def is_palindrome(s):\n    return s == s[::-1]',
+    explanation: 's[::-1] is Python\'s slice trick to reverse a string. If a string equals its reverse, it\'s a palindrome.',
+    tests: [
+      { call: 'is_palindrome("racecar")', expected: true },
+      { call: 'is_palindrome("hello")', expected: false },
+      { call: 'is_palindrome("a")', expected: true },
+      { call: 'is_palindrome("")', expected: true },
+      { call: 'is_palindrome("abba")', expected: true }
+    ],
+    runMode: 'function'
+  },
+  {
+    id: 'pp-10', title: 'Two Sum (Beginner Edition)',
+    concept: 'Hash maps / dictionaries', difficulty: 'LeetCode Easy',
+    instructions: 'Given a list of numbers and a target, return the indices of the two numbers that add up to target. You can assume exactly one solution exists.\n\nThis is the famous "Two Sum" interview problem!',
+    starter: 'def two_sum(nums, target):\n    # use a dictionary to find the pair\n    pass',
+    example: 'two_sum([2, 7, 11, 15], 9)  →  [0, 1]\n(because nums[0] + nums[1] = 2 + 7 = 9)',
+    hint1: 'For each number, what number would you need to complete the pair? (target - num)',
+    hint2: 'Store {number: index} in a dict as you go. Before adding, check if (target - num) is already in the dict.',
+    solution: 'def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i',
+    explanation: 'Instead of checking every pair (slow O(n²)), use a dict for O(1) lookups. As you iterate, ask: "have I already seen the number I need?" If yes — pair found. If no — store this number and keep going.',
+    tests: [
+      { call: 'two_sum([2, 7, 11, 15], 9)', expected: [0, 1] },
+      { call: 'two_sum([3, 2, 4], 6)', expected: [1, 2] },
+      { call: 'two_sum([3, 3], 6)', expected: [0, 1] }
+    ],
+    runMode: 'function'
+  }
+];
+
+===== public/index.html =====
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python LeetCode Trainer</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Set theme + sidebar state before CSS renders to prevent flash
+    (function() {
+      const t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      const s = localStorage.getItem('sidebar-state') || 'expanded';
+      document.documentElement.setAttribute('data-sidebar', s);
+    })();
+  </script>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">&#x1F40D;</span>
+      <span class="brand-name">PyLeetCode</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a href="#" class="nav-link active" data-page="home" data-tooltip="Home">
+            <span class="nav-icon">&#x1F3E0;</span>
+            <span class="nav-label">Home</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-label">PYTHON COURSE</div>
+      <ul id="level-nav-list">
+        <!-- Rendered by JS after course loads -->
+        <li><span class="nav-loading">Loading...</span></li>
+      </ul>
+
+      <div class="sidebar-section-label">PRACTICE</div>
+      <ul>
+        <li>
+          <a href="#" class="nav-link" data-page="lab" data-tooltip="Practice Lab">
+            <span class="nav-icon">&#x1F9EA;</span>
+            <span class="nav-label">Practice Lab</span>
+            <span class="nav-badge">10</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-page="problems" data-tooltip="LeetCode Problems">
+            <span class="nav-icon">&#x1F4BB;</span>
+            <span class="nav-label">LeetCode Problems</span>
+            <span class="nav-badge">5</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer" id="sidebar-footer">
+      0 / 0 lessons complete
+    </div>
+  </aside>
+
+  <!-- Top header bar -->
+  <header class="main-header" id="mainHeader">
+    <div class="header-left">
+      <button class="hamburger" id="menuToggle" aria-label="Open menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Collapse sidebar" title="Collapse / expand sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <div class="breadcrumb" id="breadcrumb">
+        <span class="bc-item bc-current">Home</span>
+      </div>
+    </div>
+    <nav class="top-nav" id="topNav" aria-label="Primary">
+      <button class="top-nav-btn" data-target="home" type="button">Home</button>
+      <button class="top-nav-btn" data-target="learn" type="button">Learn</button>
+      <button class="top-nav-btn" data-target="lab" type="button">Practice Lab</button>
+    </nav>
+    <div class="header-right">
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark mode">
+        <!-- Sun: shown in dark mode (click to go light) -->
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Moon: shown in light mode (click to go dark) -->
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content" id="mainContent">
+
+    <!-- ==================== HOME ==================== -->
+    <section id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-badge">Complete Beginner Course</div>
+        <h1 class="hero-title">Learn Python &amp; LeetCode</h1>
+        <p class="hero-subtitle">
+          Go from zero coding experience to solving real LeetCode problems.<br>
+          13 levels. 69 lessons. Step by step.
+        </p>
+
+        <form class="hero-search" onsubmit="event.preventDefault(); startCourse();" role="search">
+          <span class="hero-search-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="text" placeholder="What do you want to learn?" aria-label="Browse topics">
+          <button type="submit" class="hero-search-btn">Browse</button>
+        </form>
+
+        <button class="hero-cta" onclick="startCourse()">Start Learning &rarr;</button>
+      </div>
+
+      <h2 class="home-section-heading">Your Learning Path</h2>
+      <p class="home-section-sub">13 levels &middot; tap any to jump in.</p>
+
+      <div class="home-path-preview" id="home-path-preview">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="how-to-use">
+        <h2>How This Works</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <div>
+              <strong>Start at Level 0</strong>
+              <p>No prior experience needed. We begin with "What is programming?" and build from there.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <div>
+              <strong>Complete Each Lesson</strong>
+              <p>Read the explanation, study the code example, spot the mistake, answer the practice question.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <div>
+              <strong>Mark It Done</strong>
+              <p>Click "Mark Complete" when you understand the lesson. Your progress saves automatically.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <div>
+              <strong>Solve Real Problems</strong>
+              <p>After Level 9, head to Practice Problems and apply everything you've learned.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LEVEL OVERVIEW (dynamic) ==================== -->
+    <section id="page-level" class="page">
+      <div id="level-content"></div>
+    </section>
+
+    <!-- ==================== LESSON VIEW (dynamic) ==================== -->
+    <section id="page-lesson" class="page">
+      <div id="lesson-content"></div>
+    </section>
+
+    <!-- ==================== PRACTICE LAB (in-browser Python) ==================== -->
+    <section id="page-lab" class="page">
+      <div id="lab-content"></div>
+    </section>
+
+    <!-- ==================== PRACTICE PROBLEMS ==================== -->
+    <section id="page-problems" class="page">
+      <div id="problems-list">
+        <div class="page-header">
+          <h1>Practice Problems</h1>
+          <p>5 beginner LeetCode problems. Complete Level 9 first for the best experience.</p>
+        </div>
+        <div id="problems-grid" class="problems-grid">
+          <p class="loading-text">Loading problems...</p>
+        </div>
+      </div>
+      <div id="problem-detail" class="hidden"></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+===== public/script.js =====
+// ============================================================
+// THEME
+// ============================================================
+function applyTheme(theme, animate) {
+  if (animate) {
+    document.documentElement.classList.add('theme-transition');
+    setTimeout(() => document.documentElement.classList.remove('theme-transition'), 320);
+  }
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark', true);
+}
+
+document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+// ============================================================
+// BREADCRUMB
+// ============================================================
+function setBreadcrumb(parts) {
+  const bc = document.getElementById('breadcrumb');
+  if (!bc) return;
+  bc.innerHTML = parts.map((p, i) => {
+    const isCurrent = i === parts.length - 1;
+    return `<span class="bc-item ${isCurrent ? 'bc-current' : ''}">${escapeHtml(p)}</span>`;
+  }).join('<span class="bc-sep">›</span>');
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let COURSE = [];       // all levels + lessons from API
+let ALL_LESSONS = [];  // flat ordered list of all lesson objects
+
+// ============================================================
+// PROGRESS — localStorage
+// ============================================================
+function getCompleted() {
+  try { return new Set(JSON.parse(localStorage.getItem('completed') || '[]')); }
+  catch { return new Set(); }
+}
+function saveCompleted(set) {
+  localStorage.setItem('completed', JSON.stringify([...set]));
+}
+function markComplete(lessonId) {
+  const done = getCompleted();
+  done.add(lessonId);
+  saveCompleted(done);
+  refreshProgress();
+}
+function unmarkComplete(lessonId) {
+  const done = getCompleted();
+  done.delete(lessonId);
+  saveCompleted(done);
+  refreshProgress();
+}
+function isComplete(lessonId) {
+  return getCompleted().has(lessonId);
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const PAGE_TITLES = { home: 'Home', problems: 'Practice Problems', lab: 'Practice Lab' };
+
+let __internalHashChange = false;
+let __currentRoute = '#/home';
+
+function persistRoute(hash) {
+  __currentRoute = hash;
+  try { localStorage.setItem('last-route', hash); } catch (e) {}
+  if (location.hash !== hash) {
+    __internalHashChange = true;
+    location.hash = hash;
+  }
+  setActiveTopNav(hash);
+}
+
+function setActiveTopNav(hash) {
+  let target = 'home';
+  if (hash.startsWith('#/level/') || hash.startsWith('#/lesson/')) target = 'learn';
+  else if (hash === '#/lab') target = 'lab';
+  else if (hash === '#/problems') target = null;
+  document.querySelectorAll('.top-nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.target === target);
+  });
+}
+
+function navigateTo(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById(`page-${pageId}`);
+  if (page) page.classList.add('active');
+
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const link = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+  if (link) link.classList.add('active');
+
+  document.querySelectorAll('.level-nav-link').forEach(l => l.classList.remove('active'));
+
+  setBreadcrumb([PAGE_TITLES[pageId] || pageId]);
+  closeSidebar();
+  if (pageId === 'lab') setTimeout(renderLabIndex, 30);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  persistRoute('#/' + pageId);
+}
+
+function openLevel(levelId) {
+  renderLevelPage(levelId);
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-level').classList.add('active');
+
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.level-nav-link').forEach(l => l.classList.remove('active'));
+  const link = document.querySelector(`.level-nav-link[data-level="${levelId}"]`);
+  if (link) link.classList.add('active');
+
+  const level = COURSE.find(l => l.id === levelId);
+  setBreadcrumb(level ? [`Level ${level.id}`, level.title] : [`Level ${levelId}`]);
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try { localStorage.setItem('last-level-id', String(levelId)); } catch (e) {}
+  persistRoute('#/level/' + levelId);
+}
+
+function openLesson(lessonId) {
+  renderLessonPage(lessonId);
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-lesson').classList.add('active');
+
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  const level  = lesson ? COURSE.find(lv => lv.lessons.some(l => l.id === lessonId)) : null;
+  setBreadcrumb(level && lesson ? [`Level ${level.id}`, lesson.title] : [lessonId]);
+
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.level-nav-link').forEach(l => l.classList.remove('active'));
+  if (level) {
+    const link = document.querySelector(`.level-nav-link[data-level="${level.id}"]`);
+    if (link) link.classList.add('active');
+    try { localStorage.setItem('last-level-id', String(level.id)); } catch (e) {}
+  }
+
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  persistRoute('#/lesson/' + lessonId);
+}
+
+function openLearn() {
+  const savedLevel = parseInt(localStorage.getItem('last-level-id') || '', 10);
+  if (!Number.isNaN(savedLevel) && COURSE.some(l => l.id === savedLevel)) {
+    openLevel(savedLevel);
+  } else if (COURSE.length) {
+    openLevel(COURSE[0].id);
+  } else {
+    navigateTo('home');
+  }
+}
+
+function applyRouteFromHash() {
+  let hash = location.hash || '';
+  if (!hash) {
+    try { hash = localStorage.getItem('last-route') || ''; } catch (e) {}
+  }
+  if (hash.startsWith('#/lesson/')) {
+    const id = hash.slice('#/lesson/'.length);
+    if (ALL_LESSONS.some(l => l.id === id)) { openLesson(id); return; }
+  }
+  if (hash.startsWith('#/level/')) {
+    const id = parseInt(hash.slice('#/level/'.length), 10);
+    if (COURSE.some(l => l.id === id)) { openLevel(id); return; }
+  }
+  if (hash === '#/lab')      { navigateTo('lab'); return; }
+  if (hash === '#/problems') { navigateTo('problems'); return; }
+  navigateTo('home');
+}
+
+window.addEventListener('hashchange', () => {
+  if (__internalHashChange) { __internalHashChange = false; return; }
+  applyRouteFromHash();
+});
+
+// Mobile sidebar
+const menuToggle = document.getElementById('menuToggle');
+const sidebar    = document.getElementById('sidebar');
+const overlay    = document.getElementById('overlay');
+menuToggle.addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('active'); });
+overlay.addEventListener('click', closeSidebar);
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+
+// ============================================================
+// SIDEBAR COLLAPSE / EXPAND (desktop rail)
+// ============================================================
+function getSidebarState() {
+  return localStorage.getItem('sidebar-state') || 'expanded';
+}
+function setSidebarState(state) {
+  localStorage.setItem('sidebar-state', state);
+  document.documentElement.setAttribute('data-sidebar', state);
+  const btn = document.getElementById('sidebarToggle');
+  if (btn) {
+    btn.setAttribute('aria-label', state === 'collapsed' ? 'Expand sidebar' : 'Collapse sidebar');
+    btn.setAttribute('title', state === 'collapsed' ? 'Expand sidebar' : 'Collapse sidebar');
+  }
+}
+function toggleSidebarCollapsed() {
+  setSidebarState(getSidebarState() === 'collapsed' ? 'expanded' : 'collapsed');
+}
+const sidebarToggle = document.getElementById('sidebarToggle');
+if (sidebarToggle) sidebarToggle.addEventListener('click', toggleSidebarCollapsed);
+// Sync the aria/title once on boot (state was applied pre-render in index.html)
+setSidebarState(getSidebarState());
+
+// Nav link clicks (Home, Practice Problems)
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', e => { e.preventDefault(); navigateTo(link.dataset.page); });
+});
+
+// Top-nav (header) clicks
+document.querySelectorAll('.top-nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.target;
+    if (target === 'home') navigateTo('home');
+    else if (target === 'lab') navigateTo('lab');
+    else if (target === 'learn') openLearn();
+  });
+});
+
+// ============================================================
+// LOAD COURSE
+// ============================================================
+async function loadCourse() {
+  try {
+    const res = await fetch('/api/course');
+    COURSE = await res.json();
+    ALL_LESSONS = COURSE.flatMap(level => level.lessons);
+    renderSidebarLevels();
+    renderHomePreview();
+    refreshProgress();
+  } catch (e) {
+    document.getElementById('level-nav-list').innerHTML =
+      '<li><span class="nav-loading" style="color:var(--red)">Failed to load</span></li>';
+  }
+  applyRouteFromHash();
+}
+
+// ============================================================
+// SIDEBAR LEVEL LIST
+// ============================================================
+function renderSidebarLevels() {
+  const done = getCompleted();
+  const list = document.getElementById('level-nav-list');
+  list.innerHTML = COURSE.map(level => {
+    const completedCount = level.lessons.filter(l => done.has(l.id)).length;
+    const total = level.lessons.length;
+    const allDone = completedCount === total;
+    const tooltip = `L${level.id}: ${level.title} — ${completedCount}/${total}`;
+    return `
+      <li>
+        <button class="level-nav-link" data-level="${level.id}" data-tooltip="${escapeHtml(tooltip)}" onclick="openLevel(${level.id})">
+          <span class="level-nav-badge" style="background:${level.color}22;color:${level.color}">L${level.id}</span>
+          <span class="level-nav-title">${escapeHtml(level.title)}</span>
+          <span class="level-nav-progress ${allDone ? 'done' : ''}">${completedCount}/${total}</span>
+        </button>
+      </li>`;
+  }).join('');
+}
+
+// ============================================================
+// HOME PREVIEW CARDS
+// ============================================================
+function renderHomePreview() {
+  const done = getCompleted();
+  const container = document.getElementById('home-path-preview');
+  container.innerHTML = COURSE.map(level => {
+    const completedCount = level.lessons.filter(l => done.has(l.id)).length;
+    const total = level.lessons.length;
+    const pct = total > 0 ? (completedCount / total) * 100 : 0;
+    const allDone = completedCount === total;
+    return `
+      <div class="home-level-card ${allDone ? 'complete' : ''}" style="--level-color:${level.color}" onclick="openLevel(${level.id})">
+        <div class="hlc-top">
+          <span class="hlc-badge" style="background:${level.color}22;color:${level.color}">${allDone ? '✓' : `L${level.id}`}</span>
+          <span class="hlc-title">${escapeHtml(level.title)}</span>
+        </div>
+        <div class="hlc-count">${allDone ? '<span style="color:var(--green);font-weight:600">✓ Complete</span>' : `${completedCount}/${total} lessons`}</div>
+        <div class="hlc-progress-bg">
+          <div class="hlc-progress-fill" style="width:${pct}%;--fill-color:${level.color}"></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// REFRESH PROGRESS INDICATORS
+// ============================================================
+function refreshProgress() {
+  const done = getCompleted();
+  const total = ALL_LESSONS.length;
+  const completedCount = ALL_LESSONS.filter(l => done.has(l.id)).length;
+
+  // Sidebar footer
+  document.getElementById('sidebar-footer').textContent =
+    `${completedCount} / ${total} lessons complete`;
+
+  // Re-render sidebar level counts
+  document.querySelectorAll('.level-nav-link').forEach(link => {
+    const levelId = parseInt(link.dataset.level);
+    const level = COURSE.find(l => l.id === levelId);
+    if (!level) return;
+    const c = level.lessons.filter(l => done.has(l.id)).length;
+    const t = level.lessons.length;
+    const allDone = c === t;
+    const prog = link.querySelector('.level-nav-progress');
+    if (prog) { prog.textContent = `${c}/${t}`; prog.className = `level-nav-progress ${allDone ? 'done' : ''}`; }
+    link.setAttribute('data-tooltip', `L${level.id}: ${level.title} — ${c}/${t}`);
+  });
+
+  // Re-render home preview if visible
+  if (document.getElementById('page-home').classList.contains('active')) {
+    renderHomePreview();
+  }
+
+  // Update expanded dashboard (defined later in file)
+  if (typeof refreshProgressDashboard === 'function') refreshProgressDashboard();
+}
+
+// ============================================================
+// LEVEL PAGE
+// ============================================================
+function renderLevelPage(levelId) {
+  const level = COURSE.find(l => l.id === levelId);
+  if (!level) return;
+  const done = getCompleted();
+  const completedCount = level.lessons.filter(l => done.has(l.id)).length;
+  const total = level.lessons.length;
+  const pct = total > 0 ? (completedCount / total) * 100 : 0;
+
+  const prevLevel = COURSE.find(l => l.id === levelId - 1);
+  const nextLevel = COURSE.find(l => l.id === levelId + 1);
+
+  const lessonCardsHtml = level.lessons.map((lesson, idx) => {
+    const isDone = done.has(lesson.id);
+    return `
+      <div class="lesson-card ${isDone ? 'done' : ''}" style="--card-accent:${level.color}" onclick="openLesson('${lesson.id}')">
+        <div class="lesson-card-check" style="${isDone ? '' : `border-color:${level.color}55`}">
+          ${isDone ? '&#x2713;' : `<span style="font-size:0.7rem;color:${level.color};font-weight:700">${idx+1}</span>`}
+        </div>
+        <div class="lesson-card-body">
+          <div class="lesson-card-title">${escapeHtml(lesson.title)}</div>
+        </div>
+        <div class="lesson-card-right">
+          ${isDone
+            ? `<span class="lesson-done-badge">&#x2713; Done</span>`
+            : `<span class="lesson-start-badge" style="border-color:${level.color}55;color:${level.color};background:${level.color}11">Start &rarr;</span>`}
+        </div>
+      </div>`;
+  }).join('');
+
+  const navButtons = `
+    <div class="level-nav-buttons">
+      ${prevLevel ? `<button class="btn-ghost" onclick="openLevel(${prevLevel.id})">&larr; L${prevLevel.id}: ${escapeHtml(prevLevel.title)}</button>` : ''}
+      ${level.lessons.length > 0 ? `<button class="next-btn" onclick="openLesson('${level.lessons[0].id}')">Start Level ${level.id} &rarr;</button>` : ''}
+      ${nextLevel ? `<button class="btn-ghost" onclick="openLevel(${nextLevel.id})">L${nextLevel.id}: ${escapeHtml(nextLevel.title)} &rarr;</button>` : ''}
+    </div>`;
+
+  document.getElementById('level-content').innerHTML = `
+    <button class="back-btn" onclick="navigateTo('home')" style="margin-bottom:1.5rem">&larr; All Levels</button>
+    <div class="level-page-header">
+      <div class="level-page-badge" style="background:${level.color}22;color:${level.color}">L${level.id}</div>
+      <div class="level-page-info">
+        <h1>${escapeHtml(level.title)}</h1>
+        <p>${escapeHtml(level.subtitle)}</p>
+        <div class="level-page-meta">
+          <span>${total} lessons</span>
+          <span>${completedCount} completed</span>
+        </div>
+      </div>
+    </div>
+    <div class="level-progress-bar">
+      <div class="level-progress-fill" style="width:${pct}%;--fill-color:${level.color}"></div>
+    </div>
+    <div class="lesson-cards">${lessonCardsHtml}</div>
+    ${navButtons}
+  `;
+}
+
+// ============================================================
+// LESSON PAGE
+// ============================================================
+function renderLessonPage(lessonId) {
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  if (!lesson) return;
+
+  const level = COURSE.find(lv => lv.lessons.some(l => l.id === lessonId));
+  const lessonIdx = ALL_LESSONS.findIndex(l => l.id === lessonId);
+  const prevLesson = lessonIdx > 0 ? ALL_LESSONS[lessonIdx - 1] : null;
+  const nextLesson = lessonIdx < ALL_LESSONS.length - 1 ? ALL_LESSONS[lessonIdx + 1] : null;
+  const levelIdx = level ? level.lessons.findIndex(l => l.id === lessonId) : 0;
+  const isDone = isComplete(lessonId);
+
+  // Progress dots for this level
+  const dotsHtml = level ? level.lessons.map((l, i) => {
+    const cls = l.id === lessonId ? 'current' : (isComplete(l.id) ? 'done' : '');
+    return `<div class="strip-dot ${cls}" title="${escapeHtml(l.title)}"></div>`;
+  }).join('') : '';
+
+  // Explanation paragraphs
+  const explanationHtml = lesson.explanation
+    ? lesson.explanation.map(p => `<p>${escapeHtml(p)}</p>`).join('')
+    : '';
+
+  // Mistake block
+  const mistakeHtml = lesson.mistake ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x26A0;&#xFE0F; Common Mistake</div>
+      <div class="mistake-box" id="mistake-box">
+        <button class="mistake-toggle" onclick="toggleMistake()">
+          <span class="mistake-toggle-label">
+            <span style="color:var(--red)">&#x274C;</span>
+            ${escapeHtml(lesson.mistake.title)}
+          </span>
+          <span class="mistake-arrow" id="mistake-arrow">&#x25BC;</span>
+        </button>
+        <div class="mistake-body">
+          <p class="mistake-desc">${escapeHtml(lesson.mistake.description)}</p>
+          <div class="mistake-codes">
+            <div>
+              <div class="mistake-label bad-label">&#x274C; Incorrect</div>
+              <pre class="code-block" style="border-color:rgba(248,81,73,0.25)"><code>${escapeHtml(lesson.mistake.bad)}</code></pre>
+            </div>
+            <div>
+              <div class="mistake-label good-label">&#x2714; Correct</div>
+              <pre class="code-block" style="border-color:rgba(63,185,80,0.25)"><code>${escapeHtml(lesson.mistake.good)}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>` : '';
+
+  // Analogy block
+  const analogyHtml = lesson.analogy ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x1F4A1; Real-World Analogy</div>
+      <div class="analogy-box">
+        <div class="analogy-icon">&#x1F4A1;</div>
+        <div class="analogy-body">
+          <div class="analogy-label">Think of it like this</div>
+          <div class="analogy-text">${escapeHtml(lesson.analogy)}</div>
+        </div>
+      </div>
+    </div>` : '';
+
+  // Step-by-step block
+  const stepByStepHtml = (lesson.stepByStep && lesson.stepByStep.length) ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x1F50D; What's Happening Step by Step</div>
+      <div class="step-list">
+        ${lesson.stepByStep.map(s => `<div class="step-list-item">${escapeHtml(s)}</div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // Quiz block
+  const quizDone = isQuizPassed(lessonId);
+  const quizHtml = lesson.quiz ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x2753; Quick Quiz</div>
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-question">${escapeHtml(lesson.quiz.question)}</div>
+        <div class="quiz-options">
+          ${lesson.quiz.options.map((opt, i) => `
+            <button class="quiz-option" data-idx="${i}" onclick="answerQuiz('${lessonId}', ${i}, ${lesson.quiz.correctIndex})">
+              <span class="quiz-option-letter">${String.fromCharCode(65 + i)}</span>
+              <span>${escapeHtml(opt)}</span>
+            </button>
+          `).join('')}
+        </div>
+        <div id="quiz-feedback" class="quiz-feedback ${quizDone ? 'correct' : ''}" style="${quizDone ? '' : 'display:none'}">
+          ${quizDone ? `<strong>&#x2713; Correct!</strong> ${escapeHtml(lesson.quiz.explanation)}` : ''}
+        </div>
+      </div>
+    </div>` : '';
+
+  // Coding challenge block
+  const challengeDone = isChallengePassed(lessonId);
+  const challengeHtml = lesson.challenge ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x1F4BB; Coding Challenge${challengeDone ? ' &#x2713;' : ''}</div>
+      <div class="challenge-box">
+        <div class="challenge-desc">${formatText(lesson.challenge.description)}</div>
+        <div class="challenge-editor-area">
+          <textarea class="challenge-editor" id="challenge-editor" spellcheck="false">${escapeHtml(lesson.challenge.starter)}</textarea>
+        </div>
+        <div class="challenge-controls">
+          <button class="challenge-btn primary" onclick="runChallenge('${lessonId}')">&#x25B6; Run &amp; Test</button>
+          <button class="challenge-btn" onclick="resetChallenge(${JSON.stringify(escapeHtml(lesson.challenge.starter)).replace(/'/g, '&#39;')})">Reset</button>
+          <button class="challenge-btn" onclick="toggleChallengeHint()">&#x1F4AD; Hint</button>
+          <button class="challenge-btn" onclick="toggleChallengeSolution('${lessonId}')">&#x1F511; Solution</button>
+        </div>
+        <div id="challenge-hint" class="lab-reveal hidden" style="margin: 0 1.15rem 1rem">${lesson.challenge.hint ? escapeHtml(lesson.challenge.hint) : 'Try breaking the problem into small steps.'}</div>
+        <div id="challenge-solution" class="lab-reveal hidden" style="margin: 0 1.15rem 1rem">
+          <strong>Solution:</strong>
+          <pre>${escapeHtml(lesson.challenge.solution)}</pre>
+        </div>
+        <div id="challenge-output" class="challenge-output"></div>
+        <div id="challenge-tests" class="challenge-test-results"></div>
+        <div id="challenge-status" class="challenge-status ${challengeDone ? '' : 'hidden'}">${challengeDone ? '&#x2713; Challenge complete — well done!' : ''}</div>
+      </div>
+    </div>` : '';
+
+  // Reflection block
+  const reflectionHtml = lesson.reflection ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x1F914; Reflection</div>
+      <div class="reflection-box">
+        <span class="reflection-label">Explain in your own words</span>
+        ${escapeHtml(lesson.reflection)}
+      </div>
+    </div>` : '';
+
+  // Practice block (existing)
+  const practiceHtml = lesson.practice ? `
+    <div class="lesson-section">
+      <div class="lesson-section-title">&#x270F;&#xFE0F; Practice</div>
+      <div class="practice-box">
+        <div class="practice-question">${escapeHtml(lesson.practice.question)}</div>
+        <div class="practice-hint-row">
+          <button class="hint-pill" onclick="togglePracticeHint()">Show hint</button>
+          <div class="practice-hint-text hidden" id="practice-hint">${escapeHtml(lesson.practice.hint)}</div>
+        </div>
+        <button class="practice-answer-toggle" onclick="togglePracticeAnswer()">&#x1F4A1; Show Answer</button>
+        <div class="practice-answer hidden" id="practice-answer">${escapeHtml(lesson.practice.answer)}</div>
+      </div>
+    </div>` : '';
+
+  document.getElementById('lesson-content').innerHTML = `
+    <div class="lesson-page">
+      <div class="lesson-back-row">
+        <button class="back-btn" onclick="openLevel(${level ? level.id : 0})">&larr; Back to ${level ? escapeHtml(level.title) : 'Level'}</button>
+      </div>
+
+      <div class="lesson-progress-strip">${dotsHtml}</div>
+
+      <div class="lesson-header">
+        ${level ? `<div class="lesson-level-tag" style="background:${level.color}22;color:${level.color}">Level ${level.id} &bull; ${escapeHtml(level.title)}</div>` : ''}
+        <h1 class="lesson-title">${escapeHtml(lesson.title)}</h1>
+        <div class="lesson-nav-row">
+          <span>Lesson ${levelIdx + 1} of ${level ? level.lessons.length : '?'}</span>
+          <span>${isDone ? '<span style="color:var(--green)">&#x2713; Completed</span>' : ''}</span>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-title">&#x1F4D6; Explanation</div>
+        <div class="lesson-explanation">${explanationHtml}</div>
+      </div>
+
+      ${analogyHtml}
+
+      ${lesson.code ? `
+      <div class="lesson-section">
+        <div class="lesson-section-title">&#x1F4BB; Code Example</div>
+        <pre class="code-block"><code>${escapeHtml(lesson.code)}</code></pre>
+        ${lesson.codeCaption ? `<p class="code-caption">${escapeHtml(lesson.codeCaption)}</p>` : ''}
+      </div>` : ''}
+
+      ${stepByStepHtml}
+      ${mistakeHtml}
+      ${quizHtml}
+      ${challengeHtml}
+      ${practiceHtml}
+      ${reflectionHtml}
+
+      <div class="lesson-footer">
+        ${prevLesson ? `<button class="prev-btn" onclick="openLesson('${prevLesson.id}')">&larr; Previous</button>` : ''}
+        <button class="complete-btn ${isDone ? 'is-done' : ''}" id="complete-btn" onclick="toggleComplete('${lessonId}')">
+          ${isDone ? '&#x2713; Completed' : 'Mark Complete'}
+        </button>
+        ${nextLesson ? `<button class="next-btn" onclick="openLesson('${nextLesson.id}')">Next Lesson &rarr;</button>` : `<button class="next-btn" onclick="navigateTo('problems')">Go to Practice Problems &rarr;</button>`}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// LESSON TOGGLES
+// ============================================================
+function toggleMistake() {
+  const box = document.getElementById('mistake-box');
+  const arrow = document.getElementById('mistake-arrow');
+  if (!box) return;
+  box.classList.toggle('open');
+  if (arrow) arrow.style.transform = box.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function togglePracticeHint() {
+  const hint = document.getElementById('practice-hint');
+  if (!hint) return;
+  hint.classList.toggle('hidden');
+}
+
+function togglePracticeAnswer() {
+  const ans = document.getElementById('practice-answer');
+  const btn = document.querySelector('.practice-answer-toggle');
+  if (!ans) return;
+  const hidden = ans.classList.toggle('hidden');
+  if (btn) btn.textContent = hidden ? '💡 Show Answer' : '🙈 Hide Answer';
+}
+
+function toggleComplete(lessonId) {
+  if (isComplete(lessonId)) {
+    unmarkComplete(lessonId);
+    const btn = document.getElementById('complete-btn');
+    if (btn) { btn.classList.remove('is-done'); btn.textContent = 'Mark Complete'; }
+    const navRow = document.querySelector('.lesson-nav-row span:last-child');
+    if (navRow) navRow.innerHTML = '';
+  } else {
+    markComplete(lessonId);
+    const btn = document.getElementById('complete-btn');
+    if (btn) { btn.classList.add('is-done'); btn.innerHTML = '&#x2713; Completed'; }
+    const navRow = document.querySelector('.lesson-nav-row span:last-child');
+    if (navRow) navRow.innerHTML = '<span style="color:var(--green)">&#x2713; Completed</span>';
+  }
+  // Refresh dots
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  const level = lesson ? COURSE.find(lv => lv.lessons.some(l => l.id === lessonId)) : null;
+  if (level) {
+    const done = getCompleted();
+    document.querySelectorAll('.strip-dot').forEach((dot, i) => {
+      const l = level.lessons[i];
+      if (!l) return;
+      dot.className = 'strip-dot' + (l.id === lessonId ? ' current' : (done.has(l.id) ? ' done' : ''));
+    });
+  }
+}
+
+// ============================================================
+// START COURSE — find first incomplete lesson
+// ============================================================
+function startCourse() {
+  if (COURSE.length === 0) return;
+  const done = getCompleted();
+  for (const level of COURSE) {
+    for (const lesson of level.lessons) {
+      if (!done.has(lesson.id)) {
+        openLesson(lesson.id);
+        return;
+      }
+    }
+  }
+  // All done — go to first lesson of first level
+  openLesson(COURSE[0].lessons[0].id);
+}
+
+// ============================================================
+// PROBLEMS (unchanged from original)
+// ============================================================
+async function loadProblems() {
+  try {
+    const res = await fetch('/api/problems');
+    if (!res.ok) throw new Error();
+    const problems = await res.json();
+    renderProblemsGrid(problems);
+  } catch {
+    document.getElementById('problems-grid').innerHTML =
+      '<p class="error-text">Could not load problems. Make sure the server is running.</p>';
+  }
+}
+
+function renderProblemsGrid(problems) {
+  const grid = document.getElementById('problems-grid');
+  grid.innerHTML = problems.map(p => `
+    <div class="problem-card" onclick="showProblem(${p.id})">
+      <div class="problem-card-header">
+        <span class="problem-num">#${p.id}</span>
+        <span class="difficulty-badge difficulty-${p.difficulty.toLowerCase()}">${p.difficulty}</span>
+      </div>
+      <h3 class="problem-title">${escapeHtml(p.title)}</h3>
+      <p class="problem-concept"><span class="concept-label">Concept:</span> ${escapeHtml(p.concept)}</p>
+      <p class="problem-learn">${escapeHtml(p.whatYouLearn)}</p>
+      <div class="problem-tags">${p.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+      <button class="solve-btn">Solve Problem &rarr;</button>
+    </div>`).join('');
+}
+
+async function showProblem(id) {
+  const listEl   = document.getElementById('problems-list');
+  const detailEl = document.getElementById('problem-detail');
+  detailEl.innerHTML = '<p class="loading-text">Loading problem...</p>';
+  listEl.classList.add('hidden');
+  detailEl.classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try {
+    const res = await fetch(`/api/problems/${id}`);
+    if (!res.ok) throw new Error();
+    renderProblemDetail(await res.json());
+  } catch {
+    detailEl.innerHTML = '<p class="error-text">Could not load this problem.</p>';
+  }
+}
+
+function renderProblemDetail(problem) {
+  document.getElementById('problem-detail').innerHTML = `
+    <div class="problem-detail">
+      <button class="back-btn" onclick="backToProblems()" style="margin-bottom:1.75rem">&larr; Back to Problems</button>
+      <div class="problem-detail-header">
+        <div class="problem-detail-title-row">
+          <h1>${escapeHtml(problem.title)}</h1>
+          <span class="difficulty-badge difficulty-${problem.difficulty.toLowerCase()}">${problem.difficulty}</span>
+        </div>
+        <div class="problem-meta">
+          <span><strong>Concept:</strong> ${escapeHtml(problem.concept)}</span>
+          <span><strong>Time:</strong> ${escapeHtml(problem.timeComplexity)}</span>
+          <span><strong>Space:</strong> ${escapeHtml(problem.spaceComplexity)}</span>
+        </div>
+        <div class="problem-tags">${problem.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+      </div>
+      <div class="what-you-learn">
+        <span class="learn-icon">&#x1F4A1;</span>
+        <div><strong>What you'll learn:</strong> ${escapeHtml(problem.whatYouLearn)}</div>
+      </div>
+      <div class="detail-section">
+        <h2>Problem Explanation</h2>
+        <div class="explanation-text">${formatText(problem.explanation)}</div>
+      </div>
+      <div class="detail-section">
+        <h2>Starter Code</h2>
+        <p class="section-hint">Try to solve this yourself first. Spend at least 10–15 minutes before using hints.</p>
+        <pre class="code-block"><code>${escapeHtml(problem.starterCode)}</code></pre>
+      </div>
+      <div class="detail-section hints-section">
+        <h2>Hints</h2>
+        <div class="hint-box" id="hint1-box">
+          <button class="hint-toggle" onclick="toggleHint('hint1')">
+            <span class="hint-label">&#x1F4AD; Hint 1 &mdash; click to reveal</span>
+            <span class="hint-arrow" id="hint1-arrow">&#x25BC;</span>
+          </button>
+          <div class="hint-content hidden" id="hint1">${formatText(problem.hint1)}</div>
+        </div>
+        <div class="hint-box" id="hint2-box">
+          <button class="hint-toggle" onclick="toggleHint('hint2')">
+            <span class="hint-label">&#x1F4AD; Hint 2 &mdash; click to reveal</span>
+            <span class="hint-arrow" id="hint2-arrow">&#x25BC;</span>
+          </button>
+          <div class="hint-content hidden" id="hint2">${formatText(problem.hint2)}</div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h2>Solution</h2>
+        <div class="solution-warning"><span>&#x26A0;&#xFE0F;</span><span>Only reveal after trying and using both hints!</span></div>
+        <button class="reveal-btn" id="revealBtn" onclick="toggleSolution()">Reveal Solution</button>
+        <div class="solution-content hidden" id="solutionContent">
+          <pre class="code-block"><code>${escapeHtml(problem.solution)}</code></pre>
+          <h3>Step-by-Step Explanation</h3>
+          <div class="solution-explanation">${formatText(problem.solutionExplanation)}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleHint(hintId) {
+  const content = document.getElementById(hintId);
+  const arrow = document.getElementById(`${hintId}-arrow`);
+  const label = document.querySelector(`#${hintId}-box .hint-label`);
+  const num = hintId.replace('hint', '');
+  if (!content) return;
+  const isHidden = content.classList.toggle('hidden');
+  if (arrow) arrow.style.transform = isHidden ? '' : 'rotate(180deg)';
+  if (label) label.textContent = isHidden ? `💭 Hint ${num} — click to reveal` : `💭 Hint ${num} — revealed`;
+}
+
+function toggleSolution() {
+  const content = document.getElementById('solutionContent');
+  const btn = document.getElementById('revealBtn');
+  if (!content) return;
+  const isHidden = content.classList.toggle('hidden');
+  if (btn) btn.textContent = isHidden ? 'Reveal Solution' : 'Hide Solution';
+}
+
+function backToProblems() {
+  document.getElementById('problems-list').classList.remove('hidden');
+  document.getElementById('problem-detail').classList.add('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+function formatText(str) {
+  return escapeHtml(str).replace(/\n/g, '<br>');
+}
+
+// ============================================================
+// QUIZ + CHALLENGE PROGRESS (localStorage)
+// ============================================================
+function getPassedSet(key) {
+  try { return new Set(JSON.parse(localStorage.getItem(key) || '[]')); }
+  catch { return new Set(); }
+}
+function savePassedSet(key, set) {
+  localStorage.setItem(key, JSON.stringify([...set]));
+}
+function isQuizPassed(lessonId)        { return getPassedSet('quizzes-passed').has(lessonId); }
+function isChallengePassed(lessonId)   { return getPassedSet('challenges-passed').has(lessonId); }
+function markQuizPassed(lessonId)      { const s = getPassedSet('quizzes-passed'); s.add(lessonId); savePassedSet('quizzes-passed', s); refreshProgress(); }
+function markChallengePassed(lessonId) { const s = getPassedSet('challenges-passed'); s.add(lessonId); savePassedSet('challenges-passed', s); refreshProgress(); }
+function isLabPassed(problemId)        { return getPassedSet('lab-passed').has(problemId); }
+function markLabPassed(problemId)      { const s = getPassedSet('lab-passed'); s.add(problemId); savePassedSet('lab-passed', s); refreshProgress(); }
+
+// ============================================================
+// QUIZ INTERACTION
+// ============================================================
+function answerQuiz(lessonId, chosenIdx, correctIdx) {
+  const card = document.getElementById('quiz-card');
+  if (!card) return;
+  const options = card.querySelectorAll('.quiz-option');
+  const feedback = document.getElementById('quiz-feedback');
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  if (!lesson || !lesson.quiz) return;
+
+  const isCorrect = chosenIdx === correctIdx;
+
+  if (isCorrect) {
+    options.forEach((btn, i) => {
+      btn.disabled = true;
+      btn.classList.remove('correct', 'incorrect');
+      if (i === correctIdx) btn.classList.add('correct');
+    });
+    feedback.style.display = '';
+    feedback.classList.remove('incorrect');
+    feedback.classList.add('correct');
+    feedback.innerHTML = `<strong>&#x2713; Correct!</strong> ${escapeHtml(lesson.quiz.explanation)}`;
+    markQuizPassed(lessonId);
+    return;
+  }
+
+  // Wrong answer: disable only the chosen option, do NOT highlight or reveal the correct one.
+  const chosenBtn = options[chosenIdx];
+  if (chosenBtn) {
+    chosenBtn.disabled = true;
+    chosenBtn.classList.add('incorrect');
+  }
+
+  const chosenText = lesson.quiz.options[chosenIdx] || '';
+  feedback.style.display = '';
+  feedback.classList.remove('correct');
+  feedback.classList.add('incorrect');
+  feedback.innerHTML =
+    `<strong>&#x2717; Not quite.</strong> "${escapeHtml(chosenText)}" isn&rsquo;t the best answer here &mdash; re-read the question and think about what it is really asking.` +
+    `<div style="margin-top:0.5rem;font-size:0.85rem;color:var(--muted)"><strong>Hint:</strong> Eliminate options that are clearly wrong first, then pick the one that most precisely matches the question.</div>` +
+    `<div style="margin-top:0.6rem;display:flex;gap:0.5rem;flex-wrap:wrap">` +
+      `<button class="hint-pill" onclick="retryQuiz('${lessonId}')">Try Again</button>` +
+      `<button class="hint-pill" onclick="revealQuizAnswer('${lessonId}', ${correctIdx})">Reveal Answer</button>` +
+    `</div>`;
+}
+
+function retryQuiz(lessonId) {
+  const card = document.getElementById('quiz-card');
+  if (!card) { renderLessonPage(lessonId); return; }
+  card.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove('correct', 'incorrect');
+  });
+  const feedback = document.getElementById('quiz-feedback');
+  if (feedback) {
+    feedback.style.display = 'none';
+    feedback.classList.remove('correct', 'incorrect');
+    feedback.innerHTML = '';
+  }
+}
+
+function revealQuizAnswer(lessonId, correctIdx) {
+  const card = document.getElementById('quiz-card');
+  if (!card) return;
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  if (!lesson || !lesson.quiz) return;
+  const options = card.querySelectorAll('.quiz-option');
+  options.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correctIdx) btn.classList.add('correct');
+  });
+  const feedback = document.getElementById('quiz-feedback');
+  if (feedback) {
+    feedback.style.display = '';
+    feedback.classList.remove('incorrect');
+    feedback.classList.add('correct');
+    feedback.innerHTML = `<strong>Answer:</strong> ${escapeHtml(lesson.quiz.options[correctIdx])}<div style="margin-top:0.4rem">${escapeHtml(lesson.quiz.explanation)}</div>`;
+  }
+}
+
+// ============================================================
+// CHALLENGE INTERACTION (uses Pyodide)
+// ============================================================
+function resetChallenge(escapedStarter) {
+  const editor = document.getElementById('challenge-editor');
+  if (!editor) return;
+  // escapedStarter comes through as HTML-encoded; decode it
+  const tmp = document.createElement('textarea');
+  tmp.innerHTML = escapedStarter;
+  editor.value = tmp.value;
+  document.getElementById('challenge-output').textContent = '';
+  document.getElementById('challenge-tests').innerHTML = '';
+}
+
+function toggleChallengeHint()    { document.getElementById('challenge-hint').classList.toggle('hidden'); }
+function toggleChallengeSolution() { document.getElementById('challenge-solution').classList.toggle('hidden'); }
+
+async function runChallenge(lessonId) {
+  const editor = document.getElementById('challenge-editor');
+  const outEl  = document.getElementById('challenge-output');
+  const testsEl = document.getElementById('challenge-tests');
+  const statusEl = document.getElementById('challenge-status');
+  if (!editor) return;
+
+  const lesson = ALL_LESSONS.find(l => l.id === lessonId);
+  if (!lesson || !lesson.challenge) return;
+
+  outEl.textContent = '';
+  testsEl.innerHTML = '<div style="color:var(--muted);font-size:0.78rem;padding:0.4rem 0">Loading Python runtime…</div>';
+
+  try {
+    await ensurePyodide();
+    testsEl.innerHTML = '';
+    const result = await runUserCodeWithTests(editor.value, lesson.challenge.tests || [], lesson.challenge.expectedOutput, lesson.challenge.runMode);
+    outEl.textContent = result.stdout || '';
+    if (result.error) {
+      outEl.textContent += (result.stdout ? '\n' : '') + result.error;
+      testsEl.innerHTML = `<div class="lab-error-help"><strong>Error tip:</strong> ${friendlyErrorTip(result.error)}</div>`;
+      statusEl.classList.add('hidden');
+      return;
+    }
+
+    if (result.tests && result.tests.length) {
+      testsEl.innerHTML = result.tests.map(t => `
+        <div class="test-result ${t.pass ? 'pass' : 'fail'}">
+          <span class="test-icon">${t.pass ? '&#x2713;' : '&#x2717;'}</span>
+          <span>${escapeHtml(t.call)} &rarr; got ${escapeHtml(JSON.stringify(t.actual))}, expected ${escapeHtml(JSON.stringify(t.expected))}</span>
+        </div>`).join('');
+      const allPass = result.tests.every(t => t.pass);
+      if (allPass) {
+        markChallengePassed(lessonId);
+        statusEl.classList.remove('hidden');
+        statusEl.innerHTML = '&#x2713; All tests passed — challenge complete!';
+      } else {
+        statusEl.classList.add('hidden');
+      }
+    } else if (result.expectedOutput !== undefined && result.expectedOutput !== null) {
+      const userOut = (result.stdout || '').trim();
+      const expected = String(result.expectedOutput).trim();
+      const pass = userOut === expected;
+      testsEl.innerHTML = `<div class="test-result ${pass ? 'pass' : 'fail'}">
+        <span class="test-icon">${pass ? '&#x2713;' : '&#x2717;'}</span>
+        <span>${pass ? 'Output matches expected.' : `Got: ${escapeHtml(userOut)} | Expected: ${escapeHtml(expected)}`}</span>
+      </div>`;
+      if (pass) {
+        markChallengePassed(lessonId);
+        statusEl.classList.remove('hidden');
+        statusEl.innerHTML = '&#x2713; Output matches — challenge complete!';
+      }
+    } else {
+      // Pure run-only mode (no tests, no expected output) — just show the output
+      statusEl.classList.add('hidden');
+    }
+  } catch (e) {
+    outEl.textContent = String(e);
+    testsEl.innerHTML = '';
+  }
+}
+
+// ============================================================
+// PYODIDE LOADER (lazy — first-use)
+// ============================================================
+let _pyodide = null;
+let _pyodideLoadPromise = null;
+
+function ensurePyodide() {
+  if (_pyodide) return Promise.resolve(_pyodide);
+  if (_pyodideLoadPromise) return _pyodideLoadPromise;
+
+  _pyodideLoadPromise = new Promise((resolve, reject) => {
+    if (!window.loadPyodide) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';
+      script.onload = () => initPyodide().then(resolve, reject);
+      script.onerror = () => reject(new Error('Failed to load Pyodide from CDN. Check your internet connection.'));
+      document.head.appendChild(script);
+    } else {
+      initPyodide().then(resolve, reject);
+    }
+  });
+  return _pyodideLoadPromise;
+}
+
+async function initPyodide() {
+  _pyodide = await window.loadPyodide({
+    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/'
+  });
+  return _pyodide;
+}
+
+// Run user Python code and capture stdout/stderr
+// Optionally run test cases that call a function and compare results
+async function runUserCodeWithTests(code, tests, expectedOutput, runMode) {
+  if (!_pyodide) await ensurePyodide();
+
+  // Clear previous globals to give a clean slate, but keep stdout buffer
+  _pyodide.runPython(`
+import sys, io
+_stdout_buffer = io.StringIO()
+sys.stdout = _stdout_buffer
+sys.stderr = _stdout_buffer
+`);
+
+  let error = null;
+  try {
+    _pyodide.runPython(code);
+  } catch (e) {
+    error = String(e.message || e).replace(/^[\s\S]*?(?=Traceback|\w+Error|\w+Exception)/, '');
+  }
+
+  const stdout = _pyodide.runPython('_stdout_buffer.getvalue()');
+
+  // Reset stdout
+  _pyodide.runPython('sys.stdout = sys.__stdout__\nsys.stderr = sys.__stderr__');
+
+  if (error) return { stdout, error };
+
+  // If there are function tests, run them
+  if (tests && tests.length) {
+    const results = [];
+    for (const t of tests) {
+      try {
+        // Eval the call expression and capture the result
+        const r = _pyodide.runPython(t.call);
+        const actualJs = r && r.toJs ? r.toJs({ dict_converter: Object.fromEntries }) : r;
+        const pass = deepEqual(actualJs, t.expected);
+        results.push({ call: t.call, expected: t.expected, actual: actualJs, pass });
+      } catch (e) {
+        results.push({ call: t.call, expected: t.expected, actual: '(error: ' + e.message + ')', pass: false });
+      }
+    }
+    return { stdout, tests: results };
+  }
+
+  return { stdout, expectedOutput };
+}
+
+function deepEqual(a, b) {
+  if (a === b) return true;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) if (!deepEqual(a[i], b[i])) return false;
+    return true;
+  }
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const ak = Object.keys(a), bk = Object.keys(b);
+    if (ak.length !== bk.length) return false;
+    for (const k of ak) if (!deepEqual(a[k], b[k])) return false;
+    return true;
+  }
+  return false;
+}
+
+function friendlyErrorTip(err) {
+  if (!err) return '';
+  const e = err.toString();
+  if (e.includes('NameError'))   return 'Python doesn\'t recognize a name. Check your spelling and that variables/functions are defined before being used.';
+  if (e.includes('SyntaxError')) return 'Python can\'t parse this. Check for missing colons (:), unmatched brackets/quotes, or wrong indentation.';
+  if (e.includes('IndentationError')) return 'The indentation is off. Use exactly 4 spaces (or 1 tab) per level — and be consistent.';
+  if (e.includes('TypeError'))   return 'You combined incompatible types. For example, trying to add a string and a number. Use str() or int() to convert.';
+  if (e.includes('IndexError'))  return 'You accessed a list index that doesn\'t exist. Remember: indexing starts at 0, and list[len(list)] is out of range.';
+  if (e.includes('KeyError'))    return 'You looked up a dict key that doesn\'t exist. Use dict.get(key) or check "if key in dict" first.';
+  if (e.includes('ZeroDivisionError')) return 'You divided by zero. Check that the denominator is not 0 before dividing.';
+  if (e.includes('ValueError'))  return 'A function got an argument of the right type but an invalid value. E.g. int("hello") fails because "hello" is not a number.';
+  return 'Read the error message carefully — it often tells you the exact line and what went wrong.';
+}
+
+// ============================================================
+// PRACTICE LAB
+// ============================================================
+let LAB_PROBLEMS = [];
+
+async function loadPracticeProblems() {
+  try {
+    const res = await fetch('/api/practice-problems');
+    LAB_PROBLEMS = await res.json();
+  } catch { LAB_PROBLEMS = []; }
+}
+
+function renderLabIndex() {
+  const container = document.getElementById('lab-content');
+  const passed = getPassedSet('lab-passed');
+  container.innerHTML = `
+    <div class="page-header">
+      <h1>&#x1F9EA; Practice Lab</h1>
+      <p>Write and run real Python in your browser. ${passed.size}/${LAB_PROBLEMS.length} problems solved.</p>
+    </div>
+    <div class="lab-problems-grid">
+      ${LAB_PROBLEMS.map((p, i) => `
+        <div class="lab-problem-card ${passed.has(p.id) ? 'passed' : ''}" onclick="openLabProblem('${p.id}')">
+          <div class="lab-problem-card-header">
+            <span class="lab-problem-num">#${i + 1}</span>
+            ${passed.has(p.id) ? '<span class="lab-problem-passed-badge">&#x2713; Solved</span>' : ''}
+          </div>
+          <div class="lab-problem-title">${escapeHtml(p.title)}</div>
+          <div class="lab-problem-concept">${escapeHtml(p.concept)}</div>
+          <span class="lab-problem-difficulty">${escapeHtml(p.difficulty)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function openLabProblem(problemId) {
+  const p = LAB_PROBLEMS.find(x => x.id === problemId);
+  if (!p) return;
+  const passed = isLabPassed(problemId);
+  const container = document.getElementById('lab-content');
+  container.innerHTML = `
+    <button class="back-btn" onclick="renderLabIndex()" style="margin-bottom:1.5rem">&larr; All Lab Problems</button>
+    <div class="lab-detail">
+      <div class="lab-detail-header">
+        <div class="lab-detail-meta">
+          <span class="lab-problem-num">${escapeHtml(p.concept)}</span>
+          <span class="lab-problem-difficulty">${escapeHtml(p.difficulty)}</span>
+          ${passed ? '<span style="color:var(--green);font-size:0.8rem;font-weight:700">&#x2713; Solved</span>' : ''}
+        </div>
+        <h1 class="lab-detail-title">${escapeHtml(p.title)}</h1>
+      </div>
+
+      <div class="lab-instructions">${escapeHtml(p.instructions)}</div>
+
+      <div class="lab-example">
+        <div class="lab-example-label">Example</div>
+        ${escapeHtml(p.example)}
+      </div>
+
+      <div class="lab-editor-section">
+        <div class="lab-editor-toolbar">
+          <span class="lab-editor-label">your_code.py</span>
+          <button class="challenge-btn" onclick="resetLabEditor('${p.id}')">Reset</button>
+        </div>
+        <textarea class="lab-editor" id="lab-editor" spellcheck="false">${escapeHtml(p.starter)}</textarea>
+        <div class="lab-controls">
+          <button class="lab-btn primary" onclick="runLabCode('${p.id}', false)">&#x25B6; Run Code</button>
+          ${(p.tests && p.tests.length) || p.expectedOutput ? `<button class="lab-btn success" onclick="runLabCode('${p.id}', true)">&#x2713; Run Tests</button>` : ''}
+          <button class="lab-btn" onclick="toggleLabHint(1)">&#x1F4AD; Hint 1</button>
+          <button class="lab-btn" onclick="toggleLabHint(2)">&#x1F4AD; Hint 2</button>
+          <button class="lab-btn" onclick="toggleLabSolution()">&#x1F511; Solution</button>
+        </div>
+        <div id="lab-hint-1" class="lab-reveal hidden"><strong>Hint 1:</strong> ${escapeHtml(p.hint1)}</div>
+        <div id="lab-hint-2" class="lab-reveal hidden"><strong>Hint 2:</strong> ${escapeHtml(p.hint2)}</div>
+        <div id="lab-solution" class="lab-reveal hidden">
+          <strong>Solution:</strong>
+          <pre>${escapeHtml(p.solution)}</pre>
+          <div style="margin-top:0.5rem">${escapeHtml(p.explanation)}</div>
+        </div>
+      </div>
+
+      <div class="lab-output-section">
+        <div class="lab-output-label">Output</div>
+        <div class="lab-output" id="lab-output"></div>
+      </div>
+
+      ${(p.tests && p.tests.length) ? `
+      <div class="lab-tests-section">
+        <div class="lab-tests-header">
+          <span class="lab-tests-title">Test Cases (${p.tests.length})</span>
+        </div>
+        <div class="lab-test-list" id="lab-tests">
+          ${p.tests.map(t => `
+            <div class="test-result">
+              <span class="test-icon" style="color:var(--muted)">○</span>
+              <span>${escapeHtml(t.call)} &rarr; ${escapeHtml(JSON.stringify(t.expected))}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    </div>
+  `;
+  // Stash starter for reset
+  window.__labStarter = p.starter;
+}
+
+function resetLabEditor(problemId) {
+  const p = LAB_PROBLEMS.find(x => x.id === problemId);
+  if (!p) return;
+  const editor = document.getElementById('lab-editor');
+  if (editor) editor.value = p.starter;
+  const out = document.getElementById('lab-output');
+  if (out) out.textContent = '';
+  const tests = document.getElementById('lab-tests');
+  if (tests) renderLabTestPlaceholders(p.tests, tests);
+}
+
+function renderLabTestPlaceholders(tests, el) {
+  if (!tests) return;
+  el.innerHTML = tests.map(t => `
+    <div class="test-result">
+      <span class="test-icon" style="color:var(--muted)">○</span>
+      <span>${escapeHtml(t.call)} &rarr; ${escapeHtml(JSON.stringify(t.expected))}</span>
+    </div>
+  `).join('');
+}
+
+function toggleLabHint(n)   { document.getElementById(`lab-hint-${n}`).classList.toggle('hidden'); }
+function toggleLabSolution(){ document.getElementById('lab-solution').classList.toggle('hidden'); }
+
+async function runLabCode(problemId, runTests) {
+  const p = LAB_PROBLEMS.find(x => x.id === problemId);
+  if (!p) return;
+  const editor = document.getElementById('lab-editor');
+  const out    = document.getElementById('lab-output');
+  const tests  = document.getElementById('lab-tests');
+  if (!editor || !out) return;
+
+  out.textContent = '';
+  out.innerHTML = '<div class="pyodide-loading"><div class="pyodide-spinner"></div>Loading Python… this may take ~10 seconds the first time.</div>';
+
+  try {
+    await ensurePyodide();
+    out.textContent = '';
+
+    const testList = runTests ? (p.tests || []) : [];
+    const result = await runUserCodeWithTests(editor.value, testList, runTests ? p.expectedOutput : null, p.runMode);
+    out.textContent = result.stdout || '(no output)';
+    if (result.error) {
+      out.textContent += (result.stdout ? '\n' : '') + result.error;
+      out.innerHTML += `<div class="lab-error-help"><strong>Error tip:</strong> ${friendlyErrorTip(result.error)}</div>`;
+      return;
+    }
+
+    if (runTests) {
+      if (result.tests && result.tests.length) {
+        tests.innerHTML = result.tests.map(t => `
+          <div class="test-result ${t.pass ? 'pass' : 'fail'}">
+            <span class="test-icon">${t.pass ? '&#x2713;' : '&#x2717;'}</span>
+            <span>${escapeHtml(t.call)} &rarr; got ${escapeHtml(JSON.stringify(t.actual))}, expected ${escapeHtml(JSON.stringify(t.expected))}</span>
+          </div>`).join('');
+        if (result.tests.every(t => t.pass)) {
+          markLabPassed(p.id);
+          out.innerHTML += '<div style="margin-top:0.5rem;color:var(--green);font-weight:700">&#x2713; All tests passed — solved!</div>';
+        }
+      } else if (p.expectedOutput) {
+        const userOut = (result.stdout || '').trim();
+        const expected = String(p.expectedOutput).trim();
+        if (userOut === expected) {
+          markLabPassed(p.id);
+          out.innerHTML += '<div style="margin-top:0.5rem;color:var(--green);font-weight:700">&#x2713; Output matches — solved!</div>';
+        } else {
+          out.innerHTML += `<div class="lab-error-help">Expected output:\n${escapeHtml(expected)}</div>`;
+        }
+      }
+    }
+  } catch (e) {
+    out.textContent = 'Error: ' + (e.message || e);
+  }
+}
+
+// ============================================================
+// EXPANDED PROGRESS DASHBOARD
+// ============================================================
+function refreshProgressDashboard() {
+  const lessonsDone = getCompleted().size;
+  const lessonsTotal = ALL_LESSONS.length;
+  const quizzesDone = getPassedSet('quizzes-passed').size;
+  const quizzesTotal = ALL_LESSONS.filter(l => l.quiz).length;
+  const challengesDone = getPassedSet('challenges-passed').size;
+  const challengesTotal = ALL_LESSONS.filter(l => l.challenge).length;
+  const labDone = getPassedSet('lab-passed').size;
+  const labTotal = LAB_PROBLEMS.length;
+
+  const overallParts = [
+    [lessonsDone, lessonsTotal],
+    [quizzesDone, quizzesTotal],
+    [challengesDone, challengesTotal],
+    [labDone, labTotal]
+  ].filter(([_, t]) => t > 0);
+  const overallDone = overallParts.reduce((s, [d]) => s + d, 0);
+  const overallTotal = overallParts.reduce((s, [_, t]) => s + t, 0);
+  const overallPct = overallTotal ? Math.round((overallDone / overallTotal) * 100) : 0;
+
+  const container = document.querySelector('.dashboard-grid');
+  if (!container) return;
+  const stats = [
+    { label: 'Lessons',    done: lessonsDone,    total: lessonsTotal,    color: 'var(--accent)' },
+    { label: 'Quizzes',    done: quizzesDone,    total: quizzesTotal,    color: 'var(--green)' },
+    { label: 'Challenges', done: challengesDone, total: challengesTotal, color: 'var(--yellow)' },
+    { label: 'Lab',        done: labDone,        total: labTotal,        color: 'var(--purple)' },
+    { label: 'Overall',    done: overallDone,    total: overallTotal,    color: 'linear-gradient(90deg,var(--accent),var(--purple))', pct: overallPct }
+  ];
+  container.innerHTML = stats.map(s => `
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-label">${s.label}</div>
+      <div class="dashboard-stat-value">${s.pct !== undefined ? s.pct + '%' : `${s.done} / ${s.total}`}</div>
+      <div class="dashboard-stat-bar">
+        <div class="dashboard-stat-fill" style="width:${s.total > 0 ? Math.round((s.done/s.total)*100) : 0}%;background:${s.color}"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// INSERT DASHBOARD INTO HOME PAGE
+// ============================================================
+function injectHomeDashboard() {
+  const home = document.getElementById('page-home');
+  if (!home || home.querySelector('.dashboard-grid')) return;
+  const hero = home.querySelector('.hero');
+  if (hero) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'dashboard-grid';
+    hero.insertAdjacentElement('afterend', wrapper);
+  }
+}
+
+// Render lab index when navigating to lab page
+// (We listen for the navigation click on the nav link)
+document.querySelectorAll('.nav-link[data-page="lab"]').forEach(link => {
+  link.addEventListener('click', () => setTimeout(renderLabIndex, 30));
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadCourse();
+loadPracticeProblems().then(() => {
+  injectHomeDashboard();
+  refreshProgressDashboard();
+});
+loadProblems();
