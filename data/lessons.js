@@ -3677,6 +3677,595 @@ def two_sum(nums, target):
     ]
   },
   {
+    id: 14, slug: 'dsa-foundations', title: 'DSA Foundations',
+    subtitle: 'Gently learn the building blocks behind every LeetCode problem',
+    color: '#a371f7',
+    badgeLabel: 'DSA Foundations',
+    lessons: [
+      {
+        id: 'l14-0', title: 'What is DSA?',
+        explanation: [
+          'DSA stands for Data Structures and Algorithms. A data structure is just a way to organize information so a computer can use it. An algorithm is just a set of steps that solves a problem.',
+          'Why it matters: every LeetCode problem is really asking "pick the right container for your data, then pick the right steps to work with it." That is it. No magic.',
+          'Simple analogy: a backpack vs a filing cabinet are both data structures — they store stuff differently. Packing your bag for school is an algorithm — a small set of repeatable steps.',
+          'For now, do not worry about hard problems. Your only job in this section is to get comfortable with the building blocks: lists, strings, dictionaries, sets, stacks, and queues.'
+        ],
+        code: `# A tiny taste of DSA:
+# Data structure: a list (holds many numbers)
+nums = [3, 7, 1, 9, 4]
+
+# Algorithm: go through the list and find the biggest
+biggest = nums[0]
+for n in nums:
+    if n > biggest:
+        biggest = n
+
+print(biggest)   # 9`,
+        codeCaption: 'A list (data structure) plus a few steps (algorithm) is already real DSA.',
+        mistake: {
+          title: 'Thinking DSA is only for advanced people',
+          description: 'DSA sounds scary but the beginner version is just: lists, dicts, sets, loops, and ifs. You already know most of the pieces.',
+          bad: '# "I need to learn DSA later, it is too advanced"',
+          good: '# "DSA is just organized data + organized steps. I already use both."'
+        },
+        practice: {
+          question: 'In your own words: what is a data structure and what is an algorithm? Give one real-life example of each.',
+          hint: 'Think containers (backpack, fridge, shelf) and step-by-step routines (recipe, morning routine).',
+          answer: 'A data structure is a way to organize data. Example: a contact list on your phone.\nAn algorithm is a series of steps to do something. Example: a recipe for pancakes.'
+        },
+        quiz: {
+          question: 'Which best describes DSA at the beginner level?',
+          options: [
+            'A secret math language only senior engineers understand',
+            'Picking the right container for your data and the right steps to use it',
+            'Memorizing every LeetCode problem',
+            'A specific Python library you import'
+          ],
+          correctIndex: 1,
+          explanation: 'DSA is just: choose how to store the data, then choose the steps to work with it. Lists, dicts, sets, and loops are already DSA tools.'
+        },
+        reflection: 'Recap: DSA = data structures (how data is stored) + algorithms (steps to use that data). You will spend the next lessons getting fluent with the most useful beginner ones.'
+      },
+      {
+        id: 'l14-1', title: 'What is Big O?',
+        explanation: [
+          'Big O is just a way to describe how slow a piece of code gets as the input grows. It is not exact timing — it is the SHAPE of the growth.',
+          'Why it matters: in interviews and on LeetCode, "does it work?" is only half the question. "Is it fast enough?" is the other half. Big O is the vocabulary for that second half.',
+          'Simple analogy: imagine looking for a friend in a room. Glancing at a name tag on your own shirt is instant — that is O(1). Walking past every person once to find them is O(n). Comparing every pair of people to each other is O(n²).',
+          'Time complexity = how long the code takes. Space complexity = how much extra memory it uses. For now, focus on time.',
+          'You do not need to be precise yet. If you can spot "one loop" vs "a loop inside a loop", you already understand 80% of beginner Big O.'
+        ],
+        code: `# O(1) — constant time, does NOT depend on n
+nums = [10, 20, 30, 40, 50]
+print(nums[0])           # one step, always
+
+# O(n) — grows with the size of the input
+for n in nums:
+    print(n)             # n steps total
+
+# O(n^2) — a loop INSIDE a loop
+for a in nums:
+    for b in nums:
+        print(a, b)      # n * n steps total`,
+        codeCaption: 'O(1) = one step. O(n) = one loop. O(n²) = nested loop. That is the beginner cheat sheet.',
+        stepByStep: [
+          '1. Look at the code. Is there a loop?',
+          '2. No loop → probably O(1).',
+          '3. One loop over the input → O(n).',
+          '4. A loop INSIDE another loop over the same input → O(n²).',
+          '5. Ignore tiny details (constants, +1s). Big O cares about the shape, not the number.'
+        ],
+        mistake: {
+          title: 'Counting lines instead of loops',
+          description: 'Big O is not about how many lines of code you wrote. It is about how the work grows when the input grows. 100 lines with no loop is still O(1).',
+          bad: '# "This is 12 lines, so it is O(12)"  — not how Big O works',
+          good: '# "There is one loop over nums, so this is O(n)."'
+        },
+        practice: {
+          question: 'Predict the output AND the Big O:\n\nnums = [1, 2, 3]\nfor x in nums:\n    for y in nums:\n        print(x, y)',
+          hint: 'Two loops, each over nums of length 3. That is 3 * 3 prints.',
+          answer: 'Output: 9 lines (1 1, 1 2, 1 3, 2 1, ... 3 3).\nBig O: O(n²) because of the loop inside a loop.'
+        },
+        quiz: {
+          question: 'You write a function that loops through a list once and prints each item. What is its time complexity?',
+          options: ['O(1)', 'O(n)', 'O(n²)', 'O(n³)'],
+          correctIndex: 1,
+          explanation: 'One pass over the list = O(n). Work grows in a straight line with the input size.'
+        },
+        reflection: 'Recap: O(1) = instant, O(n) = one loop, O(n²) = nested loops. You do not need precision yet — just notice the shape of the loops.'
+      },
+      {
+        id: 'l14-2', title: 'Lists / Arrays Review',
+        explanation: [
+          'A list (in many other languages called an "array") is an ordered collection of values. Each value has a position called an index, starting at 0.',
+          'Why it matters: lists are everywhere in LeetCode. "Given an array of numbers..." is how at least half of Easy problems start.',
+          'Simple analogy: a list is like a row of lockers numbered starting from 0. To get inside locker 3, you ask for nums[3].',
+          'Key beginner skills: index a value, update a value, append a new value, get the length, loop through every value, and check if something is inside.',
+          'Common beginner mistake: forgetting indexes start at 0. The first element is nums[0], not nums[1].'
+        ],
+        code: `nums = [10, 20, 30, 40]
+
+# Index (read)
+print(nums[0])          # 10 — first element
+print(nums[-1])         # 40 — last element using negative index
+
+# Update
+nums[1] = 99
+print(nums)             # [10, 99, 30, 40]
+
+# Append
+nums.append(50)
+print(nums)             # [10, 99, 30, 40, 50]
+
+# Length
+print(len(nums))        # 5
+
+# Loop
+for n in nums:
+    print(n)
+
+# Membership
+print(30 in nums)       # True
+print(7  in nums)       # False`,
+        codeCaption: 'The 6 list moves you will use constantly: index, update, append, len, loop, in.',
+        stepByStep: [
+          '1. nums = [10, 20, 30, 40] — a list of 4 numbers at indexes 0, 1, 2, 3.',
+          '2. nums[0] reads the first item.',
+          '3. nums[1] = 99 overwrites the second item.',
+          '4. nums.append(50) adds 50 to the end.',
+          '5. len(nums) counts how many items are inside.',
+          '6. "for n in nums" walks through every item, one at a time.'
+        ],
+        mistake: {
+          title: 'Indexing past the end of the list',
+          description: 'If your list has 4 items, the highest valid index is 3. nums[4] crashes with IndexError.',
+          bad: 'nums = [10, 20, 30, 40]\nprint(nums[4])    # IndexError',
+          good: 'nums = [10, 20, 30, 40]\nprint(nums[-1])   # 40 — safe way to get the last item'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = [5, 10, 15]\nnums.append(20)\nprint(nums[0], nums[-1], len(nums))',
+          hint: 'append adds to the END. -1 is the last index.',
+          answer: '5 20 4\n\nnums[0] is 5, nums[-1] is the newly appended 20, and len is 4 after the append.'
+        },
+        challenge: {
+          description: 'DSA drill: write largest(nums) that returns the largest number in the list. Assume nums has at least one number.',
+          starter: 'def largest(nums):\n    # your code here\n    pass',
+          tests: [
+            { call: 'largest([3, 7, 1, 9, 4])', expected: 9 },
+            { call: 'largest([-5, -2, -10])',  expected: -2 },
+            { call: 'largest([42])',           expected: 42 }
+          ],
+          hint: 'Start with biggest = nums[0]. Loop through nums. If n > biggest, update biggest. Return biggest.',
+          solution: 'def largest(nums):\n    biggest = nums[0]\n    for n in nums:\n        if n > biggest:\n            biggest = n\n    return biggest'
+        },
+        quiz: {
+          question: 'Given nums = [4, 8, 15, 16, 23, 42], which expression correctly gets the LAST element?',
+          options: ['nums[6]', 'nums[len(nums)]', 'nums[-1]', 'nums.last()'],
+          correctIndex: 2,
+          explanation: 'Indexes start at 0, so the last index is len(nums) - 1, or simply -1. nums[6] and nums[len(nums)] crash. nums.last() does not exist in Python.'
+        },
+        reflection: 'Recap: lists are indexed from 0, support len/append/in, and you can loop them with "for x in nums". Most LeetCode warmups live here.'
+      },
+      {
+        id: 'l14-3', title: 'Strings as Sequences',
+        explanation: [
+          'A string is a sequence of characters. The big idea: a string behaves a LOT like a list of one-letter pieces.',
+          'You can index it, get its length, loop through it, slice it, and check if a character is inside — exactly like a list.',
+          'Why it matters: many beginner LeetCode problems are about strings (reverse a word, count vowels, check duplicates). The same list skills apply.',
+          'Simple analogy: the word "cat" is like a list ["c", "a", "t"]. Position 0 is "c", position 1 is "a", position 2 is "t".',
+          'Important rule: strings are IMMUTABLE. You cannot change a character in place. word[0] = "b" will crash. If you need to change something, build a new string instead.'
+        ],
+        code: `word = "python"
+
+# Index
+print(word[0])      # 'p'
+print(word[-1])     # 'n'
+
+# Length
+print(len(word))    # 6
+
+# Loop
+for ch in word:
+    print(ch)
+
+# Slice (start:stop, stop is NOT included)
+print(word[0:3])    # 'pyt'
+print(word[3:])     # 'hon'
+print(word[::-1])   # 'nohtyp' — reversed
+
+# Membership
+print("y" in word)  # True
+print("z" in word)  # False`,
+        codeCaption: 'Strings act like read-only lists of characters: indexing, len, looping, slicing, in.',
+        stepByStep: [
+          '1. word = "python" stores 6 characters in order.',
+          '2. word[0] reads the first character.',
+          '3. word[0:3] takes characters at indexes 0, 1, 2 (the 3 is excluded).',
+          '4. word[::-1] is a Pythonic trick to reverse a string.',
+          '5. "for ch in word" walks one character at a time.'
+        ],
+        mistake: {
+          title: 'Trying to change a character with index assignment',
+          description: 'Strings cannot be modified in place. Build a new string instead.',
+          bad: 'word = "cat"\nword[0] = "b"   # TypeError: \'str\' object does not support item assignment',
+          good: 'word = "cat"\nword = "b" + word[1:]   # "bat"'
+        },
+        practice: {
+          question: 'Predict the output:\n\nword = "hello"\nprint(word[1], word[-1], len(word), word[1:4])',
+          hint: 'Indexes start at 0. -1 is the last. Slicing stops BEFORE the second number.',
+          answer: 'e o 5 ell\n\nword[1] is "e", word[-1] is "o", len is 5, word[1:4] is "ell" (indexes 1, 2, 3).'
+        },
+        challenge: {
+          description: 'DSA drill: write contains_letter(word, letter) that returns True if letter appears anywhere in word, otherwise False. Both inputs are lowercase strings.',
+          starter: 'def contains_letter(word, letter):\n    # your code here\n    pass',
+          tests: [
+            { call: 'contains_letter("python", "y")', expected: true },
+            { call: 'contains_letter("python", "z")', expected: false },
+            { call: 'contains_letter("", "a")',       expected: false }
+          ],
+          hint: 'You can use "letter in word" directly, or loop char by char.',
+          solution: 'def contains_letter(word, letter):\n    return letter in word'
+        },
+        quiz: {
+          question: 'Why does this code crash?\n\nword = "hi"\nword[0] = "H"',
+          options: [
+            'Indexes do not exist for strings',
+            'Strings are immutable — you cannot change a character in place',
+            '"H" is uppercase',
+            'You must use word.set(0, "H") instead'
+          ],
+          correctIndex: 1,
+          explanation: 'Strings cannot be edited in place in Python. To change a character, build a new string with slicing or concatenation.'
+        },
+        reflection: 'Recap: a string is basically a read-only list of characters. Index, len, loop, slice, and "in" all work. Just remember: immutable.'
+      },
+      {
+        id: 'l14-4', title: 'Dictionaries / Hash Maps Review',
+        explanation: [
+          'A dictionary (called a "hash map" in other languages) stores key → value pairs. You look up a value by its key, instantly.',
+          'Why it matters: dictionaries are the single most important data structure for beginner LeetCode. Two Sum, character counting, "have I seen X?" — all dictionaries.',
+          'Simple analogy: a real-world dictionary maps a word → its definition. A Python dictionary maps any key → any value.',
+          'Key beginner skills: create, read with dict[key], read safely with dict.get(key), add/update with dict[key] = value, check existence with "key in dict", and count with the .get(key, 0) + 1 trick.',
+          'Lookup is O(1) — instant — no matter how many keys are inside. That is the magic.'
+        ],
+        code: `ages = {"Alice": 25, "Bob": 30}
+
+# Read
+print(ages["Alice"])         # 25
+
+# Safe read (no crash)
+print(ages.get("Carol"))     # None
+print(ages.get("Carol", 0))  # 0 (default)
+
+# Add / update
+ages["Carol"] = 28           # add
+ages["Alice"] = 26           # update
+
+# Check
+print("Bob" in ages)         # True
+
+# Count with a dict — THE pattern to remember
+word = "banana"
+count = {}
+for ch in word:
+    count[ch] = count.get(ch, 0) + 1
+print(count)   # {'b': 1, 'a': 3, 'n': 2}`,
+        codeCaption: 'The .get(key, 0) + 1 pattern is the heart of beginner counting problems.',
+        stepByStep: [
+          '1. {} creates an empty dictionary.',
+          '2. ages["Alice"] = 25 stores a key→value pair.',
+          '3. ages["Alice"] reads the value back.',
+          '4. ages.get("Carol", 0) gives 0 instead of crashing on missing keys.',
+          '5. In the loop, count[ch] = count.get(ch, 0) + 1 increases the running tally for each character.'
+        ],
+        mistake: {
+          title: 'Crashing on a missing key with dict[key]',
+          description: 'dict[key] raises KeyError if the key does not exist. Use dict.get(key) or "key in dict" first.',
+          bad: 'ages = {"Alice": 25}\nprint(ages["Bob"])    # KeyError',
+          good: 'print(ages.get("Bob"))      # None\nprint(ages.get("Bob", 0))   # 0'
+        },
+        practice: {
+          question: 'Predict the output:\n\nd = {}\nfor x in [1, 2, 1, 1, 2]:\n    d[x] = d.get(x, 0) + 1\nprint(d)',
+          hint: 'Count how many times each number appears.',
+          answer: '{1: 3, 2: 2}\n\n1 appears three times, 2 appears twice.'
+        },
+        challenge: {
+          description: 'DSA drill: write word_count(words) where words is a list of strings. Return a dictionary mapping each word to the number of times it appears.',
+          starter: 'def word_count(words):\n    # your code here\n    pass',
+          tests: [
+            { call: 'word_count(["a", "b", "a"])',        expected: { a: 2, b: 1 } },
+            { call: 'word_count([])',                     expected: {} },
+            { call: 'word_count(["hi", "hi", "hi"])',    expected: { hi: 3 } }
+          ],
+          hint: 'count = {}. Loop w in words. count[w] = count.get(w, 0) + 1. Return count.',
+          solution: 'def word_count(words):\n    count = {}\n    for w in words:\n        count[w] = count.get(w, 0) + 1\n    return count'
+        },
+        quiz: {
+          question: 'Which line safely adds 1 to the count for key c in a dict, even when c is not in the dict yet?',
+          options: [
+            'count[c] = count[c] + 1',
+            'count[c] += 1',
+            'count[c] = count.get(c, 0) + 1',
+            'count.add(c, 1)'
+          ],
+          correctIndex: 2,
+          explanation: 'count.get(c, 0) returns 0 when c is missing, so the + 1 starts the count cleanly. The first two crash with KeyError, and count.add() does not exist.'
+        },
+        reflection: 'Recap: dicts map keys to values with O(1) lookup. The .get(key, 0) + 1 pattern solves a huge chunk of beginner LeetCode counting problems.'
+      },
+      {
+        id: 'l14-5', title: 'Sets Review',
+        explanation: [
+          'A set is a collection of UNIQUE values. Adding a duplicate does nothing. Order is not guaranteed.',
+          'Why it matters: sets are perfect for two things — "have I seen this before?" and "give me only the unique items." Both come up constantly in beginner LeetCode.',
+          'Simple analogy: a set is like a bag of unique stickers. If you already have a Pikachu sticker and someone hands you another Pikachu, the bag does not change.',
+          'Key beginner skills: create, add, remove/discard, check membership with "in", and turn a list into a set to find uniques.',
+          'Membership check (x in my_set) is O(1) — just like dictionary lookup. That is the superpower.'
+        ],
+        code: `# Create a set
+seen = set()
+seen.add(1)
+seen.add(2)
+seen.add(1)              # duplicate — ignored
+print(seen)              # {1, 2}
+
+# Membership — O(1)
+print(2 in seen)         # True
+print(9 in seen)         # False
+
+# Remove (discard does NOT crash if missing)
+seen.discard(2)
+seen.discard(99)         # safe — no error
+
+# Unique values from a list
+nums = [1, 2, 2, 3, 3, 3]
+print(set(nums))         # {1, 2, 3}
+
+# Classic pattern: detect duplicates
+def has_duplicate(nums):
+    seen = set()
+    for n in nums:
+        if n in seen:
+            return True
+        seen.add(n)
+    return False`,
+        codeCaption: 'Sets = uniqueness + instant membership. The classic loop pattern solves Contains Duplicate.',
+        stepByStep: [
+          '1. set() creates an empty set.',
+          '2. seen.add(x) puts x in the set (duplicates do nothing).',
+          '3. "x in seen" is the O(1) membership check.',
+          '4. set(my_list) turns a list into a set — duplicates disappear.',
+          '5. In has_duplicate, we add each number after checking; if we see it twice, we return True.'
+        ],
+        mistake: {
+          title: 'Trying to index into a set',
+          description: 'Sets have no order, so no indexes. my_set[0] crashes. If you need order, use a list.',
+          bad: 's = {1, 2, 3}\nprint(s[0])    # TypeError',
+          good: 's = {1, 2, 3}\nprint(1 in s)  # True — the correct use of a set'
+        },
+        practice: {
+          question: 'Predict the output:\n\ns = set()\nfor x in [1, 2, 2, 3]:\n    s.add(x)\nprint(len(s))',
+          hint: 'Duplicates are ignored. How many unique numbers are in [1, 2, 2, 3]?',
+          answer: '3\n\nThe set ends up as {1, 2, 3}, so len is 3.'
+        },
+        challenge: {
+          description: 'DSA drill: write has_duplicate(nums) that returns True if any number appears more than once in nums, else False.',
+          starter: 'def has_duplicate(nums):\n    # your code here\n    pass',
+          tests: [
+            { call: 'has_duplicate([1, 2, 3, 1])',    expected: true },
+            { call: 'has_duplicate([1, 2, 3, 4])',    expected: false },
+            { call: 'has_duplicate([])',              expected: false }
+          ],
+          hint: 'seen = set(). Loop n in nums. If n in seen, return True. Otherwise seen.add(n). At the end, return False.',
+          solution: 'def has_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False'
+        },
+        quiz: {
+          question: 'Which problem is the BEST fit for a set?',
+          options: [
+            'Storing scores in the order they were earned',
+            'Mapping student names to their grades',
+            'Tracking which words you have already seen in a sentence',
+            'Sorting numbers from smallest to largest'
+          ],
+          correctIndex: 2,
+          explanation: 'Sets shine when you only need "have I seen this before?" with no order and no duplicates. The other tasks need a list, a dict, or sorting.'
+        },
+        reflection: 'Recap: sets store unique values and check membership in O(1). The "seen" pattern is your new best friend.'
+      },
+      {
+        id: 'l14-6', title: 'Stacks',
+        explanation: [
+          'A stack is a structure where the LAST thing you put in is the FIRST thing you take out. Computer scientists call this LIFO (Last In, First Out).',
+          'Why it matters: stacks show up in beginner LeetCode for things like "valid parentheses" and reversing things. The Python list already works as a stack — no special import.',
+          'Simple analogy: a stack of plates. You add a new plate on top, and you grab from the top. You do not pull a plate out from the bottom.',
+          'In Python, use stack.append(x) to push, and stack.pop() to pop the top item. That is it.',
+          'Do not worry about hard parentheses problems yet. Just get comfortable with push and pop.'
+        ],
+        code: `stack = []
+
+# Push (add to the top)
+stack.append("A")
+stack.append("B")
+stack.append("C")
+print(stack)        # ['A', 'B', 'C']
+
+# Peek at the top
+print(stack[-1])    # 'C'
+
+# Pop (remove from the top)
+top = stack.pop()
+print(top)          # 'C'
+print(stack)        # ['A', 'B']
+
+# Use a stack to reverse a list
+def reverse_list(items):
+    stack = []
+    for x in items:
+        stack.append(x)
+    result = []
+    while stack:
+        result.append(stack.pop())
+    return result
+
+print(reverse_list([1, 2, 3]))   # [3, 2, 1]`,
+        codeCaption: 'A Python list IS a stack: append to push, pop to pop. LIFO order.',
+        stepByStep: [
+          '1. stack = [] starts empty.',
+          '2. append("A") pushes "A" on top → ["A"].',
+          '3. append("B") → ["A", "B"]. append("C") → ["A", "B", "C"].',
+          '4. stack[-1] peeks at the top without removing.',
+          '5. stack.pop() removes and returns the last item.',
+          '6. To reverse a list with a stack: push everything in, then pop everything out.'
+        ],
+        mistake: {
+          title: 'Calling pop(0) when you wanted pop()',
+          description: 'pop() removes the LAST item (top of stack). pop(0) removes the FIRST item — that turns it into a queue, and it is slow on a list.',
+          bad: 'stack.pop(0)   # not a stack anymore, also O(n)',
+          good: 'stack.pop()    # correct: removes the top, O(1)'
+        },
+        practice: {
+          question: 'Predict the output:\n\ns = []\ns.append(1)\ns.append(2)\ns.append(3)\nprint(s.pop(), s.pop())',
+          hint: 'pop() always takes the LAST item.',
+          answer: '3 2\n\nPushes are 1, 2, 3. The two pops take 3 first, then 2.'
+        },
+        challenge: {
+          description: 'DSA drill: write reverse_with_stack(items) that returns a NEW list with the items in reverse order, using a stack (push then pop).',
+          starter: 'def reverse_with_stack(items):\n    # your code here\n    pass',
+          tests: [
+            { call: 'reverse_with_stack([1, 2, 3])', expected: [3, 2, 1] },
+            { call: 'reverse_with_stack(["a","b"])',  expected: ["b", "a"] },
+            { call: 'reverse_with_stack([])',         expected: [] }
+          ],
+          hint: 'Build stack = []. For x in items, stack.append(x). Then while stack: result.append(stack.pop()). Return result.',
+          solution: 'def reverse_with_stack(items):\n    stack = []\n    for x in items:\n        stack.append(x)\n    result = []\n    while stack:\n        result.append(stack.pop())\n    return result'
+        },
+        quiz: {
+          question: 'A stack is LIFO. If you push A, B, C in that order and then pop once, what do you get?',
+          options: ['A', 'B', 'C', 'Nothing — the stack is empty'],
+          correctIndex: 2,
+          explanation: 'Last In, First Out. C went in last, so C comes out first.'
+        },
+        reflection: 'Recap: a stack is LIFO. In Python, a list with append() and pop() IS a stack. Push, peek with [-1], pop.'
+      },
+      {
+        id: 'l14-7', title: 'Queues',
+        explanation: [
+          'A queue is the opposite shape of a stack: the FIRST thing you put in is the FIRST thing you take out. This is FIFO (First In, First Out).',
+          'Why it matters: queues are the natural way to handle "process things in the order they arrived." They appear in beginner BFS-style thinking and in many real-world problems.',
+          'Simple analogy: a line at the coffee shop. The first person in line gets served first.',
+          'In Python, you CAN use a list, but list.pop(0) is slow. The cleaner tool is collections.deque — it supports fast adds and removes from either end.',
+          'Beginner skills: append() to add to the back, popleft() to remove from the front. That is the FIFO pair.'
+        ],
+        code: `from collections import deque
+
+queue = deque()
+
+# Enqueue (add to the back)
+queue.append("Alice")
+queue.append("Bob")
+queue.append("Carol")
+print(queue)            # deque(['Alice', 'Bob', 'Carol'])
+
+# Peek at the front
+print(queue[0])         # 'Alice'
+
+# Dequeue (remove from the front) — FIFO
+first = queue.popleft()
+print(first)            # 'Alice'
+print(queue)            # deque(['Bob', 'Carol'])
+
+# Simulate a coffee shop line
+line = deque(["Alice", "Bob", "Carol"])
+while line:
+    person = line.popleft()
+    print(person, "is being served")`,
+        codeCaption: 'deque + append + popleft = a proper FIFO queue with fast O(1) operations.',
+        stepByStep: [
+          '1. from collections import deque — Python\'s fast double-ended queue.',
+          '2. deque() creates an empty queue.',
+          '3. append(x) adds x to the BACK.',
+          '4. popleft() removes from the FRONT and returns it.',
+          '5. The loop serves people in arrival order, like a real line.'
+        ],
+        mistake: {
+          title: 'Using list.pop(0) for a queue',
+          description: 'list.pop(0) works but is O(n) because Python shifts every other element down. For queues, use deque.popleft() — O(1).',
+          bad: 'queue = ["a", "b", "c"]\nqueue.pop(0)   # works but slow on big inputs',
+          good: 'from collections import deque\nqueue = deque(["a", "b", "c"])\nqueue.popleft()   # fast — O(1)'
+        },
+        practice: {
+          question: 'Predict the output:\n\nfrom collections import deque\nq = deque()\nq.append("A")\nq.append("B")\nq.append("C")\nprint(q.popleft(), q.popleft())',
+          hint: 'FIFO — the FIRST one in comes out first.',
+          answer: 'A B\n\nA was added first, so it leaves first. Then B leaves next.'
+        },
+        challenge: {
+          description: 'DSA drill: write serve_line(people) that takes a list of names and returns a list of strings like "Alice served", in the order they would be served by a FIFO queue. Use collections.deque.',
+          starter: 'from collections import deque\n\ndef serve_line(people):\n    # your code here\n    pass',
+          tests: [
+            { call: 'serve_line(["Alice", "Bob"])', expected: ["Alice served", "Bob served"] },
+            { call: 'serve_line([])',               expected: [] },
+            { call: 'serve_line(["Solo"])',          expected: ["Solo served"] }
+          ],
+          hint: 'q = deque(people). While q: pop the front and append f"{name} served" to a result list.',
+          solution: 'from collections import deque\n\ndef serve_line(people):\n    q = deque(people)\n    result = []\n    while q:\n        name = q.popleft()\n        result.append(f"{name} served")\n    return result'
+        },
+        quiz: {
+          question: 'A queue is FIFO. You add A, B, C in that order to a deque and then popleft() twice. What do you get?',
+          options: ['C then B', 'B then A', 'A then B', 'A then C'],
+          correctIndex: 2,
+          explanation: 'First In, First Out. A went in first so it comes out first, then B.'
+        },
+        reflection: 'Recap: queues are FIFO. Use collections.deque with append() and popleft() for O(1) adds and removes. That is the beginner toolkit for queues.'
+      },
+      {
+        id: 'l14-8', title: 'DSA Foundations Checkpoint',
+        explanation: [
+          'Quick recap of everything in this module: DSA = data + steps. Big O = the shape of how slow code gets. Lists/strings/dicts/sets are your everyday containers. Stacks (LIFO) and queues (FIFO) are two important add-ons.',
+          'Why this matters: every beginner LeetCode pattern you will meet next reuses these exact tools. The names will get fancier ("hash map", "monotonic stack"), but underneath they are still the same simple ideas.',
+          'Below is a final mini challenge that mixes a list, a dict, and a loop — the three pieces you will lean on the most.'
+        ],
+        code: `# A tiny mixed example: count word frequency
+words = ["apple", "banana", "apple", "cherry", "banana", "apple"]
+
+count = {}
+for w in words:
+    count[w] = count.get(w, 0) + 1
+
+print(count)   # {'apple': 3, 'banana': 2, 'cherry': 1}`,
+        codeCaption: 'List of words + dict for counting + a single loop. That is 80% of beginner LeetCode in one snippet.',
+        mistake: {
+          title: 'Rushing into LeetCode without these basics',
+          description: 'If lists, dicts, and sets do not feel fluent yet, replay this module. Five minutes of review now saves hours of confusion later.',
+          bad: '# "I half understand dicts — I will figure it out on Two Sum"',
+          good: '# "I will run a few drills first so dicts feel automatic."'
+        },
+        challenge: {
+          description: 'DSA roundup: write top_word(words) that returns the word that appears the most times in the list words. If the list is empty, return None. If multiple words tie, return any of the tied ones.',
+          starter: 'def top_word(words):\n    # your code here\n    pass',
+          tests: [
+            { call: 'top_word(["a", "b", "a"])',                    expected: 'a' },
+            { call: 'top_word(["x", "x", "y", "y", "y"])',         expected: 'y' },
+            { call: 'top_word([])',                                 expected: null }
+          ],
+          hint: 'Build a count dict like in the example. Then loop through count.items() and keep track of the key with the largest value. Return None when empty.',
+          solution: 'def top_word(words):\n    if not words:\n        return None\n    count = {}\n    for w in words:\n        count[w] = count.get(w, 0) + 1\n    best = None\n    best_n = -1\n    for w, n in count.items():\n        if n > best_n:\n            best = w\n            best_n = n\n    return best'
+        },
+        quiz: {
+          question: 'You see a problem: "given a list of numbers, return True if any number appears twice." What is the cleanest beginner approach?',
+          options: [
+            'Use a nested loop and compare every pair — O(n²)',
+            'Sort the list and check neighbors — O(n log n)',
+            'Use a set and the "seen" pattern — O(n)',
+            'Convert to a string and use slicing'
+          ],
+          correctIndex: 2,
+          explanation: 'The "seen" set pattern is O(n) and easy to write. Nested loops work but are slow; sorting works but is overkill for the beginner version.'
+        },
+        reflection: 'Recap of the whole module: DSA building blocks are lists, strings, dicts, sets, stacks, and queues. Big O is just the shape of the growth. You are now ready to step into Beginner LeetCode Prep with the right foundation.'
+      }
+    ]
+  },
+  {
     id: 10, slug: 'leetcode-prep', title: 'Beginner LeetCode Prep',
     subtitle: 'How to actually approach and solve coding problems',
     color: '#d29922',
