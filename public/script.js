@@ -338,8 +338,9 @@ function renderLevelPage(levelId) {
   const total = level.lessons.length;
   const pct = total > 0 ? (completedCount / total) * 100 : 0;
 
-  const prevLevel = COURSE.find(l => l.id === levelId - 1);
-  const nextLevel = COURSE.find(l => l.id === levelId + 1);
+  const courseIdx = COURSE.findIndex(l => l.id === levelId);
+  const prevLevel = courseIdx > 0 ? COURSE[courseIdx - 1] : null;
+  const nextLevel = courseIdx >= 0 && courseIdx < COURSE.length - 1 ? COURSE[courseIdx + 1] : null;
 
   const lessonCardsHtml = level.lessons.map((lesson, idx) => {
     const isDone = done.has(lesson.id);

@@ -4266,6 +4266,713 @@ print(count)   # {'apple': 3, 'banana': 2, 'cherry': 1}`,
     ]
   },
   {
+    id: 11, slug: 'problem-solving', title: 'Problem-Solving Basics',
+    subtitle: 'How to actually approach a problem, not just memorize syntax',
+    color: '#79c0ff',
+    lessons: [
+      {
+        id: 'l11-5', title: 'What Problem Solving Really Means',
+        explanation: [
+          'Problem solving is not magic and it is not memorization. It is a repeatable loop: understand the problem, plan an approach, write a first version, then verify it works. Every strong programmer runs some version of this loop — even when it does not look like it from the outside.',
+          'Why it matters: when you skip steps, you spend ten minutes coding and an hour debugging. When you follow the steps, you spend twenty minutes thinking and ten minutes coding. The total time is shorter, and you understand what you wrote.',
+          'This module walks through the loop one step at a time so you can run it on any new problem — not just the ones we cover here.'
+        ],
+        analogy: 'Like a doctor diagnosing a patient. They do not guess the illness from across the room. They ask questions, gather symptoms, rule things out, and only then prescribe. Code is the same: diagnose the problem before treating it.',
+        code: '# The full problem-solving loop\n#\n# 1. Read the problem carefully\n# 2. Identify the INPUT (what you are given)\n# 3. Identify the OUTPUT (what you must return)\n# 4. Restate the problem in your own words\n# 5. Make small examples by hand\n# 6. Think about edge cases\n# 7. Write pseudocode\n# 8. Code a brute force solution first\n# 9. Dry run it line by line\n# 10. Improve if needed and test again',
+        codeCaption: 'You will practice each of these steps in the lessons that follow.',
+        stepByStep: [
+          '1. Slow down — understanding is the slowest but most important step',
+          '2. Write things down — your working memory is small, paper is patient',
+          '3. Trust the process even when the answer is not yet visible',
+          '4. Verify with examples before declaring victory',
+          '5. Treat every problem as practice for the process, not only for the answer'
+        ],
+        mistake: {
+          title: 'Thinking great coders just "see" the answer',
+          description: 'It looks like that from the outside, but they are running the same steps you are about to learn — just faster, because they have done it thousands of times.',
+          bad: '# "I will never be as fast as them" -> give up -> never improve',
+          good: '# "They follow a process. I can follow it too." -> practice -> get faster'
+        },
+        quiz: {
+          question: 'Which best describes problem solving in programming?',
+          options: [
+            'A magical insight you either have or do not have',
+            'Memorizing every algorithm in advance',
+            'A repeatable set of steps you can run on any problem',
+            'Trying random code until a test passes'
+          ],
+          correctIndex: 2,
+          explanation: 'Problem solving is a learnable, repeatable process. Speed comes with practice, not talent.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nx = max(0, 5 - 8)\nprint(x)',
+          hint: 'max(0, negative_number) returns 0.',
+          answer: '0\n\n5 - 8 is -3, and max(0, -3) is 0. A common pattern for clamping values.'
+        },
+        reflection: 'Recap: problem solving is a process — read, identify input/output, restate, examples, edge cases, pseudocode, brute force, dry run, improve, test. The rest of this module walks through each step.'
+      },
+      {
+        id: 'l11-0', title: 'How to Read a Problem Carefully',
+        explanation: [
+          'Beginners read a problem once and start coding. Strong programmers read it three times before touching the keyboard. Why? Because most "I can\'t solve it" moments are actually "I didn\'t fully understand it" moments.',
+          'A LeetCode problem has 4 parts: (1) the description, (2) the function signature, (3) examples, and (4) constraints. Each tells you something different. Skip any of them and you\'ll waste time.',
+          'The goal of reading is not to memorize the problem. The goal is to be able to explain it to a friend in plain English without looking at it.'
+        ],
+        analogy: 'Think of it like reading a recipe. If you skim and see "chicken, oven, 400°F", you might miss "marinate overnight first". You\'d ruin dinner. Code is the same: skip a constraint, ruin your solution.',
+        code: '# Reading "Two Sum" carefully\n\n# DESCRIPTION:\n# Given a list of numbers and a target, return INDICES of two\n# numbers that add up to target.\n#   Key word: INDICES (positions), not the numbers themselves\n\n# SIGNATURE:\n# def two_sum(nums, target):\n#   nums = a list of integers\n#   target = a single integer\n#   returns: a list of TWO indices\n\n# EXAMPLES:\n# nums=[2,7,11,15], target=9 → [0,1]\n#   Why? nums[0]=2, nums[1]=7, 2+7=9 ✓\n\n# CONSTRAINTS:\n# - Exactly one valid answer exists\n# - You cannot use the same element twice',
+        codeCaption: 'Break the problem into 4 parts. Don\'t code until all 4 are crystal clear.',
+        stepByStep: [
+          '1. Read the description — what is being asked in plain English?',
+          '2. Look at the function signature — what types are inputs/outputs?',
+          '3. Trace through each example by hand — confirm you understand',
+          '4. Check constraints — how big is the input? Are there edge cases?',
+          '5. Restate the problem in your own words before coding'
+        ],
+        mistake: {
+          title: 'Coding from the first sentence',
+          description: 'Many beginners read "Given an array of numbers..." and immediately start typing. Then they realize they misunderstood and have to throw the code away.',
+          bad: '# Read first line → start coding → realize halfway through\n# you\'re solving the wrong problem',
+          good: '# Read description → read examples → restate aloud →\n# write 2-3 lines of approach in comments → THEN code'
+        },
+        quiz: {
+          question: 'You see a problem that says "return the indices". The example shows nums=[5,3,7], target=10 returning [0,2]. What does the function need to return?',
+          options: [
+            'The numbers that add up to the target (5 and 7)',
+            'The positions of those numbers in the list (0 and 2)',
+            'The sum of the two numbers (10)',
+            'A True or False whether a pair exists'
+          ],
+          correctIndex: 1,
+          explanation: '"Indices" means positions, not values. nums[0]=5 and nums[2]=7. The example confirms this — [0,2] are positions, not numbers.'
+        },
+        challenge: {
+          description: 'Write a function understand_problem(text) that returns True if the text contains the word "indices" (case-insensitive). This simulates "scanning a problem for important keywords".',
+          starter: 'def understand_problem(text):\n    # return True if "indices" appears (case insensitive)\n    pass',
+          tests: [
+            { call: 'understand_problem("Return the indices of two numbers")', expected: true },
+            { call: 'understand_problem("RETURN THE INDICES")', expected: true },
+            { call: 'understand_problem("Return the values")', expected: false },
+            { call: 'understand_problem("")', expected: false }
+          ],
+          solution: 'def understand_problem(text):\n    return "indices" in text.lower()',
+          hint: 'Use .lower() on the text first, then use the "in" operator.'
+        },
+        practice: {
+          question: 'Read this problem out loud: "Given a list of integers, return the largest one. If the list is empty, return None." Now restate it in your own words.',
+          hint: 'What is the input? What is the output? What is the edge case?',
+          answer: 'Input: a list of integers (could be empty). Output: the largest integer in the list, or None if the list has no items. Edge case: empty list returns None instead of crashing.'
+        },
+        reflection: 'Can you describe in your own words why reading a problem 3 times before coding actually saves time, even though it feels slower at first?'
+      },
+      {
+        id: 'l11-6', title: 'Identify the Input',
+        explanation: [
+          'The first concrete step after reading is naming the input. Ask: what data am I given, what type is it, and how big can it be? Until you can answer those questions, you cannot pick the right approach.',
+          'Why it matters: the input shape determines what tools you reach for. A list of numbers suggests loops, sums, two pointers. A string suggests indexing and joins. A dictionary suggests lookups.',
+          'Writing the input down on paper (or in a comment) makes it real. Most "I am stuck" moments at this stage come from a fuzzy idea of what the function actually receives.'
+        ],
+        analogy: 'Like a chef checking ingredients before cooking. You cannot plan the recipe if you do not know whether you have eggs, flour, or just leftovers. The input is your ingredients.',
+        code: '# Problem: "Given a list of integers and a target, return indices..."\n#\n# What is the INPUT?\n#   nums: list[int]   - a list of whole numbers\n#   target: int       - a single whole number\n#\n# Concrete example:\n#   nums = [2, 7, 11, 15]\n#   target = 9\n#\n# Size hint (from constraints):\n#   2 <= len(nums) <= 10_000\n# This tells you O(n^2) might be too slow at the upper end.',
+        codeCaption: 'Name every input, its type, and a concrete example value.',
+        stepByStep: [
+          '1. List each parameter the function receives',
+          '2. Write its type next to it (int, str, list, dict, ...)',
+          '3. Write one concrete example value for each input',
+          '4. Note the size limits from the constraints, if given',
+          '5. Decide whether the input can be empty or None'
+        ],
+        mistake: {
+          title: 'Assuming the input is "obvious"',
+          description: 'When the input feels obvious, beginners skip writing it down. Then halfway through coding they confuse a list with a string, or forget that nums could be empty.',
+          bad: '# Just start coding. Discover the input is a list of strings, not ints, after 20 lines.',
+          good: '# nums: list[int], target: int\n# Now every line of code can trust those types.'
+        },
+        quiz: {
+          question: 'A problem says: "Given a sentence as a string, return the number of words." What is the input?',
+          options: [
+            'A list of words',
+            'A single string containing one or more words',
+            'A dictionary of words to counts',
+            'An integer count'
+          ],
+          correctIndex: 1,
+          explanation: 'The input is one string. The output (the count) is an integer — different thing entirely.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = [2, 7, 11, 15]\nprint(type(nums).__name__, len(nums))',
+          hint: 'type(x).__name__ gives the type name. len() gives the size.',
+          answer: 'list 4\n\nThis is exactly the kind of quick check you should make at the start of a problem: "yes, it is a list of length 4."'
+        },
+        reflection: 'Recap: name the inputs, their types, an example value, and the size limits. Writing this in a comment at the top of your solution makes the rest of the work easier.'
+      },
+      {
+        id: 'l11-7', title: 'Identify the Output',
+        explanation: [
+          'After the input, name the output. What must the function return, and what type and shape should it be? A surprising number of wrong answers come from returning the right value in the wrong shape — a number instead of a list, or [1,2] instead of [2,1].',
+          'Why it matters: the output is the contract. The grader does not care how clever your code is. It cares whether your return value exactly matches the expected output.',
+          'When examples are given, read the OUTPUT side of each example carefully. The output type is usually the same across all examples — that pattern is your contract.'
+        ],
+        analogy: 'Like a restaurant order. If the customer asked for soup in a bowl, handing them soup in a mug is wrong even if the soup is great. Output shape matters.',
+        code: '# Problem: "Return the indices of the two numbers..."\n#\n# What is the OUTPUT?\n#   A list of two integers  -> list[int] of length 2\n#\n# Concrete example:\n#   nums=[2,7,11,15], target=9  ->  [0, 1]\n#\n# Watch out:\n#   Returning (0, 1) (a tuple) might fail\n#   Returning [1, 0] (wrong order) might fail\n#   Returning 9 (the sum) is the wrong thing entirely',
+        codeCaption: 'The output type AND shape are part of the contract.',
+        stepByStep: [
+          '1. Read the "return" sentence of the problem carefully',
+          '2. Look at every example output, not just the first',
+          '3. Write the output type next to "OUTPUT:"',
+          '4. Note whether order matters (list vs. set behavior)',
+          '5. Note what to return for the "no answer" case (None? -1? [])'
+        ],
+        mistake: {
+          title: 'Returning a value instead of a list (or vice versa)',
+          description: 'A common bug: the problem wants a list with one element but you return the element itself. Tests fail with a confusing message.',
+          bad: 'return 7        # when the contract is a list',
+          good: 'return [7]      # matches the expected shape'
+        },
+        quiz: {
+          question: 'A problem says "return True if any number appears twice." What is the output type?',
+          options: [
+            'A list of duplicates',
+            'A boolean (True or False)',
+            'An integer (count of duplicates)',
+            'A dictionary mapping number to count'
+          ],
+          correctIndex: 1,
+          explanation: 'The word "True" in the prompt is your clue. The function returns a boolean, not a count or a list.'
+        },
+        practice: {
+          question: 'Predict the output:\n\ndef f(x):\n    return [x]\n\nprint(f(7) == 7)',
+          hint: 'f(7) returns [7], a list. Compare it with 7, an integer.',
+          answer: 'False\n\n[7] != 7. This is why output shape matters — the values look similar, but the types are different.'
+        },
+        reflection: 'Recap: write the output type and shape down before coding. Most output bugs are not subtle — they are mismatches between what you returned and what the grader expects.'
+      },
+      {
+        id: 'l11-8', title: 'Restate the Problem in Your Own Words',
+        explanation: [
+          'Take the problem statement and rewrite it in one or two sentences in your own voice. If you cannot do this without looking at the original, you have not yet understood it.',
+          'Why it matters: textbooks and LeetCode use formal language. Your restatement strips out the noise and forces you to commit to a meaning. If your restatement is wrong, you find out now (cheap) instead of after coding (expensive).',
+          'Bonus: when you ask for help, your restatement is what you send to the other person. Clear restatements get clear answers.'
+        ],
+        analogy: 'Like translating a foreign-language sentence and then explaining it back in your own words. If you can only repeat the original sentence, you do not really understand it yet.',
+        code: '# Original (Two Sum, paraphrased):\n# "Given an array of integers nums and an integer target,\n#  return indices of the two numbers such that they add\n#  up to target. You may assume that each input has exactly\n#  one solution, and you may not use the same element twice."\n#\n# My restatement:\n# "Find the two positions in the list whose numbers add to target,\n#  and return those positions. There is exactly one such pair,\n#  and the two positions must be different."',
+        codeCaption: 'Plain English, one sentence if possible. Keep the meaning, drop the formality.',
+        stepByStep: [
+          '1. Read the original once for general meaning',
+          '2. Close the problem and write one sentence from memory',
+          '3. Reopen the problem and check your sentence for missing pieces',
+          '4. Add anything you missed and rewrite',
+          '5. If you still need 5 sentences, the problem might have multiple parts'
+        ],
+        mistake: {
+          title: 'Restating the problem by copy-pasting the original',
+          description: 'Rephrasing without truly translating it gives you the illusion of understanding. The test is whether you can say it without looking.',
+          bad: '# Just copy the problem statement into a comment',
+          good: '# Close the tab. Write one sentence. Then reopen and check.'
+        },
+        quiz: {
+          question: 'You restate "Return the longest substring without repeating characters" as "Find a substring with no repeats and return it." What is missing?',
+          options: [
+            'Nothing — your version is fine',
+            'The word "longest" — your version does not say which substring to return',
+            'The fact that the input is a string',
+            'The expected return type'
+          ],
+          correctIndex: 1,
+          explanation: '"Longest" changes the answer. Dropping a single word like that is the most common restatement mistake.'
+        },
+        practice: {
+          question: 'Restate this in one sentence in your own words: "Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order."',
+          hint: 'Two facts: input is sorted; output is the sorted squares.',
+          answer: 'Example answer: "Take a sorted list of numbers, square each one, and return the squares in sorted order." Your wording can differ — but it must include sorted input AND sorted output.'
+        },
+        reflection: 'Recap: if you cannot say the problem in your own words without looking, you have not understood it. Restating is a cheap test that catches expensive misunderstandings.'
+      },
+      {
+        id: 'l11-9', title: 'Make Simple Examples',
+        explanation: [
+          'Before you write code, make tiny examples by hand. Pick the smallest input you can — one or two elements — and solve it yourself with pencil and paper.',
+          'Why it matters: solving a small example yourself reveals the algorithm. Your brain already knows how to do it for small inputs. Your job is to notice WHAT STEPS your brain took and copy them into code.',
+          'The trap of "big examples first" is that they overwhelm your working memory. With a tiny example you can hold every variable in your head at once.'
+        ],
+        analogy: 'Like learning a dance by walking through it slowly to a count of 4 before doing it at full speed with music. Small examples are the slow walkthrough.',
+        code: '# Problem: return the sum of a list of numbers (without sum()).\n#\n# Smallest example I can make:\n#   nums = []           -> 0\n#   nums = [5]          -> 5\n#   nums = [2, 3]       -> 5\n#   nums = [2, 3, 4]    -> 9\n#\n# What my brain did for [2, 3, 4]:\n#   start with total = 0\n#   add 2 -> total = 2\n#   add 3 -> total = 5\n#   add 4 -> total = 9\n#\n# That mental procedure becomes the loop.',
+        codeCaption: 'Solve a tiny example by hand, then notice the steps you used.',
+        stepByStep: [
+          '1. Pick the smallest meaningful input (often size 0, 1, 2)',
+          '2. Solve it by hand, narrating each move',
+          '3. Write down each step you actually took',
+          '4. Look for a pattern that repeats — that is your loop',
+          '5. Try one more slightly bigger example to confirm the pattern'
+        ],
+        mistake: {
+          title: 'Starting with a giant example',
+          description: 'Tracing [42, 17, 8, 99, 13, 27] by hand is exhausting and you will lose track. The size of the example does not prove anything — the pattern does.',
+          bad: '# Try to trace nums = [42, 17, 8, 99, 13, 27] in your head',
+          good: '# Trace nums = [2, 3, 4] on paper. The pattern is identical.'
+        },
+        quiz: {
+          question: 'What is the best size for a worked-by-hand example when you start a problem?',
+          options: [
+            'The biggest example given in the problem',
+            'The smallest non-trivial example you can make',
+            'A randomly generated 100-element input',
+            'It does not matter as long as it is in the problem'
+          ],
+          correctIndex: 1,
+          explanation: 'Small examples reveal the pattern without overwhelming your working memory. Big examples are for the test phase later.'
+        },
+        practice: {
+          question: 'Predict the output:\n\ntotal = 0\nfor n in [2, 3, 4]:\n    total += n\nprint(total)',
+          hint: 'Walk through it one step at a time, just like in the lesson code.',
+          answer: '9\n\ntotal goes 0 -> 2 -> 5 -> 9. This is the exact pattern your hand-trace just produced.'
+        },
+        reflection: 'Recap: solve a tiny example yourself, narrate the steps you used, and copy those steps into code. Your brain already knows the algorithm — small examples surface it.'
+      },
+      {
+        id: 'l11-10', title: 'Find Edge Cases',
+        explanation: [
+          'Edge cases are inputs at the boundaries of what the problem allows: empty input, a single element, all the same value, negatives, zero, max size. Strong solutions handle them. Weak solutions crash on them.',
+          'Why it matters: graders intentionally include edge-case tests. Real users also hit edge cases all the time. A function that works on the happy path but crashes on an empty list is not done.',
+          'Listing edge cases is a short, separate step. Spending 60 seconds on it usually saves 10 minutes of debugging later.'
+        ],
+        analogy: 'Like checking a chair before you sit on it. You do not just trust that all four legs are screwed in — you give it a wiggle. Edge cases are how you wiggle your code.',
+        code: '# Problem: find the maximum value in a list.\n#\n# Edge cases to consider:\n#   1. Empty list:        []          -> what should this return?\n#   2. One element:       [42]        -> 42\n#   3. All equal:         [7, 7, 7]   -> 7\n#   4. Negative numbers:  [-5, -2]    -> -2 (not 0!)\n#   5. Mix of pos/neg:    [-3, 0, 5]  -> 5\n#   6. Very large input:  range(10**6) -> tests speed\n#\n# Notice how (1) and (4) trip up most naive solutions.',
+        codeCaption: 'Write the list before coding. Each edge case is a future test you will not have to invent later.',
+        stepByStep: [
+          '1. Empty input — what should happen?',
+          '2. Single element — does your loop still work?',
+          '3. Duplicates — does each one get counted correctly?',
+          '4. Negatives and zero — do you assume positive numbers anywhere?',
+          '5. Maximum size — will your approach be fast enough?'
+        ],
+        mistake: {
+          title: 'Initializing max with 0 instead of the first element',
+          description: 'A classic edge-case bug. If all numbers are negative, max stays 0 and the wrong answer is returned. The fix is to start max from nums[0] (and handle empty input separately).',
+          bad: 'max_val = 0\nfor n in nums:\n    if n > max_val:\n        max_val = n\n# Wrong on [-5, -2, -10]: returns 0 instead of -2',
+          good: 'if not nums:\n    return None\nmax_val = nums[0]\nfor n in nums[1:]:\n    if n > max_val:\n        max_val = n'
+        },
+        quiz: {
+          question: 'Which of these is NOT a typical edge case you should check?',
+          options: [
+            'Empty input',
+            'Input with one element',
+            'Input where every element is identical',
+            'The exact example given in the problem'
+          ],
+          correctIndex: 3,
+          explanation: 'The given example is already a test case the problem provides. Edge cases are the boundary inputs the example does not cover.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = []\nprint(sum(nums))',
+          hint: 'sum of an empty list — does it crash or return a number?',
+          answer: '0\n\nPython sum() returns 0 for an empty iterable. Many beginner-written sum functions crash here — that is the edge case the test was built for.'
+        },
+        reflection: 'Recap: edge cases live at the boundaries — empty, one, many, all-same, negative, zero, huge. Listing them before coding turns surprises into expected outcomes.'
+      },
+      {
+        id: 'l11-1', title: 'Plan Before You Code',
+        explanation: [
+          'Once you understand the problem, the next step is NOT to write code. It is to write the plan in plain English. This is called "pseudocode" — code-like steps in human language.',
+          'Pseudocode lets you focus on the logic without worrying about Python syntax. You decide WHAT the steps are, then translate them into actual Python.',
+          'A good plan is concrete enough that translating it to code is mostly mechanical. If you\'re still inventing the algorithm while typing Python, you\'re doing two hard things at once.'
+        ],
+        analogy: 'Like building IKEA furniture. The instructions show every step in pictures BEFORE you touch a single screw. Pseudocode is your instructions — you wouldn\'t skip them and start drilling.',
+        code: '# PLANNING two_sum BEFORE writing Python\n\n# Plain English plan:\n#   1. I\'ll go through each number in the list\n#   2. For each number, I\'ll calculate what I need (target - num)\n#   3. I\'ll keep a record of numbers I\'ve already seen\n#   4. If the number I need is in my record, I found the pair!\n#   5. Otherwise, add the current number to my record\n\n# Pseudocode (more code-like):\n#   create empty dict called seen\n#   loop through nums with index i and value num:\n#       complement = target - num\n#       if complement in seen:\n#           return [seen[complement], i]\n#       seen[num] = i\n\n# Now translating to Python is straightforward:\ndef two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i',
+        codeCaption: 'Plain English → Pseudocode → Python. Three small jumps instead of one giant leap.',
+        stepByStep: [
+          '1. Restate the problem in 1 sentence',
+          '2. Write 3-5 plain English steps for solving it',
+          '3. Convert those steps to pseudocode (loops, conditions, variables)',
+          '4. Translate pseudocode to actual Python',
+          '5. Test against the given examples'
+        ],
+        mistake: {
+          title: 'Skipping the plan because "I know what to do"',
+          description: 'You THINK you know what to do, but in your head it\'s a fuzzy idea. Writing the plan forces you to make it concrete — and that\'s where you discover gaps in your thinking.',
+          bad: '# "I\'ll just figure it out as I code" — you start, get stuck,\n# delete code, restart, get stuck again, give up',
+          good: '# Spend 5 minutes writing 5 lines of pseudocode.\n# Save 30 minutes of confused coding.'
+        },
+        quiz: {
+          question: 'Why is pseudocode useful BEFORE writing real Python?',
+          options: [
+            'It is required by Python and the code won\'t run otherwise',
+            'It separates "what to do" (logic) from "how to write it" (syntax)',
+            'It runs faster than Python code',
+            'It tells the computer what type each variable should be'
+          ],
+          correctIndex: 1,
+          explanation: 'Pseudocode lets you focus only on the logic. Once the logic is clear, translating to Python is the easier half.'
+        },
+        challenge: {
+          description: 'Write the function double_each(nums) that returns a new list where every number is doubled. Plan it first in your head: (1) make empty list, (2) loop through nums, (3) append num*2 to the new list, (4) return it.',
+          starter: 'def double_each(nums):\n    # plan: create result list, loop, append doubled value\n    pass',
+          tests: [
+            { call: 'double_each([1, 2, 3])', expected: [2, 4, 6] },
+            { call: 'double_each([])', expected: [] },
+            { call: 'double_each([5])', expected: [10] },
+            { call: 'double_each([-1, 0, 1])', expected: [-2, 0, 2] }
+          ],
+          solution: 'def double_each(nums):\n    result = []\n    for n in nums:\n        result.append(n * 2)\n    return result',
+          hint: 'result = []  →  for n in nums:  →  result.append(n*2)  →  return result'
+        },
+        practice: {
+          question: 'Write pseudocode (no Python yet!) for: "given a list, return the count of even numbers".',
+          hint: 'Counter starts at 0. Loop through. If even, increment.',
+          answer: 'create count = 0\nloop through each n in nums:\n    if n % 2 == 0:\n        count = count + 1\nreturn count'
+        },
+        reflection: 'Have you ever started coding and gotten stuck halfway through because you didn\'t fully know what to do? How would planning first have helped?'
+      },
+      {
+        id: 'l11-11', title: 'Brute Force First',
+        explanation: [
+          'After pseudocode, write the most obvious solution that works — even if it is slow. This is called the "brute force" solution. Its only job is to be correct.',
+          'Why it matters: a correct slow answer is worth far more than a fast wrong answer. Brute force also gives you a reference: once you optimize, you can compare results against the brute-force output to make sure you did not introduce a bug.',
+          'Many beginners skip this step trying to look clever. They end up with a half-broken "fast" solution and no way to tell whether the bug is in the algorithm or the optimization.'
+        ],
+        analogy: 'Like writing a rough draft of an essay. You do not start with the polished final version. You write something readable first, then revise.',
+        code: '# Two Sum — brute force first\n#\n# Check every pair (i, j) with i < j.\n# Slow (O(n^2)) but obviously correct.\n\ndef two_sum_brute(nums, target):\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []\n\n# Test it:\nprint(two_sum_brute([2, 7, 11, 15], 9))   # -> [0, 1]\n# Now I have a reference answer.\n# If my faster version disagrees, I know IT is wrong.',
+        codeCaption: 'A correct slow solution is the foundation for a correct fast solution.',
+        stepByStep: [
+          '1. Ask: what is the most obvious way to solve this, even if slow?',
+          '2. Write it. Do not optimize yet',
+          '3. Run it on a couple of examples — confirm it is correct',
+          '4. Note the time complexity (often O(n^2) or O(n^3) at this stage)',
+          '5. THEN decide whether you need a faster version'
+        ],
+        mistake: {
+          title: 'Trying to write the optimal solution on the first try',
+          description: 'Going straight for O(n) often leaves you with bugs in both the algorithm AND the data structures. Two unknowns are harder than one. Solve correctness first, performance second.',
+          bad: '# Start with a hash-map two-pointer thing\n# get confused -> bugs everywhere -> give up',
+          good: '# Nested loop. Confirm correct on examples.\n# THEN replace inner loop with a dict lookup.'
+        },
+        quiz: {
+          question: 'You have written a correct O(n^2) solution. The constraints say n <= 10,000. What should you do?',
+          options: [
+            'Always optimize regardless — never submit slow code',
+            'Estimate whether O(n^2) is fast enough; if yes, submit it',
+            'Delete it and start over with a hash map',
+            'Ask the interviewer to lower the constraints'
+          ],
+          correctIndex: 1,
+          explanation: 'O(n^2) at n = 10,000 is 100 million operations — borderline. Often acceptable. Estimate first, optimize only if needed.'
+        },
+        challenge: {
+          description: 'Write a brute-force has_pair_sum(nums, target) that returns True if any two different positions in nums add to target, else False.',
+          starter: 'def has_pair_sum(nums, target):\n    # nested loop, return as soon as you find a match\n    pass',
+          tests: [
+            { call: 'has_pair_sum([2, 7, 11, 15], 9)', expected: true },
+            { call: 'has_pair_sum([1, 2, 3], 7)', expected: false },
+            { call: 'has_pair_sum([3, 3], 6)', expected: true },
+            { call: 'has_pair_sum([], 0)', expected: false }
+          ],
+          solution: 'def has_pair_sum(nums, target):\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            if nums[i] + nums[j] == target:\n                return True\n    return False',
+          hint: 'Outer loop i over indices. Inner loop j from i+1. If nums[i] + nums[j] == target, return True.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = [1, 2, 3]\ncount = 0\nfor i in range(len(nums)):\n    for j in range(i + 1, len(nums)):\n        count += 1\nprint(count)',
+          hint: 'How many ordered pairs (i, j) with i < j are there for 3 items?',
+          answer: '3\n\nThe pairs are (0,1), (0,2), (1,2). That is the shape of every brute-force pair check.'
+        },
+        reflection: 'Recap: write the obvious slow solution first. Verify it is correct. Then decide if you need to optimize. Correctness is the foundation; speed is the polish.'
+      },
+      {
+        id: 'l11-2', title: 'Test with Examples',
+        explanation: [
+          'After you write code, you must test it. Not just "look at it and assume it works". Actually run it on the given examples and on edge cases you make up yourself.',
+          'The examples in the problem are the BARE MINIMUM. They test happy paths. Real bugs hide in edge cases: empty input, single element, duplicates, negatives, very large/small values, all the same value.',
+          'Mental tracing — walking through code line by line on paper — is one of the most underrated skills. Do it before submitting. You\'ll catch silly mistakes.'
+        ],
+        analogy: 'Like proofreading an essay. You don\'t just write it and submit. You read it back, looking for typos and weird sentences. Tracing code is proofreading.',
+        code: '# Tracing two_sum([2, 7, 11, 15], target=9) by hand:\n\n# seen = {}\n\n# i=0, num=2:\n#   complement = 9 - 2 = 7\n#   7 in seen? NO ({} is empty)\n#   seen = {2: 0}\n\n# i=1, num=7:\n#   complement = 9 - 7 = 2\n#   2 in seen? YES! seen[2] = 0\n#   return [0, 1] ✓\n\n# Edge cases to test yourself:\n#   two_sum([3, 3], 6)        → [0, 1]  (same number twice)\n#   two_sum([1, -1], 0)       → [0, 1]  (negatives)\n#   two_sum([5, 75, 25], 100) → [1, 2]',
+        codeCaption: 'Trace one line at a time. Track what each variable holds at each step.',
+        stepByStep: [
+          '1. Run the code on the given example and check the result',
+          '2. Trace through it on paper — write down each variable\'s value',
+          '3. Try edge cases: empty input, single item, duplicates, negatives',
+          '4. If your trace differs from the actual result, find where they diverge',
+          '5. The first divergence is your bug'
+        ],
+        mistake: {
+          title: 'Submitting after only testing the first example',
+          description: 'Easy problems often have 2-3 visible examples but 30+ hidden test cases. The first example is just to help you understand. The hidden tests catch bugs in edge cases.',
+          bad: '# Test example 1 → it works → submit\n# → "Wrong Answer" on test 17, an empty list',
+          good: '# Test all visible examples, plus:\n# - empty input\n# - single element\n# - all same values\n# - very large/small values\n# - negatives'
+        },
+        quiz: {
+          question: 'Your function passes the given example but fails on hidden tests. What is most likely the cause?',
+          options: [
+            'Python is broken',
+            'Your code is too fast and the tests time out',
+            'You have a bug in an edge case the example didn\'t cover',
+            'The problem is unsolvable'
+          ],
+          correctIndex: 2,
+          explanation: 'The first example tests the happy path. Hidden tests probe edge cases. Empty inputs, duplicates, and boundary values are the usual culprits.'
+        },
+        challenge: {
+          description: 'Write safe_divide(a, b) that returns a/b, but returns None if b is 0 (instead of crashing). Test it mentally first!',
+          starter: 'def safe_divide(a, b):\n    # check for b == 0 first\n    pass',
+          tests: [
+            { call: 'safe_divide(10, 2)', expected: 5 },
+            { call: 'safe_divide(10, 0)', expected: null },
+            { call: 'safe_divide(0, 5)', expected: 0 },
+            { call: 'safe_divide(-6, 3)', expected: -2 }
+          ],
+          solution: 'def safe_divide(a, b):\n    if b == 0:\n        return None\n    return a / b',
+          hint: 'if b is 0, return None. Otherwise return a / b.'
+        },
+        practice: {
+          question: 'Trace through this code and predict the output BEFORE running it:\n\nx = 5\nfor i in range(3):\n    x = x + i\nprint(x)',
+          hint: 'i goes through 0, 1, 2. Add each to x.',
+          answer: '8\n\nStart: x=5. i=0: x=5+0=5. i=1: x=5+1=6. i=2: x=6+2=8. Print 8.'
+        },
+        reflection: 'When was the last time a bug surprised you? In hindsight, what test case would have caught it earlier?'
+      },
+      {
+        id: 'l11-3', title: 'Debug Like a Detective',
+        explanation: [
+          'Bugs aren\'t mysterious — they\'re evidence of a logic mismatch between what you THINK your code does and what it ACTUALLY does. Debugging is finding where those two diverge.',
+          'The fastest debugging tool you have is print(). Drop print() statements at key spots to see what your variables actually hold at each step. This is called "print debugging" and even senior engineers use it constantly.',
+          'When you see an error, READ THE MESSAGE. Python errors tell you (1) the type of error, (2) the line number, and (3) often what specifically went wrong. The answer is usually right there.'
+        ],
+        analogy: 'A detective doesn\'t guess who the killer is. They follow the clues. Print statements are your clues — they show you what actually happened, not what you hoped happened.',
+        code: '# Bug: this should sum positive numbers but returns 0\ndef sum_positives_buggy(nums):\n    total = 0\n    for n in nums:\n        if n > 0:\n            total = 0     # BUG: should be total += n\n    return total\n\n# Debug with print():\ndef sum_positives_debug(nums):\n    total = 0\n    for n in nums:\n        print(f"Looking at {n}, total is {total}")\n        if n > 0:\n            total = 0\n            print(f"  After update, total is {total}")  # !! always 0\n    return total\n\n# Now you can SEE the bug:\n# total resets to 0 instead of adding n.\n# Fix: change "total = 0" to "total += n"',
+        codeCaption: 'print() reveals what your variables actually hold at each step.',
+        stepByStep: [
+          '1. Read the error message carefully (last line is the actual error)',
+          '2. Note the line number — that\'s where Python noticed the problem',
+          '3. Add print() statements before/after the suspicious area',
+          '4. Run again and compare what variables actually hold to what you expected',
+          '5. The first divergence is the bug — fix it'
+        ],
+        mistake: {
+          title: 'Changing code randomly hoping it fixes itself',
+          description: 'Beginners often "shotgun debug" — randomly tweak code without understanding why it\'s broken. This makes things worse. Find the bug first, THEN fix it.',
+          bad: '# Try removing a line → still broken → add a +1 → still broken\n# → swap two lines → still broken → give up',
+          good: '# Add print() to see actual values\n# Compare to expected values\n# Find the line where they diverge\n# Fix THAT specific line'
+        },
+        quiz: {
+          question: 'Your function returns the wrong answer. What is the FIRST thing you should do?',
+          options: [
+            'Rewrite the function from scratch',
+            'Add print() statements to see what the variables actually contain',
+            'Try random changes until something works',
+            'Ask someone else to fix it'
+          ],
+          correctIndex: 1,
+          explanation: 'print() shows what your code actually does. Without that information, every "fix" is just guessing.'
+        },
+        challenge: {
+          description: 'Fix the bug in this function. It should return the count of items in nums that equal target. (Test it mentally first!)',
+          starter: 'def count_target(nums, target):\n    count = 0\n    for n in nums:\n        if n == target:\n            count = 1     # ← bug here\n    return count',
+          tests: [
+            { call: 'count_target([1, 2, 1, 3, 1], 1)', expected: 3 },
+            { call: 'count_target([5, 5, 5], 5)', expected: 3 },
+            { call: 'count_target([1, 2, 3], 4)', expected: 0 },
+            { call: 'count_target([], 1)', expected: 0 }
+          ],
+          solution: 'def count_target(nums, target):\n    count = 0\n    for n in nums:\n        if n == target:\n            count += 1\n    return count',
+          hint: 'count = 1 sets count to 1 every time. You want to ADD 1 each time. Use count += 1.'
+        },
+        practice: {
+          question: 'You see this error: "TypeError: can only concatenate str (not int) to str" on line 5. What does it mean?',
+          hint: 'Python is complaining about mixing strings and integers.',
+          answer: 'You tried to add (or join with +) a string and an integer. For example: "Age: " + 25. The fix is to convert the integer to a string: "Age: " + str(25), or use an f-string: f"Age: {25}".'
+        },
+        reflection: 'Describe a recent bug you fixed. How did you find it? What would help you find similar bugs faster next time?'
+      },
+      {
+        id: 'l11-12', title: 'Improve the Solution',
+        explanation: [
+          'Once your code is correct, look for ways to make it cleaner or faster — but only after it works. The two main moves: (1) replace repeated work with stored values, and (2) replace slow lookups with fast ones.',
+          'Why it matters: most "fast" algorithms come from one realization — you were doing the same work twice, or you were searching when you could have looked up. Optimization is rarely about clever tricks. It is usually about noticing waste.',
+          'Always rerun your tests after each change. It is easy to break correctness while chasing speed.'
+        ],
+        analogy: 'Like noticing you keep walking to the fridge for one ingredient at a time. The fix is not to walk faster — it is to bring out all the ingredients at once. Optimization is reorganizing, not sprinting.',
+        code: '# Sum-of-pairs — improving step by step\n#\n# SLOW: nested loop (O(n^2))\ndef pairs_brute(nums, target):\n    seen = []\n    for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n            if nums[i] + nums[j] == target:\n                seen.append((i, j))\n    return seen\n\n# Observation: for each num, the question\n# "is target - num somewhere earlier?" is a LOOKUP.\n# Lists are slow to search; dicts/sets are O(1).\n\n# FASTER: single pass with a set (O(n))\ndef pairs_fast(nums, target):\n    out = []\n    seen_index = {}\n    for i, num in enumerate(nums):\n        comp = target - num\n        if comp in seen_index:\n            out.append((seen_index[comp], i))\n        seen_index[num] = i\n    return out',
+        codeCaption: 'Same answer, less wasted work. That is what "improve" means.',
+        stepByStep: [
+          '1. Look at the slow part — what is being repeated?',
+          '2. Can you replace a search (list "in") with a lookup (dict/set "in")?',
+          '3. Can you store a result you keep recalculating?',
+          '4. Apply ONE change at a time',
+          '5. Rerun your tests after each change to confirm correctness'
+        ],
+        mistake: {
+          title: 'Optimizing before the code is correct',
+          description: 'Speeding up broken code does not help. Worse, when something fails, you cannot tell whether the bug is in the original logic or in the optimization.',
+          bad: '# Code is buggy on edge cases\n# but I rewrite it with fancy tricks anyway',
+          good: '# Get all tests green. THEN rewrite the slow part.\n# If a test goes red, you know your last change caused it.'
+        },
+        quiz: {
+          question: 'You have nested loops searching a list. What is usually the first improvement to try?',
+          options: [
+            'Rewrite the whole solution in a different language',
+            'Replace the inner search with a dict or set lookup',
+            'Use a recursive helper function',
+            'Run the function multiple times and average the result'
+          ],
+          correctIndex: 1,
+          explanation: 'Dict/set lookups are O(1). Replacing "is x in this list?" with "is x in this set?" is the most common O(n^2) -> O(n) move.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = [1, 2, 3, 4]\ntotal = 0\nfor n in nums:\n    total += n\nprint(total, len(nums))',
+          hint: 'Single pass. No nested loop. This is already optimal for a sum.',
+          answer: '10 4\n\nNot every problem needs optimizing — sometimes the brute force IS already optimal. Improving means knowing when to stop.'
+        },
+        reflection: 'Recap: improve only after correct. Replace repeated work with stored values; replace searches with lookups. Apply one change at a time and rerun the tests.'
+      },
+      {
+        id: 'l11-13', title: 'Big O in Context',
+        explanation: [
+          'Big O is a quick way to estimate how the time your code takes grows with the input size n. You do not need to memorize a table — you need three intuitions: O(1), O(n), and O(n^2).',
+          'O(1) means constant — looking up a key in a dict, or accessing list[5]. Size of input does not change the cost.',
+          'O(n) means one pass over the input — a single for-loop touching each element once. Doubles the input, doubles the time.',
+          'O(n^2) means a loop inside a loop — touching every pair. Doubles the input, FOUR times the time. This is the level where things start to feel slow at n > 10,000.'
+        ],
+        analogy: 'Like cleaning a house. O(1) is grabbing one item from the shelf. O(n) is walking through every room once. O(n^2) is comparing every room to every other room — and gets painful fast as the house grows.',
+        code: '# O(1) — constant time\nx = nums[0]\ny = d["key"]\nz = seen.add(value)\n\n# O(n) — one pass\ntotal = 0\nfor num in nums:        # touches each item once\n    total += num\n\n# O(n^2) — nested pass\nfor i in range(len(nums)):\n    for j in range(len(nums)):\n        do_something(nums[i], nums[j])\n\n# Rough budget on a modern machine:\n#   O(n)   at n = 10**7  -> fine\n#   O(n^2) at n = 10**4  -> borderline\n#   O(n^2) at n = 10**5  -> too slow',
+        codeCaption: 'Three shapes cover almost every beginner problem.',
+        stepByStep: [
+          '1. Count the loops in your code',
+          '2. No loops over the input -> O(1)',
+          '3. One loop over the input -> O(n)',
+          '4. A loop inside a loop -> O(n^2)',
+          '5. Compare your complexity against the input size in the constraints'
+        ],
+        mistake: {
+          title: 'Memorizing Big O without using it to pick an approach',
+          description: 'Knowing "O(n^2) is worse than O(n)" is useless if you do not check the input size. Big O is a TOOL for choosing — not a fact to recite.',
+          bad: '# Recite "O(n) is better" -> still write nested loops anyway',
+          good: '# Constraints say n up to 10^5\n# My nested loop is 10^10 -> too slow\n# I need O(n log n) or O(n) here'
+        },
+        quiz: {
+          question: 'The constraints say n can be up to 1,000,000. Which complexity is likely safe?',
+          options: [
+            'O(n^3)',
+            'O(n^2)',
+            'O(n) or O(n log n)',
+            'O(2^n)'
+          ],
+          correctIndex: 2,
+          explanation: 'At n = 10^6, anything worse than O(n log n) is usually too slow. O(n) is comfortable; O(n log n) is fine.'
+        },
+        practice: {
+          question: 'Predict the time complexity in Big O:\n\nfor i in range(len(nums)):\n    for j in range(len(nums)):\n        if nums[i] == nums[j] and i != j:\n            return True\nreturn False',
+          hint: 'Loop inside a loop, each over n elements.',
+          answer: 'O(n^2)\n\nA hash-set version would be O(n). This is the kind of comparison that drives the "improve" step from the previous lesson.'
+        },
+        reflection: 'Recap: O(1), O(n), O(n^2) cover most beginner cases. Count loops, compare to the input size, and let that decide whether you need to optimize.'
+      },
+      {
+        id: 'l11-4', title: 'When You\'re Stuck',
+        explanation: [
+          'Getting stuck is not a sign you\'re bad at coding. It\'s a sign you\'re actually programming. Every developer — beginner or 20-year veteran — gets stuck. The difference is what they do next.',
+          'When stuck, the worst move is to keep staring at the same code for an hour. Better moves: simplify the problem, walk away briefly, talk through the problem out loud, or look at a hint.',
+          'Hints are not cheating. Looking at a hint, understanding why it works, then trying again from scratch builds real skill. Avoiding hints out of pride wastes time and teaches you nothing.'
+        ],
+        analogy: 'Like getting lost while driving. You don\'t keep driving in circles for 2 hours — you check the map. Hints and Google are your map. Use them.',
+        code: '# WHEN STUCK, TRY THIS LADDER:\n\n# Step 1: Simplify the problem\n#   What if the input had only 1 element? Could you solve it then?\n#   Solve the simple case first, then expand.\n\n# Step 2: Trace through an example by hand\n#   Don\'t try to invent an algorithm — manually solve\n#   ONE example with paper and pencil. Then ask:\n#   what steps did MY BRAIN follow? Convert those steps to code.\n\n# Step 3: Talk through it out loud\n#   Saying it out loud forces clarity.\n#   This is called "rubber duck debugging".\n\n# Step 4: Take a break\n#   5-10 minute walk. Solutions appear when you stop pushing.\n\n# Step 5: Look at hint 1 (just the first hint)\n#   Read it, close it, try again.\n\n# Step 6: Read the solution, understand it deeply,\n#   close it, write it from scratch yourself.',
+        codeCaption: 'A ladder to climb when stuck. Don\'t skip steps. Don\'t feel guilty using hints.',
+        stepByStep: [
+          '1. Simplify: solve a tiny version of the problem first',
+          '2. Trace by hand on paper — what steps does YOUR BRAIN take?',
+          '3. Explain the problem out loud (to a person, pet, or rubber duck)',
+          '4. Take a 5–10 minute break; come back fresh',
+          '5. Look at hint 1 only; close it; try again',
+          '6. As a last resort: read the solution → close it → rewrite from scratch'
+        ],
+        mistake: {
+          title: 'Refusing to look at hints',
+          description: 'Many beginners think looking at a hint = failure. It\'s the opposite. The skill is in UNDERSTANDING the hint and being able to redo it from scratch — not in suffering alone for 3 hours.',
+          bad: '# 3 hours stuck on one problem\n# → frustrated → quit programming for the night\n# → don\'t come back for a week',
+          good: '# 30 minutes stuck → look at hint 1\n# → understand it → try again → solve it\n# → move on to next problem with confidence'
+        },
+        quiz: {
+          question: 'You\'ve been stuck on a problem for 45 minutes. What is the BEST next move?',
+          options: [
+            'Keep staring at the code — quitters look at hints',
+            'Delete everything and start over from scratch',
+            'Take a short break, then look at one hint and try again',
+            'Move to a much harder problem to challenge yourself'
+          ],
+          correctIndex: 2,
+          explanation: 'A break clears your head. A small hint unblocks you without giving away the answer. You learn far more by getting unstuck and finishing than by suffering forever.'
+        },
+        challenge: {
+          description: 'Quick warmup: write a function called greet(name) that returns the string "Hello, NAME!" (replacing NAME with the input). Use this to confirm your testing works.',
+          starter: 'def greet(name):\n    pass',
+          tests: [
+            { call: 'greet("Alice")', expected: 'Hello, Alice!' },
+            { call: 'greet("Bob")', expected: 'Hello, Bob!' },
+            { call: 'greet("")', expected: 'Hello, !' }
+          ],
+          solution: 'def greet(name):\n    return f"Hello, {name}!"',
+          hint: 'Use an f-string: return f"Hello, {name}!"'
+        },
+        practice: {
+          question: 'Think of a coding problem you struggled with recently (any kind). Which step on the ladder would have unblocked you fastest?',
+          hint: 'Was it understanding? An algorithm? A bug? A syntax issue?',
+          answer: 'Different problems need different steps. Logic confusion → trace by hand. Stuck on algorithm → simplify or look at hint. Bug you can\'t find → print debugging or take a break. Knowing which to use comes with practice.'
+        },
+        reflection: 'How do you feel about looking at hints? Do you see them as failure or as a learning tool? What would change if you treated hints like a teacher\'s help?'
+      },
+      {
+        id: 'l11-14', title: 'Problem-Solving Checkpoint',
+        explanation: [
+          'Time to put it all together. You now have a full process: read carefully, identify input and output, restate, make examples, find edge cases, write pseudocode, code a brute force, dry run, debug, improve, and check Big O in context.',
+          'Why it matters: the goal of this module is not to memorize trivia. It is to make this loop feel automatic. Once it is automatic, every new problem becomes "run the loop on this one" instead of "what do I do?".',
+          'Use this lesson as your self-check before moving on to Beginner LeetCode Prep and the patterns module.'
+        ],
+        analogy: 'Like a pilot running through the pre-flight checklist. Same items every flight, in the same order. Not because the pilot is forgetful — because the checklist catches problems before they become disasters.',
+        code: '# Your problem-solving checklist (commit to memory)\n#\n# [ ] 1. Read the problem 2-3 times\n# [ ] 2. Identify the INPUT (type, shape, size)\n# [ ] 3. Identify the OUTPUT (type, shape)\n# [ ] 4. Restate the problem in your own words\n# [ ] 5. Solve a tiny example by hand\n# [ ] 6. List edge cases you must handle\n# [ ] 7. Write pseudocode\n# [ ] 8. Code a brute force solution\n# [ ] 9. Dry run it on examples and edge cases\n# [ ] 10. Improve if Big O is too slow for the constraints\n# [ ] 11. Test again',
+        codeCaption: 'Run the checklist on every problem until it becomes invisible.',
+        stepByStep: [
+          '1. Start every problem by writing INPUT, OUTPUT, RESTATEMENT at the top',
+          '2. Write 1 small example and 2 edge cases before coding',
+          '3. Pseudocode in plain English, then translate',
+          '4. Brute force first, optimize second',
+          '5. Always rerun tests after a change'
+        ],
+        mistake: {
+          title: 'Skipping the checklist once you "feel ready"',
+          description: 'The checklist feels slow when problems are easy. That is when the habit forms. By the time problems are hard, the checklist runs in your head in seconds.',
+          bad: '# "This one is easy, I will skip the steps"\n# get tripped up by an edge case -> 20 minutes lost',
+          good: '# Run the checklist even on easy problems\n# Build the muscle now, lean on it later'
+        },
+        quiz: {
+          question: 'In the problem-solving loop, which step always comes BEFORE writing brute-force code?',
+          options: [
+            'Optimizing for Big O',
+            'Identifying the input and output, then writing pseudocode',
+            'Reading the official solution',
+            'Submitting your first attempt'
+          ],
+          correctIndex: 1,
+          explanation: 'Brute force only makes sense once you know what you are computing — and pseudocode is what bridges understanding and code.'
+        },
+        challenge: {
+          description: 'Apply the loop to a small problem. Write count_evens(nums) that returns how many even numbers are in nums. Handle the empty-list edge case.',
+          starter: 'def count_evens(nums):\n    # INPUT: list[int] (may be empty)\n    # OUTPUT: int (count of even numbers)\n    pass',
+          tests: [
+            { call: 'count_evens([1, 2, 3, 4, 5, 6])', expected: 3 },
+            { call: 'count_evens([])', expected: 0 },
+            { call: 'count_evens([1, 3, 5])', expected: 0 },
+            { call: 'count_evens([-2, -1, 0, 1, 2])', expected: 3 }
+          ],
+          solution: 'def count_evens(nums):\n    count = 0\n    for n in nums:\n        if n % 2 == 0:\n            count += 1\n    return count',
+          hint: 'Counter starts at 0. For each n in nums, if n % 2 == 0 then count += 1. Return count.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = [-2, -1, 0, 1, 2]\nevens = [n for n in nums if n % 2 == 0]\nprint(evens, len(evens))',
+          hint: 'Even numbers include 0 and negatives like -2.',
+          answer: '[-2, 0, 2] 3\n\nDo not forget 0 and negative evens — both are real edge cases people miss.'
+        },
+        reflection: 'Recap: you now have a complete problem-solving process. The rest of the journey is practice. Each problem you solve makes the loop faster and more automatic.'
+      },
+    ]
+  },
+  {
     id: 10, slug: 'leetcode-prep', title: 'Beginner LeetCode Prep',
     subtitle: 'How to actually approach and solve coding problems',
     color: '#d29922',
@@ -4414,278 +5121,6 @@ def two_sum(nums, target):
         codeCaption: 'You have the tools. Go to Practice Problems and start solving.',
         mistake: { title: 'Waiting until you feel "ready"', description: 'You will never feel 100% ready. The only way to get better at solving problems is to attempt problems — struggle, get stuck, look at hints, understand the solution, and try again.', bad: '# "I\'ll try LeetCode when I know more Python"\n# → never try\n# → never improve', good: '# Attempt the problem now, even if you get stuck\n# Look at Hint 1, try again\n# Look at Hint 2, try again\n# Read the solution, understand it fully\n# Try again from scratch next day' },
         practice: { question: 'Go to Practice Problems in the sidebar and attempt Contains Duplicate. Come back here after you\'ve tried it (with or without hints).', hint: 'Use a set. Loop through the numbers. Check if you\'ve seen each one before.', answer: 'def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False\n\n# If you got this: excellent! You solved a real LeetCode problem.\n# If you needed hints: that is completely normal. Keep going.' }
-      }
-    ]
-  },
-  {
-    id: 11, slug: 'problem-solving', title: 'Problem-Solving Basics',
-    subtitle: 'How to actually approach a problem, not just memorize syntax',
-    color: '#79c0ff',
-    lessons: [
-      {
-        id: 'l11-0', title: 'How to Read a Problem Carefully',
-        explanation: [
-          'Beginners read a problem once and start coding. Strong programmers read it three times before touching the keyboard. Why? Because most "I can\'t solve it" moments are actually "I didn\'t fully understand it" moments.',
-          'A LeetCode problem has 4 parts: (1) the description, (2) the function signature, (3) examples, and (4) constraints. Each tells you something different. Skip any of them and you\'ll waste time.',
-          'The goal of reading is not to memorize the problem. The goal is to be able to explain it to a friend in plain English without looking at it.'
-        ],
-        analogy: 'Think of it like reading a recipe. If you skim and see "chicken, oven, 400°F", you might miss "marinate overnight first". You\'d ruin dinner. Code is the same: skip a constraint, ruin your solution.',
-        code: '# Reading "Two Sum" carefully\n\n# DESCRIPTION:\n# Given a list of numbers and a target, return INDICES of two\n# numbers that add up to target.\n#   Key word: INDICES (positions), not the numbers themselves\n\n# SIGNATURE:\n# def two_sum(nums, target):\n#   nums = a list of integers\n#   target = a single integer\n#   returns: a list of TWO indices\n\n# EXAMPLES:\n# nums=[2,7,11,15], target=9 → [0,1]\n#   Why? nums[0]=2, nums[1]=7, 2+7=9 ✓\n\n# CONSTRAINTS:\n# - Exactly one valid answer exists\n# - You cannot use the same element twice',
-        codeCaption: 'Break the problem into 4 parts. Don\'t code until all 4 are crystal clear.',
-        stepByStep: [
-          '1. Read the description — what is being asked in plain English?',
-          '2. Look at the function signature — what types are inputs/outputs?',
-          '3. Trace through each example by hand — confirm you understand',
-          '4. Check constraints — how big is the input? Are there edge cases?',
-          '5. Restate the problem in your own words before coding'
-        ],
-        mistake: {
-          title: 'Coding from the first sentence',
-          description: 'Many beginners read "Given an array of numbers..." and immediately start typing. Then they realize they misunderstood and have to throw the code away.',
-          bad: '# Read first line → start coding → realize halfway through\n# you\'re solving the wrong problem',
-          good: '# Read description → read examples → restate aloud →\n# write 2-3 lines of approach in comments → THEN code'
-        },
-        quiz: {
-          question: 'You see a problem that says "return the indices". The example shows nums=[5,3,7], target=10 returning [0,2]. What does the function need to return?',
-          options: [
-            'The numbers that add up to the target (5 and 7)',
-            'The positions of those numbers in the list (0 and 2)',
-            'The sum of the two numbers (10)',
-            'A True or False whether a pair exists'
-          ],
-          correctIndex: 1,
-          explanation: '"Indices" means positions, not values. nums[0]=5 and nums[2]=7. The example confirms this — [0,2] are positions, not numbers.'
-        },
-        challenge: {
-          description: 'Write a function understand_problem(text) that returns True if the text contains the word "indices" (case-insensitive). This simulates "scanning a problem for important keywords".',
-          starter: 'def understand_problem(text):\n    # return True if "indices" appears (case insensitive)\n    pass',
-          tests: [
-            { call: 'understand_problem("Return the indices of two numbers")', expected: true },
-            { call: 'understand_problem("RETURN THE INDICES")', expected: true },
-            { call: 'understand_problem("Return the values")', expected: false },
-            { call: 'understand_problem("")', expected: false }
-          ],
-          solution: 'def understand_problem(text):\n    return "indices" in text.lower()',
-          hint: 'Use .lower() on the text first, then use the "in" operator.'
-        },
-        practice: {
-          question: 'Read this problem out loud: "Given a list of integers, return the largest one. If the list is empty, return None." Now restate it in your own words.',
-          hint: 'What is the input? What is the output? What is the edge case?',
-          answer: 'Input: a list of integers (could be empty). Output: the largest integer in the list, or None if the list has no items. Edge case: empty list returns None instead of crashing.'
-        },
-        reflection: 'Can you describe in your own words why reading a problem 3 times before coding actually saves time, even though it feels slower at first?'
-      },
-      {
-        id: 'l11-1', title: 'Plan Before You Code',
-        explanation: [
-          'Once you understand the problem, the next step is NOT to write code. It is to write the plan in plain English. This is called "pseudocode" — code-like steps in human language.',
-          'Pseudocode lets you focus on the logic without worrying about Python syntax. You decide WHAT the steps are, then translate them into actual Python.',
-          'A good plan is concrete enough that translating it to code is mostly mechanical. If you\'re still inventing the algorithm while typing Python, you\'re doing two hard things at once.'
-        ],
-        analogy: 'Like building IKEA furniture. The instructions show every step in pictures BEFORE you touch a single screw. Pseudocode is your instructions — you wouldn\'t skip them and start drilling.',
-        code: '# PLANNING two_sum BEFORE writing Python\n\n# Plain English plan:\n#   1. I\'ll go through each number in the list\n#   2. For each number, I\'ll calculate what I need (target - num)\n#   3. I\'ll keep a record of numbers I\'ve already seen\n#   4. If the number I need is in my record, I found the pair!\n#   5. Otherwise, add the current number to my record\n\n# Pseudocode (more code-like):\n#   create empty dict called seen\n#   loop through nums with index i and value num:\n#       complement = target - num\n#       if complement in seen:\n#           return [seen[complement], i]\n#       seen[num] = i\n\n# Now translating to Python is straightforward:\ndef two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i',
-        codeCaption: 'Plain English → Pseudocode → Python. Three small jumps instead of one giant leap.',
-        stepByStep: [
-          '1. Restate the problem in 1 sentence',
-          '2. Write 3-5 plain English steps for solving it',
-          '3. Convert those steps to pseudocode (loops, conditions, variables)',
-          '4. Translate pseudocode to actual Python',
-          '5. Test against the given examples'
-        ],
-        mistake: {
-          title: 'Skipping the plan because "I know what to do"',
-          description: 'You THINK you know what to do, but in your head it\'s a fuzzy idea. Writing the plan forces you to make it concrete — and that\'s where you discover gaps in your thinking.',
-          bad: '# "I\'ll just figure it out as I code" — you start, get stuck,\n# delete code, restart, get stuck again, give up',
-          good: '# Spend 5 minutes writing 5 lines of pseudocode.\n# Save 30 minutes of confused coding.'
-        },
-        quiz: {
-          question: 'Why is pseudocode useful BEFORE writing real Python?',
-          options: [
-            'It is required by Python and the code won\'t run otherwise',
-            'It separates "what to do" (logic) from "how to write it" (syntax)',
-            'It runs faster than Python code',
-            'It tells the computer what type each variable should be'
-          ],
-          correctIndex: 1,
-          explanation: 'Pseudocode lets you focus only on the logic. Once the logic is clear, translating to Python is the easier half.'
-        },
-        challenge: {
-          description: 'Write the function double_each(nums) that returns a new list where every number is doubled. Plan it first in your head: (1) make empty list, (2) loop through nums, (3) append num*2 to the new list, (4) return it.',
-          starter: 'def double_each(nums):\n    # plan: create result list, loop, append doubled value\n    pass',
-          tests: [
-            { call: 'double_each([1, 2, 3])', expected: [2, 4, 6] },
-            { call: 'double_each([])', expected: [] },
-            { call: 'double_each([5])', expected: [10] },
-            { call: 'double_each([-1, 0, 1])', expected: [-2, 0, 2] }
-          ],
-          solution: 'def double_each(nums):\n    result = []\n    for n in nums:\n        result.append(n * 2)\n    return result',
-          hint: 'result = []  →  for n in nums:  →  result.append(n*2)  →  return result'
-        },
-        practice: {
-          question: 'Write pseudocode (no Python yet!) for: "given a list, return the count of even numbers".',
-          hint: 'Counter starts at 0. Loop through. If even, increment.',
-          answer: 'create count = 0\nloop through each n in nums:\n    if n % 2 == 0:\n        count = count + 1\nreturn count'
-        },
-        reflection: 'Have you ever started coding and gotten stuck halfway through because you didn\'t fully know what to do? How would planning first have helped?'
-      },
-      {
-        id: 'l11-2', title: 'Test with Examples',
-        explanation: [
-          'After you write code, you must test it. Not just "look at it and assume it works". Actually run it on the given examples and on edge cases you make up yourself.',
-          'The examples in the problem are the BARE MINIMUM. They test happy paths. Real bugs hide in edge cases: empty input, single element, duplicates, negatives, very large/small values, all the same value.',
-          'Mental tracing — walking through code line by line on paper — is one of the most underrated skills. Do it before submitting. You\'ll catch silly mistakes.'
-        ],
-        analogy: 'Like proofreading an essay. You don\'t just write it and submit. You read it back, looking for typos and weird sentences. Tracing code is proofreading.',
-        code: '# Tracing two_sum([2, 7, 11, 15], target=9) by hand:\n\n# seen = {}\n\n# i=0, num=2:\n#   complement = 9 - 2 = 7\n#   7 in seen? NO ({} is empty)\n#   seen = {2: 0}\n\n# i=1, num=7:\n#   complement = 9 - 7 = 2\n#   2 in seen? YES! seen[2] = 0\n#   return [0, 1] ✓\n\n# Edge cases to test yourself:\n#   two_sum([3, 3], 6)        → [0, 1]  (same number twice)\n#   two_sum([1, -1], 0)       → [0, 1]  (negatives)\n#   two_sum([5, 75, 25], 100) → [1, 2]',
-        codeCaption: 'Trace one line at a time. Track what each variable holds at each step.',
-        stepByStep: [
-          '1. Run the code on the given example and check the result',
-          '2. Trace through it on paper — write down each variable\'s value',
-          '3. Try edge cases: empty input, single item, duplicates, negatives',
-          '4. If your trace differs from the actual result, find where they diverge',
-          '5. The first divergence is your bug'
-        ],
-        mistake: {
-          title: 'Submitting after only testing the first example',
-          description: 'Easy problems often have 2-3 visible examples but 30+ hidden test cases. The first example is just to help you understand. The hidden tests catch bugs in edge cases.',
-          bad: '# Test example 1 → it works → submit\n# → "Wrong Answer" on test 17, an empty list',
-          good: '# Test all visible examples, plus:\n# - empty input\n# - single element\n# - all same values\n# - very large/small values\n# - negatives'
-        },
-        quiz: {
-          question: 'Your function passes the given example but fails on hidden tests. What is most likely the cause?',
-          options: [
-            'Python is broken',
-            'Your code is too fast and the tests time out',
-            'You have a bug in an edge case the example didn\'t cover',
-            'The problem is unsolvable'
-          ],
-          correctIndex: 2,
-          explanation: 'The first example tests the happy path. Hidden tests probe edge cases. Empty inputs, duplicates, and boundary values are the usual culprits.'
-        },
-        challenge: {
-          description: 'Write safe_divide(a, b) that returns a/b, but returns None if b is 0 (instead of crashing). Test it mentally first!',
-          starter: 'def safe_divide(a, b):\n    # check for b == 0 first\n    pass',
-          tests: [
-            { call: 'safe_divide(10, 2)', expected: 5 },
-            { call: 'safe_divide(10, 0)', expected: null },
-            { call: 'safe_divide(0, 5)', expected: 0 },
-            { call: 'safe_divide(-6, 3)', expected: -2 }
-          ],
-          solution: 'def safe_divide(a, b):\n    if b == 0:\n        return None\n    return a / b',
-          hint: 'if b is 0, return None. Otherwise return a / b.'
-        },
-        practice: {
-          question: 'Trace through this code and predict the output BEFORE running it:\n\nx = 5\nfor i in range(3):\n    x = x + i\nprint(x)',
-          hint: 'i goes through 0, 1, 2. Add each to x.',
-          answer: '8\n\nStart: x=5. i=0: x=5+0=5. i=1: x=5+1=6. i=2: x=6+2=8. Print 8.'
-        },
-        reflection: 'When was the last time a bug surprised you? In hindsight, what test case would have caught it earlier?'
-      },
-      {
-        id: 'l11-3', title: 'Debug Like a Detective',
-        explanation: [
-          'Bugs aren\'t mysterious — they\'re evidence of a logic mismatch between what you THINK your code does and what it ACTUALLY does. Debugging is finding where those two diverge.',
-          'The fastest debugging tool you have is print(). Drop print() statements at key spots to see what your variables actually hold at each step. This is called "print debugging" and even senior engineers use it constantly.',
-          'When you see an error, READ THE MESSAGE. Python errors tell you (1) the type of error, (2) the line number, and (3) often what specifically went wrong. The answer is usually right there.'
-        ],
-        analogy: 'A detective doesn\'t guess who the killer is. They follow the clues. Print statements are your clues — they show you what actually happened, not what you hoped happened.',
-        code: '# Bug: this should sum positive numbers but returns 0\ndef sum_positives_buggy(nums):\n    total = 0\n    for n in nums:\n        if n > 0:\n            total = 0     # BUG: should be total += n\n    return total\n\n# Debug with print():\ndef sum_positives_debug(nums):\n    total = 0\n    for n in nums:\n        print(f"Looking at {n}, total is {total}")\n        if n > 0:\n            total = 0\n            print(f"  After update, total is {total}")  # !! always 0\n    return total\n\n# Now you can SEE the bug:\n# total resets to 0 instead of adding n.\n# Fix: change "total = 0" to "total += n"',
-        codeCaption: 'print() reveals what your variables actually hold at each step.',
-        stepByStep: [
-          '1. Read the error message carefully (last line is the actual error)',
-          '2. Note the line number — that\'s where Python noticed the problem',
-          '3. Add print() statements before/after the suspicious area',
-          '4. Run again and compare what variables actually hold to what you expected',
-          '5. The first divergence is the bug — fix it'
-        ],
-        mistake: {
-          title: 'Changing code randomly hoping it fixes itself',
-          description: 'Beginners often "shotgun debug" — randomly tweak code without understanding why it\'s broken. This makes things worse. Find the bug first, THEN fix it.',
-          bad: '# Try removing a line → still broken → add a +1 → still broken\n# → swap two lines → still broken → give up',
-          good: '# Add print() to see actual values\n# Compare to expected values\n# Find the line where they diverge\n# Fix THAT specific line'
-        },
-        quiz: {
-          question: 'Your function returns the wrong answer. What is the FIRST thing you should do?',
-          options: [
-            'Rewrite the function from scratch',
-            'Add print() statements to see what the variables actually contain',
-            'Try random changes until something works',
-            'Ask someone else to fix it'
-          ],
-          correctIndex: 1,
-          explanation: 'print() shows what your code actually does. Without that information, every "fix" is just guessing.'
-        },
-        challenge: {
-          description: 'Fix the bug in this function. It should return the count of items in nums that equal target. (Test it mentally first!)',
-          starter: 'def count_target(nums, target):\n    count = 0\n    for n in nums:\n        if n == target:\n            count = 1     # ← bug here\n    return count',
-          tests: [
-            { call: 'count_target([1, 2, 1, 3, 1], 1)', expected: 3 },
-            { call: 'count_target([5, 5, 5], 5)', expected: 3 },
-            { call: 'count_target([1, 2, 3], 4)', expected: 0 },
-            { call: 'count_target([], 1)', expected: 0 }
-          ],
-          solution: 'def count_target(nums, target):\n    count = 0\n    for n in nums:\n        if n == target:\n            count += 1\n    return count',
-          hint: 'count = 1 sets count to 1 every time. You want to ADD 1 each time. Use count += 1.'
-        },
-        practice: {
-          question: 'You see this error: "TypeError: can only concatenate str (not int) to str" on line 5. What does it mean?',
-          hint: 'Python is complaining about mixing strings and integers.',
-          answer: 'You tried to add (or join with +) a string and an integer. For example: "Age: " + 25. The fix is to convert the integer to a string: "Age: " + str(25), or use an f-string: f"Age: {25}".'
-        },
-        reflection: 'Describe a recent bug you fixed. How did you find it? What would help you find similar bugs faster next time?'
-      },
-      {
-        id: 'l11-4', title: 'When You\'re Stuck',
-        explanation: [
-          'Getting stuck is not a sign you\'re bad at coding. It\'s a sign you\'re actually programming. Every developer — beginner or 20-year veteran — gets stuck. The difference is what they do next.',
-          'When stuck, the worst move is to keep staring at the same code for an hour. Better moves: simplify the problem, walk away briefly, talk through the problem out loud, or look at a hint.',
-          'Hints are not cheating. Looking at a hint, understanding why it works, then trying again from scratch builds real skill. Avoiding hints out of pride wastes time and teaches you nothing.'
-        ],
-        analogy: 'Like getting lost while driving. You don\'t keep driving in circles for 2 hours — you check the map. Hints and Google are your map. Use them.',
-        code: '# WHEN STUCK, TRY THIS LADDER:\n\n# Step 1: Simplify the problem\n#   What if the input had only 1 element? Could you solve it then?\n#   Solve the simple case first, then expand.\n\n# Step 2: Trace through an example by hand\n#   Don\'t try to invent an algorithm — manually solve\n#   ONE example with paper and pencil. Then ask:\n#   what steps did MY BRAIN follow? Convert those steps to code.\n\n# Step 3: Talk through it out loud\n#   Saying it out loud forces clarity.\n#   This is called "rubber duck debugging".\n\n# Step 4: Take a break\n#   5-10 minute walk. Solutions appear when you stop pushing.\n\n# Step 5: Look at hint 1 (just the first hint)\n#   Read it, close it, try again.\n\n# Step 6: Read the solution, understand it deeply,\n#   close it, write it from scratch yourself.',
-        codeCaption: 'A ladder to climb when stuck. Don\'t skip steps. Don\'t feel guilty using hints.',
-        stepByStep: [
-          '1. Simplify: solve a tiny version of the problem first',
-          '2. Trace by hand on paper — what steps does YOUR BRAIN take?',
-          '3. Explain the problem out loud (to a person, pet, or rubber duck)',
-          '4. Take a 5–10 minute break; come back fresh',
-          '5. Look at hint 1 only; close it; try again',
-          '6. As a last resort: read the solution → close it → rewrite from scratch'
-        ],
-        mistake: {
-          title: 'Refusing to look at hints',
-          description: 'Many beginners think looking at a hint = failure. It\'s the opposite. The skill is in UNDERSTANDING the hint and being able to redo it from scratch — not in suffering alone for 3 hours.',
-          bad: '# 3 hours stuck on one problem\n# → frustrated → quit programming for the night\n# → don\'t come back for a week',
-          good: '# 30 minutes stuck → look at hint 1\n# → understand it → try again → solve it\n# → move on to next problem with confidence'
-        },
-        quiz: {
-          question: 'You\'ve been stuck on a problem for 45 minutes. What is the BEST next move?',
-          options: [
-            'Keep staring at the code — quitters look at hints',
-            'Delete everything and start over from scratch',
-            'Take a short break, then look at one hint and try again',
-            'Move to a much harder problem to challenge yourself'
-          ],
-          correctIndex: 2,
-          explanation: 'A break clears your head. A small hint unblocks you without giving away the answer. You learn far more by getting unstuck and finishing than by suffering forever.'
-        },
-        challenge: {
-          description: 'Quick warmup: write a function called greet(name) that returns the string "Hello, NAME!" (replacing NAME with the input). Use this to confirm your testing works.',
-          starter: 'def greet(name):\n    pass',
-          tests: [
-            { call: 'greet("Alice")', expected: 'Hello, Alice!' },
-            { call: 'greet("Bob")', expected: 'Hello, Bob!' },
-            { call: 'greet("")', expected: 'Hello, !' }
-          ],
-          solution: 'def greet(name):\n    return f"Hello, {name}!"',
-          hint: 'Use an f-string: return f"Hello, {name}!"'
-        },
-        practice: {
-          question: 'Think of a coding problem you struggled with recently (any kind). Which step on the ladder would have unblocked you fastest?',
-          hint: 'Was it understanding? An algorithm? A bug? A syntax issue?',
-          answer: 'Different problems need different steps. Logic confusion → trace by hand. Stuck on algorithm → simplify or look at hint. Bug you can\'t find → print debugging or take a break. Knowing which to use comes with practice.'
-        },
-        reflection: 'How do you feel about looking at hints? Do you see them as failure or as a learning tool? What would change if you treated hints like a teacher\'s help?'
       }
     ]
   },
