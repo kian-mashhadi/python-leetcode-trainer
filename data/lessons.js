@@ -5821,7 +5821,7 @@ def two_sum(nums, target):
   },
   {
     id: 12, slug: 'leetcode-patterns', title: 'Beginner LeetCode Patterns',
-    subtitle: 'The 5 patterns that solve most Easy problems',
+    subtitle: 'The 8 beginner patterns that solve most Easy problems',
     color: '#f0883e',
     lessons: [
       {
@@ -5877,6 +5877,58 @@ def two_sum(nums, target):
         reflection: 'In your own words, why does using a dict turn an O(n²) problem into O(n)?'
       },
       {
+        id: 'l12-14', title: 'Hash Map: Spotting It and the Complement Trick',
+        explanation: [
+          'The Hash Map pattern means using a Python dictionary (or set) to remember things you have seen, so you can look them up instantly instead of searching again. A dictionary lookup is O(1) — basically free — no matter how many items it holds.',
+          'When to recognize it: the problem asks "have I seen this before?", "does a matching value exist?", or "find a pair that adds to a target". Whenever you are about to write a loop INSIDE another loop to search, a hash map usually removes the inner loop.',
+          'Why it works: a dictionary stores items by a key, so checking key in d does not scan the whole thing — it jumps straight to the answer. That turns an O(n^2) double loop into a single O(n) pass. Python tools: dict {}, the in operator, .get(), and sometimes a set.'
+        ],
+        analogy: 'A hash map is like a coat-check at a theater. Instead of searching every coat (a slow scan), you hand over a numbered ticket and the exact coat comes back instantly. The ticket is the key.',
+        code: '# Non-LeetCode example: have we seen this name before?\nseen = {}\nfor name in ["amy", "bob", "amy"]:\n    if name in seen:            # O(1) lookup\n        print(name, "is a repeat")\n    seen[name] = True\n\n# TEMPLATE: the complement trick (Two Sum)\ndef two_sum(nums, target):\n    seen = {}                   # value -> index\n    for i, n in enumerate(nums):\n        need = target - n       # the complement\n        if need in seen:        # seen it already?\n            return [seen[need], i]\n        seen[n] = i\n    return []',
+        codeCaption: 'Store what you have seen; look up the complement instantly.',
+        stepByStep: [
+          'Dry run two_sum([2, 7, 11], 9):',
+          'i=0 n=2: need=7, 7 not in seen -> seen={2:0}',
+          'i=1 n=7: need=2, 2 IS in seen -> return [seen[2], 1] = [0, 1]',
+          'Found in ONE pass — no nested loop needed',
+          'Each lookup (need in seen) was instant, O(1)'
+        ],
+        mistake: {
+          title: 'Storing the value when you need the index (or vice versa)',
+          description: 'For Two Sum you must store value -> index so you can return positions. Storing just a set loses the information you need to answer.',
+          bad: 'seen.add(n)   # a set: cannot recover the index later',
+          good: 'seen[n] = i   # dict: remembers WHERE each value was'
+        },
+        quiz: {
+          question: 'A problem says "return True if any two numbers add up to k". Why reach for a hash map instead of two nested loops?',
+          options: [
+            'It looks more advanced',
+            'A hash map lets you check for the needed complement in O(1), turning O(n^2) into O(n)',
+            'Nested loops do not work in Python',
+            'Hash maps sort the data for you'
+          ],
+          correctIndex: 1,
+          explanation: 'For each number you check if (k - number) was already seen — an instant lookup — so you avoid the slow inner loop.'
+        },
+        challenge: {
+          description: 'Tiny drill: write seen_before(nums) that returns True the first time a value repeats, else False. Use a dictionary or set to remember seen values.',
+          starter: 'def seen_before(nums):\n    # return True if any value appears more than once\n    pass',
+          tests: [
+            { call: 'seen_before([1, 2, 1])', expected: true },
+            { call: 'seen_before([1, 2, 3])', expected: false },
+            { call: 'seen_before([])', expected: false }
+          ],
+          solution: 'def seen_before(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False',
+          hint: 'Keep a set of seen values; if n is already in it, return True.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nseen = {}\nfor n in [4, 5, 4]:\n    if n in seen:\n        print("repeat:", n)\n    seen[n] = True',
+          hint: 'Track what is in seen after each step.',
+          answer: 'repeat: 4\n\n4 then 5 are new; the second 4 is already in seen, so it prints "repeat: 4".'
+        },
+        reflection: 'Recap: hash map = remember-and-look-up-instantly. Recognize it when you would otherwise search in a nested loop. Easy LeetCode bridge: Two Sum and Contains Duplicate.'
+      },
+      {
         id: 'l12-1', title: 'Pattern 2: Two Pointers',
         explanation: [
           'Two pointers is a technique where you have two indexes moving through a list — usually one from the left and one from the right, moving toward each other. It\'s perfect for problems involving pairs or in-place modifications.',
@@ -5928,6 +5980,58 @@ def two_sum(nums, target):
           answer: '(1, 6), then (2, 5), then (3, 4). After that, left=3 and right=2, so left < right is false — loop ends.'
         },
         reflection: 'What kinds of problems would NOT work with two pointers?'
+      },
+      {
+        id: 'l12-15', title: 'Two Pointers: Working From Both Ends',
+        explanation: [
+          'The Two Pointers pattern uses two index variables — usually left starting at 0 and right starting at the last position — that move toward each other. You compare or swap the two ends, then step inward.',
+          'When to recognize it: the input is a list or string AND it is sorted, or you care about both ends (palindrome check, reversing in place, pairing smallest with largest). If you find yourself thinking "compare the front and the back", that is two pointers.',
+          'Why it works: by moving from both ends you cover the whole list in a single O(n) pass without a nested loop. Python tools: index variables, a while left < right loop, and tuple swap a, b = b, a.'
+        ],
+        analogy: 'Two people reading the same sentence — one from the start, one from the end — meeting in the middle. They finish in half the trips, and they can compare letters as they pass.',
+        code: '# Non-LeetCode example: is a word a palindrome?\ndef is_palindrome(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        if s[left] != s[right]:\n            return False\n        left += 1\n        right -= 1\n    return True\n\n# TEMPLATE: reverse a list in place\ndef reverse(nums):\n    left, right = 0, len(nums) - 1\n    while left < right:\n        nums[left], nums[right] = nums[right], nums[left]\n        left += 1\n        right -= 1\n    return nums',
+        codeCaption: 'Start at both ends; move inward until the pointers meet.',
+        stepByStep: [
+          'Dry run is_palindrome("aba"):',
+          'left=0 right=2: s[0]=a == s[2]=a -> move in (left=1 right=1)',
+          'now left < right is False (1 < 1) -> loop ends',
+          'never found a mismatch -> return True',
+          'Only len/2 comparisons — one efficient pass'
+        ],
+        mistake: {
+          title: 'Using two pointers on UNSORTED data when order matters',
+          description: 'The two-pointer "move inward based on comparison" trick for finding pairs relies on the list being sorted. On unsorted data that logic gives wrong answers — sort first or use a hash map instead.',
+          bad: '# unsorted + compare-and-move-inward -> wrong pair logic',
+          good: '# sort first, OR use a hash map for unsorted pair-finding'
+        },
+        quiz: {
+          question: 'Which clue most strongly suggests the Two Pointers pattern?',
+          options: [
+            'The input is a single number',
+            'The list is sorted, or you need to compare the front and back',
+            'You need to count letters',
+            'You must remember everything you have seen'
+          ],
+          correctIndex: 1,
+          explanation: 'Two pointers shine on sorted lists or when you work the two ends toward the middle.'
+        },
+        challenge: {
+          description: 'Tiny drill: write reverse_list(nums) using two pointers (left and right) that swaps ends and moves inward. Return the reversed list.',
+          starter: 'def reverse_list(nums):\n    left, right = 0, len(nums) - 1\n    # swap and move the pointers inward\n    pass',
+          tests: [
+            { call: 'reverse_list([1, 2, 3])', expected: [3, 2, 1] },
+            { call: 'reverse_list([1, 2])', expected: [2, 1] },
+            { call: 'reverse_list([9])', expected: [9] }
+          ],
+          solution: 'def reverse_list(nums):\n    left, right = 0, len(nums) - 1\n    while left < right:\n        nums[left], nums[right] = nums[right], nums[left]\n        left += 1\n        right -= 1\n    return nums',
+          hint: 'while left < right: swap nums[left] and nums[right], then left += 1 and right -= 1.'
+        },
+        practice: {
+          question: 'Predict the result:\n\ndef check(s):\n    l, r = 0, len(s) - 1\n    while l < r:\n        if s[l] != s[r]:\n            return False\n        l += 1; r -= 1\n    return True\n\nprint(check("abba"))',
+          hint: 'Compare first/last, then move inward.',
+          answer: 'True\n\na==a, then b==b, pointers meet — no mismatch, so it returns True. "abba" is a palindrome.'
+        },
+        reflection: 'Recap: two pointers walk from both ends to the middle in one pass. Recognize it on sorted lists or front/back problems. Easy LeetCode bridge: Valid Palindrome and Two Sum II (sorted).'
       },
       {
         id: 'l12-2', title: 'Pattern 3: Sliding Window',
@@ -5983,6 +6087,58 @@ def two_sum(nums, target):
         reflection: 'Why is "single-pass with a running tracker" almost always faster than "compare every possible pair"?'
       },
       {
+        id: 'l12-16', title: 'Sliding Window: A Moving Range',
+        explanation: [
+          'The Sliding Window pattern keeps a "window" — a start and an end index — over a section of a list, and slides it along. Instead of recomputing from scratch, you update the window as it moves: add the new item entering, remove the old item leaving.',
+          'When to recognize it: the problem talks about a contiguous chunk — "a subarray", "consecutive elements", "a substring", or "a window of size k". If you are about to re-add the same numbers over and over, a sliding window reuses that work.',
+          'Why it works: as the window slides one step, only one item enters and one leaves, so each update is O(1) and the whole scan is O(n). Python tools: two index variables, a running total, and a loop. We keep it to FIXED-size windows here.'
+        ],
+        analogy: 'Like looking through a train window. As the train moves, one new scene appears on one side and one scene disappears on the other — you do not re-watch the whole landscape each second.',
+        code: '# Non-LeetCode example: max sum of any 3 neighbours\n# nums = [1, 4, 2, 10, 2], k = 3\n\ndef max_window_sum(nums, k):\n    window = sum(nums[:k])      # first window\n    best = window\n    for i in range(k, len(nums)):\n        window += nums[i]       # add the one entering\n        window -= nums[i - k]   # remove the one leaving\n        best = max(best, window)\n    return best\n\n# max_window_sum([1, 4, 2, 10, 2], 3) -> 16  (4+2+10)',
+        codeCaption: 'Slide the window: add the entering item, subtract the leaving item.',
+        stepByStep: [
+          'Dry run max_window_sum([1,4,2,10,2], 3):',
+          'first window = 1+4+2 = 7, best=7',
+          'i=3: +10 -1 -> window=16, best=16  (window is 4,2,10)',
+          'i=4: +2 -4 -> window=14, best stays 16  (window is 2,10,2)',
+          'return best = 16'
+        ],
+        mistake: {
+          title: 'Recomputing the whole window each step',
+          description: 'Calling sum(nums[i:i+k]) inside the loop re-adds every element each time, which is O(n*k) and defeats the pattern. Update by adding one and subtracting one instead.',
+          bad: 'for i in range(...): window = sum(nums[i:i+k])   # slow',
+          good: 'window += nums[i]; window -= nums[i-k]          # O(1) update'
+        },
+        quiz: {
+          question: 'A problem asks for the maximum sum of every 4 CONSECUTIVE numbers. Which pattern fits best?',
+          options: [
+            'Two pointers from both ends',
+            'Sliding window of fixed size 4',
+            'Binary search',
+            'Set for uniqueness'
+          ],
+          correctIndex: 1,
+          explanation: 'Consecutive items of a fixed size is the classic fixed-size sliding window.'
+        },
+        challenge: {
+          description: 'Tiny drill: write window_sum(nums, k) that returns the SUM of the first k numbers (the first window). Assume len(nums) >= k.',
+          starter: 'def window_sum(nums, k):\n    # return the sum of the first k items\n    pass',
+          tests: [
+            { call: 'window_sum([1, 2, 3, 4], 2)', expected: 3 },
+            { call: 'window_sum([5, 5, 5], 3)', expected: 15 },
+            { call: 'window_sum([10, 1, 1], 1)', expected: 10 }
+          ],
+          solution: 'def window_sum(nums, k):\n    return sum(nums[:k])',
+          hint: 'sum(nums[:k]) adds the first k items.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nnums = [2, 1, 5, 1]\nwindow = sum(nums[:2])   # 3\nwindow += nums[2]\nwindow -= nums[0]\nprint(window)',
+          hint: 'Start 3, add nums[2]=5, subtract nums[0]=2.',
+          answer: '6\n\n3 + 5 - 2 = 6 (the window is now nums[1] and nums[2] = 1 + 5).'
+        },
+        reflection: 'Recap: a sliding window reuses work as a fixed range moves along. Recognize it on consecutive/subarray/window-of-k problems. Easy LeetCode bridge: Maximum Average Subarray I.'
+      },
+      {
         id: 'l12-3', title: 'Pattern 4: Frequency Counting',
         explanation: [
           'Frequency counting means counting how many times each item appears. It\'s a special case of the hash map pattern, used so often it deserves its own lesson.',
@@ -6032,6 +6188,58 @@ def two_sum(nums, target):
           answer: 'Yes! Both contain: l, i, s, t, e, n — each exactly once. So Counter("listen") == Counter("silent").'
         },
         reflection: 'How is frequency counting different from just using a set?'
+      },
+      {
+        id: 'l12-17', title: 'Frequency Counting: How Many of Each',
+        explanation: [
+          'The Frequency Counting pattern builds a dictionary that maps each item to how many times it appears. It answers "how many of each?" — counts of letters, numbers, or words.',
+          'When to recognize it: the problem mentions "count", "how many times", "appears", "most common", or comparing two collections by their contents (like anagrams). If you need tallies, reach for a counting dictionary.',
+          'Why it works: one pass over the data builds all the counts in O(n). Python tools: a dict with d[item] = d.get(item, 0) + 1, or collections.Counter. Two things are anagrams exactly when their frequency counts are equal.'
+        ],
+        analogy: 'Like sorting laundry into labeled bins — socks, shirts, towels. At the end each bin holds a count of that type. The bins are the dictionary keys; the pile height is the count.',
+        code: '# Non-LeetCode example: count letters in a word\ndef letter_counts(word):\n    counts = {}\n    for ch in word:\n        counts[ch] = counts.get(ch, 0) + 1\n    return counts\n\n# letter_counts("apple") -> {a:1, p:2, l:1, e:1}\n\n# TEMPLATE: anagram check via equal counts\ndef is_anagram(a, b):\n    return letter_counts(a) == letter_counts(b)\n\n# is_anagram("listen", "silent") -> True',
+        codeCaption: 'Count each item once; compare counts to compare contents.',
+        stepByStep: [
+          'Dry run letter_counts("apple"):',
+          'a -> counts={a:1}',
+          'p -> {a:1, p:1}',
+          'p -> {a:1, p:2}   (get returned 1, +1)',
+          'l -> {a:1, p:2, l:1}; e -> {...e:1} — one pass tallies all'
+        ],
+        mistake: {
+          title: 'Indexing a missing key instead of using .get',
+          description: 'Writing counts[ch] += 1 on a key that does not exist yet raises KeyError. Use counts.get(ch, 0) + 1 (or defaultdict / Counter) so the first sighting starts at 0.',
+          bad: 'counts[ch] += 1            # KeyError on first sighting',
+          good: 'counts[ch] = counts.get(ch, 0) + 1'
+        },
+        quiz: {
+          question: 'Two strings are anagrams of each other exactly when...',
+          options: [
+            'They have the same first letter',
+            'They have the same length only',
+            'Their letter frequency counts are equal',
+            'They are both palindromes'
+          ],
+          correctIndex: 2,
+          explanation: 'Anagrams use the same letters the same number of times, so their frequency dictionaries match.'
+        },
+        challenge: {
+          description: 'Tiny drill: write count_char(word, ch) that returns how many times ch appears in word.',
+          starter: 'def count_char(word, ch):\n    # return how many times ch appears in word\n    pass',
+          tests: [
+            { call: 'count_char("banana", "a")', expected: 3 },
+            { call: 'count_char("banana", "b")', expected: 1 },
+            { call: 'count_char("banana", "z")', expected: 0 }
+          ],
+          solution: 'def count_char(word, ch):\n    counts = {}\n    for c in word:\n        counts[c] = counts.get(c, 0) + 1\n    return counts.get(ch, 0)',
+          hint: 'Count every character into a dict, then return counts.get(ch, 0).'
+        },
+        practice: {
+          question: 'Predict the output:\n\ncounts = {}\nfor c in "aab":\n    counts[c] = counts.get(c, 0) + 1\nprint(counts)',
+          hint: 'Two a then one b.',
+          answer: "{'a': 2, 'b': 1}\n\nThe two a characters tally to 2 and the single b to 1."
+        },
+        reflection: 'Recap: frequency counting tallies how many of each item in one pass. Recognize it on count/how-many/anagram problems. Easy LeetCode bridge: Valid Anagram.'
       },
       {
         id: 'l12-4', title: 'Pattern 5: Set for Uniqueness',
@@ -6085,6 +6293,215 @@ def two_sum(nums, target):
           answer: 'Use a dict when you need to associate VALUES with the items (like counts, indices, or any extra info). Use a set when you only need to know if something exists.'
         },
         reflection: 'You\'ve now learned 5 patterns. Which one do you think you\'ll reach for most often?'
+      },
+      {
+        id: 'l12-18', title: 'Set for Uniqueness: Fast Membership',
+        explanation: [
+          'The Set pattern uses a Python set to track which items you have already seen, because checking item in a_set is O(1). Sets also automatically drop duplicates, so they answer "is everything unique?" cheaply.',
+          'When to recognize it: the problem says "duplicate", "unique", "distinct", or "have I seen this?". If you only need to know whether something exists (not how many or where), a set is lighter than a dict.',
+          'Why it works: like a dictionary, a set finds items by hashing, so membership tests do not scan the whole collection. That turns a nested-loop duplicate search (O(n^2)) into a single O(n) pass. Python tools: set(), .add(), and the in operator.'
+        ],
+        analogy: 'Like a bouncer with a guest list. Each name is either on the list or not — an instant yes/no. The bouncer never reads the whole list top to bottom for every guest.',
+        code: '# Non-LeetCode example: first repeated number\ndef first_repeat(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:           # O(1) membership\n            return n\n        seen.add(n)\n    return None\n\n# TEMPLATE: are there any duplicates?\ndef contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False',
+        codeCaption: 'Add as you go; an item already in the set means a duplicate.',
+        stepByStep: [
+          'Dry run contains_duplicate([3, 1, 3]):',
+          'n=3: not in seen -> seen={3}',
+          'n=1: not in seen -> seen={3,1}',
+          'n=3: 3 IS in seen -> return True',
+          'Stopped early, in one pass, with instant lookups'
+        ],
+        mistake: {
+          title: 'Using a list instead of a set for membership',
+          description: 'Checking n in a_list scans the list every time (O(n)), so a duplicate search becomes O(n^2). A set makes each check O(1).',
+          bad: 'seen = []   # n in seen scans the whole list each time',
+          good: 'seen = set()   # n in seen is instant'
+        },
+        quiz: {
+          question: 'You only need to know whether a value has appeared before (not how many times). Which is the lightest fit?',
+          options: [
+            'A sorted list',
+            'A set',
+            'A nested loop',
+            'Two pointers'
+          ],
+          correctIndex: 1,
+          explanation: 'A set gives O(1) "have I seen this?" checks and ignores counts and positions you do not need.'
+        },
+        challenge: {
+          description: 'Tiny drill: write has_repeat(nums) that returns True if any number appears more than once, using a set.',
+          starter: 'def has_repeat(nums):\n    seen = set()\n    # return True on the first repeat, else False\n    pass',
+          tests: [
+            { call: 'has_repeat([1, 2, 3, 2])', expected: true },
+            { call: 'has_repeat([1, 2, 3])', expected: false },
+            { call: 'has_repeat([5, 5])', expected: true },
+            { call: 'has_repeat([])', expected: false }
+          ],
+          solution: 'def has_repeat(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False',
+          hint: 'Loop; if n in seen return True; else seen.add(n). After the loop return False.'
+        },
+        practice: {
+          question: 'Predict the output:\n\nseen = set()\nfor n in [7, 8, 7]:\n    seen.add(n)\nprint(len(seen))',
+          hint: 'Sets drop duplicates.',
+          answer: '2\n\nAdding 7, 8, then 7 again leaves only {7, 8}, so len is 2.'
+        },
+        reflection: 'Recap: a set gives instant membership and auto-drops duplicates. Recognize it on duplicate/unique/distinct problems. Easy LeetCode bridge: Contains Duplicate.'
+      },
+      {
+        id: 'l12-19', title: 'Pattern 6: Stack',
+        explanation: [
+          'A stack is a list you only touch at one end: you push (add) to the top and pop (remove) from the top. The last thing you put in is the first thing you take out — "last in, first out" (LIFO).',
+          'When to recognize it: the problem involves matching pairs (like brackets), undo/most-recent behaviour, or "process the latest item first". If you keep needing the most recently seen thing, that is a stack.',
+          'Why it works: pushing and popping the end of a Python list are O(1), so a stack processes items in a single pass. Python tools: a list with .append() to push and .pop() to pop, and len() or [-1] to peek the top.'
+        ],
+        analogy: 'A stack of plates. You add a clean plate on top and take the top one off to use. You never pull from the bottom — the last plate added is the first one used.',
+        code: '# push and pop\nstack = []\nstack.append(1)     # push -> [1]\nstack.append(2)     # push -> [1, 2]\ntop = stack.pop()   # pop  -> returns 2, stack=[1]\n\n# Valid parentheses intuition (only "()"):\ndef valid(s):\n    stack = []\n    for ch in s:\n        if ch == "(":\n            stack.append(ch)      # opened one\n        else:                     # a ")"\n            if not stack:         # nothing to match\n                return False\n            stack.pop()           # closed a pair\n    return len(stack) == 0        # all matched?',
+        codeCaption: 'Push opens, pop on closes; empty at the end means balanced.',
+        stepByStep: [
+          'Dry run valid("(())"):',
+          '( -> push, stack=["("]',
+          '( -> push, stack=["(","("]',
+          ') -> pop, stack=["("]',
+          ') -> pop, stack=[]; end: len==0 -> True'
+        ],
+        mistake: {
+          title: 'Popping from an empty stack',
+          description: 'A closing item with nothing to match means calling .pop() on an empty list, which crashes. Check if not stack first and return False (unbalanced).',
+          bad: 'stack.pop()   # IndexError when stack is empty',
+          good: 'if not stack: return False\nstack.pop()'
+        },
+        quiz: {
+          question: 'A stack removes items in what order?',
+          options: [
+            'First in, first out',
+            'Last in, first out',
+            'Smallest first',
+            'Random order'
+          ],
+          correctIndex: 1,
+          explanation: 'A stack is LIFO — the most recently pushed item is the first one popped.'
+        },
+        challenge: {
+          description: 'Tiny drill: write top_after_pushes(items) that pushes every item onto a stack and returns the top (last) item. Return 0 if items is empty.',
+          starter: 'def top_after_pushes(items):\n    stack = []\n    # push each item, then return the top\n    pass',
+          tests: [
+            { call: 'top_after_pushes([1, 2, 3])', expected: 3 },
+            { call: 'top_after_pushes([5])', expected: 5 },
+            { call: 'top_after_pushes([])', expected: 0 }
+          ],
+          solution: 'def top_after_pushes(items):\n    stack = []\n    for x in items:\n        stack.append(x)\n    if not stack:\n        return 0\n    return stack[-1]',
+          hint: 'Append each item; if the stack is empty return 0, else return stack[-1].'
+        },
+        practice: {
+          question: 'Predict the output:\n\nstack = []\nstack.append("a")\nstack.append("b")\nprint(stack.pop())\nprint(stack.pop())',
+          hint: 'Last in, first out.',
+          answer: 'b\na\n\nb was pushed last so it pops first, then a.'
+        },
+        reflection: 'Recap: a stack is LIFO — push and pop the top. Recognize it for matching pairs and most-recent logic. Easy LeetCode bridge: Valid Parentheses.'
+      },
+      {
+        id: 'l12-20', title: 'Pattern 7: Binary Search',
+        explanation: [
+          'Binary search finds a value in a SORTED list by repeatedly looking at the middle item and throwing away the half that cannot contain the answer. Each step halves the search space.',
+          'When to recognize it: the list is sorted (or you can sort it) and you are searching for a value or a boundary. Words like "sorted array" and "find the target" are strong hints.',
+          'Why it works: because the list is sorted, the middle value tells you which half to keep. Halving each time gives O(log n) — for a million items, about 20 steps. Python tools: low and high index variables, mid = (low + high) // 2, and a while loop.'
+        ],
+        analogy: 'Finding a word in a dictionary. You open to the middle, see whether your word comes before or after, and ignore the other half. A few jumps and you are there — you never read every page.',
+        code: '# Search a SORTED list for target; return its index or -1\ndef binary_search(nums, target):\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            low = mid + 1       # answer is in the right half\n        else:\n            high = mid - 1      # answer is in the left half\n    return -1\n\n# binary_search([1, 3, 5, 7, 9], 7) -> 3',
+        codeCaption: 'Check the middle, drop the half that cannot hold the target.',
+        stepByStep: [
+          'Dry run binary_search([1,3,5,7,9], 7):',
+          'low=0 high=4 mid=2 nums[2]=5 < 7 -> low=3',
+          'low=3 high=4 mid=3 nums[3]=7 == 7 -> return 3',
+          'Only 2 checks for 5 items',
+          'Each step threw away half the list'
+        ],
+        mistake: {
+          title: 'Using binary search on an UNSORTED list',
+          description: 'Binary search only works when the list is sorted — the middle value must reliably tell you which half to keep. On unsorted data it returns wrong results. Sort first, or use a different search.',
+          bad: 'binary_search([5, 1, 9, 3], 9)   # unsorted -> unreliable',
+          good: 'binary_search(sorted([5, 1, 9, 3]), 9)   # sort first'
+        },
+        quiz: {
+          question: 'Binary search requires the input list to be...',
+          options: [
+            'Empty',
+            'Sorted',
+            'All positive',
+            'Made of strings'
+          ],
+          correctIndex: 1,
+          explanation: 'The middle value can only tell you which half to discard if the list is sorted.'
+        },
+        challenge: {
+          description: 'Tiny drill: write mid_index(low, high) that returns the middle index using integer division. Example: mid_index(0, 4) -> 2.',
+          starter: 'def mid_index(low, high):\n    # return the middle index (use //)\n    pass',
+          tests: [
+            { call: 'mid_index(0, 4)', expected: 2 },
+            { call: 'mid_index(0, 1)', expected: 0 },
+            { call: 'mid_index(2, 5)', expected: 3 }
+          ],
+          solution: 'def mid_index(low, high):\n    return (low + high) // 2',
+          hint: 'Add low and high, then use // 2 for whole-number division.'
+        },
+        practice: {
+          question: 'A sorted list has 16 items. Roughly how many items does binary search check in the worst case?',
+          hint: 'Each step halves the count: 16 -> 8 -> 4 -> 2 -> 1.',
+          answer: 'About 5 (log2 of 16 is 4, plus one). Halving 16 down to 1 takes only a handful of steps — that is the power of O(log n).'
+        },
+        reflection: 'Recap: binary search halves a SORTED list each step to find a value fast. Recognize it on sorted-array search problems. Easy LeetCode bridge: Binary Search and Search Insert Position.'
+      },
+      {
+        id: 'l12-21', title: 'Pattern 8: Prefix Sum',
+        explanation: [
+          'A prefix sum is a running total: prefix[i] holds the sum of all items up to position i. Once you have it, the sum of any range can be found by subtracting two prefix values — no re-adding.',
+          'When to recognize it: the problem asks for sums of ranges/subarrays, or "sum between index i and j", especially when asked many times. Building the running totals once lets every range answer come instantly.',
+          'Why it works: sum(i..j) = prefix[j] - prefix[i-1]. Building prefixes is one O(n) pass, and each range query is then O(1). Python tools: a list, a running total variable, and a loop.'
+        ],
+        analogy: 'Like mile markers on a highway. To find the distance between two exits you subtract their mile markers — you do not re-drive the road to measure it.',
+        code: '# Build running totals\ndef build_prefix(nums):\n    prefix = [0]                 # prefix[0] = 0 (nothing yet)\n    total = 0\n    for n in nums:\n        total += n\n        prefix.append(total)     # total up to here\n    return prefix\n\n# nums   = [2, 4, 6]\n# prefix = [0, 2, 6, 12]\n# sum of nums[1..2] (4+6) = prefix[3] - prefix[1] = 12 - 2 = 10',
+        codeCaption: 'Precompute running totals; range sum = subtract two of them.',
+        stepByStep: [
+          'Dry run build_prefix([2, 4, 6]):',
+          'start prefix=[0], total=0',
+          'n=2: total=2 -> prefix=[0,2]',
+          'n=4: total=6 -> prefix=[0,2,6]',
+          'n=6: total=12 -> prefix=[0,2,6,12]; any range sum is now one subtraction'
+        ],
+        mistake: {
+          title: 'Off-by-one with the prefix offset',
+          description: 'Because prefix starts with a leading 0, prefix[i] is the sum of the first i items. Range sum of nums[a..b] is prefix[b+1] - prefix[a]. Mixing up these indices is the classic bug — keep the leading 0 and test on a tiny example.',
+          bad: '# forgetting the leading 0 -> indices shift -> wrong range sums',
+          good: '# prefix = [0, ...]; sum(a..b) = prefix[b+1] - prefix[a]'
+        },
+        quiz: {
+          question: 'Why build a prefix-sum array before answering many range-sum questions?',
+          options: [
+            'It sorts the list',
+            'After an O(n) setup, each range sum is an O(1) subtraction',
+            'It removes duplicates',
+            'It reverses the list'
+          ],
+          correctIndex: 1,
+          explanation: 'One pass builds the running totals; then any range sum is just prefix[j] - prefix[i], computed instantly.'
+        },
+        challenge: {
+          description: 'Tiny drill: write running_totals(nums) that returns a list of running totals (no leading zero). Example: [2, 4, 6] -> [2, 6, 12].',
+          starter: 'def running_totals(nums):\n    # return a list where each item is the sum so far\n    pass',
+          tests: [
+            { call: 'running_totals([2, 4, 6])', expected: [2, 6, 12] },
+            { call: 'running_totals([1, 1, 1])', expected: [1, 2, 3] },
+            { call: 'running_totals([5])', expected: [5] }
+          ],
+          solution: 'def running_totals(nums):\n    out = []\n    total = 0\n    for n in nums:\n        total += n\n        out.append(total)\n    return out',
+          hint: 'Keep a total; after adding each number, append the total to the output list.'
+        },
+        practice: {
+          question: 'prefix = [0, 2, 6, 12] for nums = [2, 4, 6]. What is the sum of nums[1..2] (the 4 and the 6)?\n\nUse prefix[3] - prefix[1].',
+          hint: '12 - 2.',
+          answer: '10\n\nprefix[3] - prefix[1] = 12 - 2 = 10, which is 4 + 6.'
+        },
+        reflection: 'Recap: prefix sums precompute running totals so any range sum is one subtraction. Recognize it on range-sum / subarray-sum problems. Easy LeetCode bridge: Running Sum of 1d Array.'
       }
     ]
   }
