@@ -4978,6 +4978,648 @@ print(count)   # {'apple': 3, 'banana': 2, 'cherry': 1}`,
     color: '#d29922',
     lessons: [
       {
+        id: 'l10-5', title: 'What is LeetCode?',
+        explanation: [
+          'LeetCode is a website full of small, self-contained coding puzzles. Each puzzle gives you a function to fill in, and a hidden set of tests checks whether your function returns the right answer. It is the most popular place to practice for coding interviews.',
+          'Why it matters: companies use these exact puzzles in interviews. Practicing them builds the one skill interviews test — turning a written problem into working code under a little pressure.',
+          'You do not install anything. You pick a problem, read it, write Python in the box, and press Run. LeetCode tells you which tests passed and which failed.'
+        ],
+        analogy: 'LeetCode is like a gym with hundreds of machines. Each problem is one machine that trains a specific muscle. You do not need every machine on day one — you start with the light ones and build up.',
+        code: '# A LeetCode problem always gives you a function to complete.\n# You write the inside. LeetCode runs hidden tests.\n\nclass Solution:\n    def add(self, a, b):\n        return a + b\n\n# LeetCode secretly runs things like:\n#   Solution().add(2, 3)  -> expects 5\n#   Solution().add(-1, 1) -> expects 0\n# If your function returns the right value, the test passes.',
+        codeCaption: 'You fill in the function. Hidden tests check your return value.',
+        stepByStep: [
+          '1. Pick a problem (start with ones marked Easy)',
+          '2. Read the description, examples, and constraints',
+          '3. Write your code inside the given function',
+          '4. Press Run to test, then Submit when it passes',
+          '5. Read other people\'s solutions to learn new ideas'
+        ],
+        mistake: {
+          title: 'Starting with Hard problems',
+          description: 'Beginners often jump to famous Hard problems and feel crushed. Easy problems exist for a reason — they build the habits you need before harder ones make sense.',
+          bad: '# Day 1: attempt a Hard dynamic programming problem -> give up',
+          good: '# Day 1: solve 2-3 Easy problems -> build confidence -> level up'
+        },
+        quiz: {
+          question: 'What does LeetCode actually check when you submit a solution?',
+          options: [
+            'Whether your code looks neat',
+            'Whether your function returns the correct value for hidden tests',
+            'How many comments you wrote',
+            'Whether you used the fastest possible algorithm'
+          ],
+          correctIndex: 1,
+          explanation: 'LeetCode runs your function against hidden test inputs and compares what you RETURN to the expected answer.'
+        },
+        practice: {
+          question: 'In your own words, what is the difference between LeetCode and just writing a normal Python script?',
+          hint: 'Think about who provides the function and who checks the answer.',
+          answer: 'In a normal script you decide everything and print results yourself. On LeetCode, the function is given to you, you fill in the body, and hidden tests check the value you return — you usually do not print anything.'
+        },
+        reflection: 'Recap: LeetCode is a library of small puzzles where you complete a given function and hidden tests check your return value. Start Easy and build up.'
+      },
+      {
+        id: 'l10-6', title: 'How LeetCode Problems Are Structured',
+        explanation: [
+          'Every LeetCode problem has the same four parts: a title and description, one or more examples, a list of constraints, and a starter function (the signature). Once you know the parts, every new problem feels familiar.',
+          'Why it matters: when a problem looks scary, naming its parts calms it down. You are never facing a wall of text — you are facing four predictable sections.',
+          'The description tells the goal. The examples show it concretely. The constraints set the limits. The signature tells you exactly what to write.'
+        ],
+        analogy: 'Like a nutrition label. Every food package has the same sections — calories, ingredients, serving size. Once you know where to look, you read any label in seconds. LeetCode problems are the same.',
+        code: '# The four parts of every problem:\n\n# 1) DESCRIPTION\n#    "Given a list of numbers, return the largest."\n\n# 2) EXAMPLE(S)\n#    Input:  nums = [3, 7, 2]\n#    Output: 7\n\n# 3) CONSTRAINTS\n#    1 <= len(nums) <= 1000\n#    -1000 <= nums[i] <= 1000\n\n# 4) SIGNATURE (you fill the body)\n#    def largest(nums):\n#        pass',
+        codeCaption: 'Description, examples, constraints, signature — every problem, every time.',
+        stepByStep: [
+          '1. Read the description to learn the goal',
+          '2. Read the examples to see the goal in action',
+          '3. Read the constraints to learn the limits',
+          '4. Read the signature to see exactly what to write',
+          '5. Only then start coding'
+        ],
+        mistake: {
+          title: 'Reading only the description',
+          description: 'Beginners read the first paragraph and skip the examples and constraints. Those two sections often contain the real key to the problem.',
+          bad: '# Read description -> start coding -> miss a constraint -> wrong answer',
+          good: '# Read all four parts -> understand fully -> then code'
+        },
+        quiz: {
+          question: 'Which four parts appear in almost every LeetCode problem?',
+          options: [
+            'Description, examples, constraints, function signature',
+            'Title, author, difficulty, comments',
+            'Input, loop, print, return',
+            'Variables, functions, classes, modules'
+          ],
+          correctIndex: 0,
+          explanation: 'Every problem has a description, examples, constraints, and a starter function (signature).'
+        },
+        practice: {
+          question: 'Mini problem: "Given a string s, return its length. Example: s = cat -> 3. Constraint: 0 <= len(s) <= 100. def str_len(s):". Name each of the four parts.',
+          hint: 'Match each piece of text to one of the four standard parts.',
+          answer: 'Description: "return its length". Example: s = cat -> 3. Constraint: 0 <= len(s) <= 100. Signature: def str_len(s).'
+        },
+        reflection: 'Recap: every problem = description + examples + constraints + signature. Find all four before coding.'
+      },
+      {
+        id: 'l10-7', title: 'Understanding the Problem Statement',
+        explanation: [
+          'The problem statement is the sentence or two that tells you what to build. The trick is to find the verbs and nouns: what action is asked for, and on what data?',
+          'Why it matters: most wrong answers come from solving a slightly different problem than the one asked. One missed word — "even", "unique", "sorted" — changes everything.',
+          'A good habit: underline the key words and restate the whole thing in your own words. If you cannot restate it, you do not understand it yet.'
+        ],
+        analogy: 'Like reading a text from a friend: "grab milk, the cheap one, not the big jug." Miss one detail and you bring home the wrong thing. Problem statements hide details the same way.',
+        code: '# Statement: "Return the sum of all EVEN numbers in the list."\n\n# Key words underlined in your head:\n#   sum   -> add them up\n#   even  -> only the even ones (n % 2 == 0)\n#   list  -> input is a list of numbers\n\nnums = [1, 2, 3, 4]\n# even numbers: 2 and 4\n# answer: 2 + 4 = 6',
+        codeCaption: 'Find the key words. One missed word changes the whole answer.',
+        stepByStep: [
+          '1. Read the statement slowly, once',
+          '2. Underline the action word (sum, count, find, return...)',
+          '3. Underline the qualifier words (even, unique, first, largest...)',
+          '4. Restate it in your own words',
+          '5. Check your restatement against the examples'
+        ],
+        mistake: {
+          title: 'Skimming and missing a qualifier',
+          description: 'Words like "even", "unique", "non-empty", or "in order" are easy to skim past, but they completely change what your code must do.',
+          bad: '# Statement says "even numbers" -> you sum ALL numbers -> wrong',
+          good: '# Statement says "even numbers" -> you filter with n % 2 == 0 -> right'
+        },
+        quiz: {
+          question: 'A statement says: "Return the FIRST number that appears more than once." Which word is most important to not miss?',
+          options: [
+            'Return',
+            'number',
+            'FIRST',
+            'appears'
+          ],
+          correctIndex: 2,
+          explanation: 'FIRST means order matters — you must return the earliest repeat, not just any repeat. Missing it gives wrong answers.'
+        },
+        practice: {
+          question: 'Restate this in your own words: "Given a list, return True if it is sorted in increasing order, otherwise False."',
+          hint: 'What is the input? What decides True vs False?',
+          answer: 'Input: a list of numbers. Output: True if every number is bigger than (or equal to) the one before it, all the way through; otherwise False.'
+        },
+        reflection: 'Recap: the statement hides the whole task in a few key words. Underline the action and qualifiers, then restate it.'
+      },
+      {
+        id: 'l10-8', title: 'Understanding Examples',
+        explanation: [
+          'Examples are sample inputs paired with their correct outputs. They are the clearest part of any problem — when the description is confusing, the examples often make it obvious.',
+          'Why it matters: examples remove ambiguity. They show edge details the words leave out, like what to return for ties or empty inputs.',
+          'Always trace at least one example by hand before coding. If you cannot get the example output by hand, you are not ready to code it.'
+        ],
+        analogy: 'Like assembling furniture. The written steps confuse everyone, but the little picture next to each step shows exactly what it should look like. Examples are those pictures.',
+        code: '# Problem: "Return the number of vowels in a string."\n\n# Example 1: Input: "cat"   Output: 1   (just the a)\n# Example 2: Input: "apple" Output: 2   (a and e)\n# Example 3: Input: ""      Output: 0   (empty string)\n\n# Trace example 2 by hand:\n#   a -> vowel (count 1)\n#   p -> no\n#   p -> no\n#   l -> no\n#   e -> vowel (count 2)\n# matches expected output 2 -> understanding confirmed',
+        codeCaption: 'Trace one example by hand before writing any code.',
+        stepByStep: [
+          '1. Read each example as input -> output',
+          '2. Pick one and compute the output yourself, by hand',
+          '3. Confirm your hand answer matches the given output',
+          '4. Notice any tricky example (empty, ties, negatives)',
+          '5. Use the examples later to test your code'
+        ],
+        mistake: {
+          title: 'Ignoring examples and trusting the description alone',
+          description: 'The description can be vague. Examples are exact. Skipping them means guessing at details the examples would have told you.',
+          bad: '# Read description, skip examples, guess the edge behavior -> wrong',
+          good: '# Trace examples by hand -> learn the exact expected behavior'
+        },
+        quiz: {
+          question: 'Why are examples often more useful than the description?',
+          options: [
+            'They are shorter to read',
+            'They show the exact expected output for a concrete input, removing ambiguity',
+            'They contain the full solution code',
+            'They are graded separately'
+          ],
+          correctIndex: 1,
+          explanation: 'Examples pin down exactly what output is expected for a given input, which clears up anything the words left vague.'
+        },
+        practice: {
+          question: 'Predict the output by hand:\n\ndef count_a(s):\n    total = 0\n    for ch in s:\n        if ch == "a":\n            total += 1\n    return total\n\nprint(count_a("banana"))',
+          hint: 'Count how many times the letter a appears in "banana".',
+          answer: '3\n\n"banana" has a at positions 1, 3, and 5, so the function returns 3.'
+        },
+        reflection: 'Recap: examples are concrete input/output pairs. Trace one by hand to confirm you understand before coding.'
+      },
+      {
+        id: 'l10-9', title: 'Understanding Input and Output',
+        explanation: [
+          'Input is what the function receives (its parameters). Output is what the function gives back (its return value). Every problem is really just: turn THIS input into THAT output.',
+          'Why it matters: if you cannot clearly name the input and the output, you cannot solve the problem. Half of being stuck is fuzzy thinking about these two things.',
+          'Write them down explicitly: input is a list of ints; output is a single int. That one sentence shapes your whole solution.'
+        ],
+        analogy: 'A function is a vending machine. Input = the money and the button you press. Output = the snack that drops down. The machine only job is turning one into the other.',
+        code: '# def double_all(nums):\n#     ...\n\n# INPUT:  nums, a list of integers   e.g. [1, 2, 3]\n# OUTPUT: a new list with each value doubled  e.g. [2, 4, 6]\n\ndef double_all(nums):\n    result = []\n    for n in nums:\n        result.append(n * 2)\n    return result          # the OUTPUT\n\n# double_all([1, 2, 3]) -> [2, 4, 6]',
+        codeCaption: 'Name the input and the output in one sentence before solving.',
+        stepByStep: [
+          '1. Find the parameters — that is your input',
+          '2. Note the type of each input (int, str, list...)',
+          '3. Read what must be returned — that is your output',
+          '4. Note the output type',
+          '5. Write: "turn <input> into <output>" in one sentence'
+        ],
+        mistake: {
+          title: 'Confusing input with output',
+          description: 'Beginners sometimes build the wrong thing — returning the input shape when a different shape was asked for (a count instead of a list, or vice versa).',
+          bad: '# Asked for a COUNT (int) but you return the LIST of items -> wrong',
+          good: '# Asked for a count -> return len(result) -> right shape'
+        },
+        quiz: {
+          question: 'For def first_word(sentence): which is the input and which is the likely output?',
+          options: [
+            'Input: a number; Output: a list',
+            'Input: a string (sentence); Output: a string (the first word)',
+            'Input: a list; Output: a boolean',
+            'There is no input'
+          ],
+          correctIndex: 1,
+          explanation: 'The parameter sentence is the input (a string). The name first_word suggests it returns the first word — a string.'
+        },
+        practice: {
+          question: 'For def is_even(n): name the input, its type, the output, and its type.',
+          hint: 'One parameter in, one True/False out.',
+          answer: 'Input: n, an integer. Output: a boolean (True if n is even, False if odd).'
+        },
+        reflection: 'Recap: input = what comes in (parameters), output = what goes back (return value). Name both before coding.'
+      },
+      {
+        id: 'l10-10', title: 'Understanding Function Signatures',
+        explanation: [
+          'The function signature is the first line: def name(params):. It is a contract. It tells you the function name you must use, the inputs you will receive, and (often via type hints) what to return.',
+          'Why it matters: LeetCode calls your function by that exact name with those exact inputs. If you rename it or change the parameters, the hidden tests cannot call your code at all.',
+          'Type hints like nums: List[int] -> int are clues, not decoration. They tell you the input is a list of ints and the output is a single int.'
+        ],
+        analogy: 'A signature is like a mailing address on an envelope. The post office (LeetCode) delivers to that exact address. Change it and your mail (the test inputs) never arrives.',
+        code: '# Signature with type hints:\n# def two_sum(self, nums: List[int], target: int) -> List[int]:\n\n# Reading it:\n#   name:    two_sum\n#   input 1: nums   -> a list of ints\n#   input 2: target -> a single int\n#   output:  -> List[int]  (a list of ints)\n\n# Keep the name and parameters EXACTLY as given.',
+        codeCaption: 'The signature is a contract: same name, same inputs, expected output type.',
+        stepByStep: [
+          '1. Read the function name — use it exactly',
+          '2. List each parameter and its type hint',
+          '3. Read the return type hint after the ->',
+          '4. Do not rename or reorder parameters',
+          '5. Make your return match the return type'
+        ],
+        mistake: {
+          title: 'Renaming the function or changing parameters',
+          description: 'If the signature is def two_sum(nums, target) and you write def solve(arr), the tests call two_sum, which no longer exists — every test errors.',
+          bad: '# given: def two_sum(nums, target)\n# you wrote: def solve(arr, t)  -> tests cannot find two_sum',
+          good: '# keep: def two_sum(nums, target)  -> tests run correctly'
+        },
+        quiz: {
+          question: 'Given def merge(a: List[int], b: List[int]) -> List[int], what is the OUTPUT type?',
+          options: [
+            'An integer',
+            'Two lists',
+            'A list of integers',
+            'A boolean'
+          ],
+          correctIndex: 2,
+          explanation: 'The part after -> is the return type: List[int], a list of integers.'
+        },
+        challenge: {
+          description: 'Practice reading a signature. Write identify_output(signature) that returns the substring after the arrow (the return type). Example: "def f(x) -> int" gives "int".',
+          starter: 'def identify_output(signature):\n    # return whatever comes after the "-> "\n    pass',
+          tests: [
+            { call: 'identify_output("def f(x) -> int")', expected: 'int' },
+            { call: 'identify_output("def g(a, b) -> List[int]")', expected: 'List[int]' },
+            { call: 'identify_output("def h(s) -> bool")', expected: 'bool' }
+          ],
+          solution: 'def identify_output(signature):\n    return signature.split("-> ")[1]',
+          hint: 'Use .split("-> ") and take the part at index 1.'
+        },
+        practice: {
+          question: 'For def count_words(text: str) -> int, name the input (and type) and the output (and type).',
+          hint: 'One string in, one number out.',
+          answer: 'Input: text, a string. Output: an integer (the number of words). The -> int tells you the return type.'
+        },
+        reflection: 'Recap: the signature is a contract — keep the name and parameters exactly, and return the type it promises.'
+      },
+      {
+        id: 'l10-11', title: 'What "return" Means on LeetCode',
+        explanation: [
+          'return hands a value back to whoever called the function. On LeetCode, the caller is the hidden test, and it compares your returned value to the expected answer. No return means your function gives back None — and None almost never matches.',
+          'Why it matters: this is the single most common beginner mistake on LeetCode. The logic is right, the value is computed, but it is never returned — so every test fails.',
+          'A function stops the moment it hits return. Anything after that line in the same path does not run.'
+        ],
+        analogy: 'return is like handing in your exam paper. You can solve every question perfectly, but if you never hand the paper to the teacher, you score zero. The teacher only grades what is handed in.',
+        code: '# WRONG: computes the answer but never returns it\ndef add(a, b):\n    total = a + b      # computed...\n    # ...but never returned -> function gives back None\n\n# RIGHT: hands the value back\ndef add(a, b):\n    total = a + b\n    return total       # the test receives this\n\n# add(2, 3) -> 5   (only works with return)',
+        codeCaption: 'No return means the function gives back None — and tests fail.',
+        stepByStep: [
+          '1. Compute your answer in a variable',
+          '2. Make sure a return statement hands that value back',
+          '3. Check the returned value matches the required output type',
+          '4. Remember: code after return (same path) does not run',
+          '5. Every code path that should answer must return something'
+        ],
+        mistake: {
+          title: 'Forgetting to return (printing instead)',
+          description: 'The function computes the right value but never returns it, so the test sees None. This is the number one reason correct-looking code fails on LeetCode.',
+          bad: 'def square(n):\n    print(n * n)   # shows it, but returns None',
+          good: 'def square(n):\n    return n * n   # hands the value back'
+        },
+        quiz: {
+          question: 'A function computes the right answer but has no return statement. What does it give back to the test?',
+          options: [
+            'The last computed value automatically',
+            '0',
+            'None',
+            'An error'
+          ],
+          correctIndex: 2,
+          explanation: 'Without a return, a Python function returns None by default — which will not match the expected answer.'
+        },
+        challenge: {
+          description: 'Fix the missing return. Write triple(n) that RETURNS n times 3 (do not print).',
+          starter: 'def triple(n):\n    # return n times 3\n    pass',
+          tests: [
+            { call: 'triple(2)', expected: 6 },
+            { call: 'triple(0)', expected: 0 },
+            { call: 'triple(-4)', expected: -12 }
+          ],
+          solution: 'def triple(n):\n    return n * 3',
+          hint: 'Use the return keyword followed by n * 3.'
+        },
+        practice: {
+          question: 'Predict the output:\n\ndef f(x):\n    return x + 1\n    print("done")\n\nprint(f(5))',
+          hint: 'What happens to any line after return?',
+          answer: '6\n\nf(5) returns 6. The print("done") line never runs because return exits the function immediately.'
+        },
+        reflection: 'Recap: return hands your value to the test. No return = None = failed tests. Always return your answer.'
+      },
+      {
+        id: 'l10-12', title: 'Why print() Is Usually Not the Answer',
+        explanation: [
+          'print() shows text on the screen for a human to read. return gives a value back to the program. The hidden tests read your return value — they do not read the screen. So printing the answer does not pass the tests.',
+          'Why it matters: beginners coming from Hello World tutorials reach for print() out of habit. On LeetCode that habit silently fails every test, even when the printed number is correct.',
+          'print() is still useful — for debugging, to peek at values while you work. Just remember the final answer must be returned, not printed.'
+        ],
+        analogy: 'print() is reading the answer out loud in class. return is writing it on the answer sheet. The grader only marks the answer sheet — saying it out loud earns nothing.',
+        code: '# Prints the answer (test sees None -> FAILS)\ndef best(nums):\n    print(max(nums))\n\n# Returns the answer (test sees the value -> PASSES)\ndef best(nums):\n    return max(nums)\n\n# print is fine for debugging WHILE you work:\ndef best(nums):\n    print("checking:", nums)   # debug peek\n    return max(nums)           # real answer',
+        codeCaption: 'Tests read your return value, not the screen. Return the answer.',
+        stepByStep: [
+          '1. Use return for the final answer the tests check',
+          '2. Use print only to debug values while developing',
+          '3. Before submitting, confirm the answer is returned',
+          '4. Remove or ignore debug prints — they do not affect tests',
+          '5. If tests fail with None, look for a print where a return belongs'
+        ],
+        mistake: {
+          title: 'Printing the answer instead of returning it',
+          description: 'The printed value looks correct in the console, so it feels solved — but the test compares the RETURN value, which is None.',
+          bad: 'def add(a, b):\n    print(a + b)    # looks right on screen, test sees None',
+          good: 'def add(a, b):\n    return a + b    # test receives the value'
+        },
+        quiz: {
+          question: 'Your function prints the correct number but every test still fails. Why?',
+          options: [
+            'The number is actually wrong',
+            'Tests check the returned value, not what is printed',
+            'print() is banned on LeetCode',
+            'You need more comments'
+          ],
+          correctIndex: 1,
+          explanation: 'Hidden tests compare your RETURN value. Printing shows text to a human but returns None to the test.'
+        },
+        challenge: {
+          description: 'Convert a printing solution into a returning one. Write sum_list(nums) that RETURNS the sum of the list (do not print).',
+          starter: 'def sum_list(nums):\n    total = 0\n    for n in nums:\n        total += n\n    # currently nothing is returned -- fix it\n    pass',
+          tests: [
+            { call: 'sum_list([1, 2, 3])', expected: 6 },
+            { call: 'sum_list([])', expected: 0 },
+            { call: 'sum_list([10, -4])', expected: 6 }
+          ],
+          solution: 'def sum_list(nums):\n    total = 0\n    for n in nums:\n        total += n\n    return total',
+          hint: 'After the loop, return total instead of printing it.'
+        },
+        practice: {
+          question: 'Rewrite this so the test can read the answer:\n\ndef area(w, h):\n    print(w * h)',
+          hint: 'Swap print for return.',
+          answer: 'def area(w, h):\n    return w * h\n\nNow the function hands w * h back to the caller instead of only displaying it.'
+        },
+        reflection: 'Recap: print talks to humans, return talks to the tests. Final answers must be returned. Use print only to debug.'
+      },
+      {
+        id: 'l10-13', title: 'Understanding Constraints',
+        explanation: [
+          'Constraints are the limits on the input: how big the list can be, how large the numbers go, whether values can be negative or empty. They appear as lines like 1 <= len(nums) <= 10000.',
+          'Why it matters: constraints quietly tell you two things — which edge cases to handle (can the list be empty?) and roughly how fast your solution must be (a huge input means a slow nested loop may time out).',
+          'You do not need deep math here. As a beginner, read constraints to spot edge cases and to know the input is not infinite.'
+        ],
+        analogy: 'Constraints are like the weight limit and size rules on a carry-on bag. They tell you what you must plan for — a tiny bag and a huge bag need different packing.',
+        code: '# Typical constraints block:\n#   1 <= len(nums) <= 10000      # list has 1 to 10000 items\n#   -1000 <= nums[i] <= 1000     # values can be negative!\n\n# What this tells you:\n#   - The list is never empty (min length 1)\n#   - Negatives are possible -> do not assume positive\n#   - Up to 10000 items -> a simple loop is fine,\n#     but a loop inside a loop could get slow',
+        codeCaption: 'Constraints reveal edge cases and how fast your code must be.',
+        stepByStep: [
+          '1. Read the size limits (how long can the input be?)',
+          '2. Read the value limits (negatives? zero? very large?)',
+          '3. Ask: can the input be empty? (check the minimum)',
+          '4. Note edge cases the limits imply',
+          '5. If the size is huge, prefer a single loop over nested loops'
+        ],
+        mistake: {
+          title: 'Assuming inputs are small and friendly',
+          description: 'Beginners assume lists are short and numbers are positive. Constraints often say otherwise — empty lists, negatives, or very large sizes that break naive code.',
+          bad: '# Assume nums is non-empty -> max(nums) crashes on []',
+          good: '# Constraint allows empty -> handle [] first, then max(nums)'
+        },
+        quiz: {
+          question: 'A constraint says 0 <= len(nums) <= 100000. What two things does it tell you?',
+          options: [
+            'The list is always exactly 100000 items',
+            'The list can be empty, and it can be very large (so avoid slow nested loops)',
+            'The numbers are always positive',
+            'Nothing useful'
+          ],
+          correctIndex: 1,
+          explanation: 'The minimum 0 means the list can be empty (an edge case), and the large maximum warns that slow O(n^2) approaches may be too slow.'
+        },
+        practice: {
+          question: 'Constraints say: 1 <= len(s) <= 50 and s contains only lowercase letters. List one edge case you should test and one thing you do NOT need to worry about.',
+          hint: 'Look at the minimum length and the only-lowercase rule.',
+          answer: 'Test edge case: a single-character string (length 1), since that is the minimum. You do NOT need to worry about uppercase letters, digits, or an empty string (length is at least 1).'
+        },
+        reflection: 'Recap: constraints reveal edge cases (empty? negatives?) and rough speed needs (how big can the input get?). Read them every time.'
+      },
+      {
+        id: 'l10-14', title: 'Writing Brute Force First',
+        explanation: [
+          'A brute force solution is the most direct, obvious approach — even if it is slow. Try every pair, check every item, do the simple thing. It is the first honest solution.',
+          'Why it matters: a working slow solution beats a broken clever one. Brute force gets you a correct baseline you understand, and it often reveals the pattern that leads to a faster version.',
+          'Optimize later, and only if needed. Many Easy problems pass with brute force alone. Solve first, speed up second.'
+        ],
+        analogy: 'Looking for your keys by checking every room one by one is brute force. It is not elegant, but it finds the keys. Later you might remember "I always drop them by the door" — that is the optimization.',
+        code: '# Problem: does the list contain the number target?\n\n# BRUTE FORCE: check every item, one by one\ndef contains(nums, target):\n    for n in nums:\n        if n == target:\n            return True\n    return False\n\n# contains([4, 8, 2], 8) -> True\n# Simple, correct, easy to trust. Optimize only if needed.',
+        codeCaption: 'The simplest correct solution first. Speed up only if you must.',
+        stepByStep: [
+          '1. Ask: what is the most obvious way to get the answer?',
+          '2. Write that, even if it uses nested loops or extra steps',
+          '3. Test it on the examples until it is correct',
+          '4. Only then ask whether it is fast enough (check constraints)',
+          '5. Optimize if needed — otherwise you are done'
+        ],
+        mistake: {
+          title: 'Chasing the clever solution first',
+          description: 'Beginners try to write the optimal solution immediately, get tangled, and finish nothing. A correct slow answer is worth far more than an unfinished fast one.',
+          bad: '# Spend an hour on an O(n) trick -> never get it working -> 0 solved',
+          good: '# Write brute force in 5 min -> it works -> optimize if there is time'
+        },
+        quiz: {
+          question: 'Why write a brute force solution first?',
+          options: [
+            'It is always the fastest',
+            'It gives a correct, understandable baseline and often reveals the pattern',
+            'Interviewers only accept brute force',
+            'It uses the least code every time'
+          ],
+          correctIndex: 1,
+          explanation: 'Brute force gets you something correct you understand. You can optimize from there — and sometimes it is already fast enough.'
+        },
+        challenge: {
+          description: 'Write the brute force solution for: does nums contain target? Return True if it appears, else False. Use a simple loop.',
+          starter: 'def contains(nums, target):\n    # check each number; return True if you find target\n    pass',
+          tests: [
+            { call: 'contains([1, 2, 3], 2)', expected: true },
+            { call: 'contains([1, 2, 3], 9)', expected: false },
+            { call: 'contains([], 1)', expected: false },
+            { call: 'contains([5], 5)', expected: true }
+          ],
+          solution: 'def contains(nums, target):\n    for n in nums:\n        if n == target:\n            return True\n    return False',
+          hint: 'Loop through nums; if an item equals target, return True. After the loop, return False.'
+        },
+        practice: {
+          question: 'Describe (no code) a brute force way to find the largest number in a list.',
+          hint: 'How would you do it by hand, checking one at a time?',
+          answer: 'Start by assuming the first number is the largest. Walk through the rest one by one; whenever you see a bigger number, remember it as the new largest. After checking all, the remembered value is the answer.'
+        },
+        reflection: 'Recap: brute force is the simplest correct solution. Get it working first, then optimize only if the constraints demand it.'
+      },
+      {
+        id: 'l10-15', title: 'Testing Edge Cases',
+        explanation: [
+          'An edge case is an unusual input that sits at the boundary: an empty list, a single item, all-equal values, negatives, zero, or the largest allowed size. Normal inputs pass easily; edge cases are where solutions break.',
+          'Why it matters: the hidden tests are full of edge cases. Code that handles [2, 7, 11] but crashes on [] will fail submission even though it seemed to work.',
+          'Before submitting, run your solution through a few edge cases in your head or in code. Fixing them now is faster than a failed submission.'
+        ],
+        analogy: 'Edge cases are like crash-testing a car. It is easy to drive fine on a sunny road. The real test is the pothole, the sudden stop, the empty fuel tank — the boundaries.',
+        code: '# Function: average of a list\ndef average(nums):\n    return sum(nums) / len(nums)\n\n# Normal case: average([2, 4]) -> 3.0  (fine)\n# EDGE CASE:   average([])    -> crash! divide by zero\n\n# Fixed to handle the edge case:\ndef average(nums):\n    if len(nums) == 0:\n        return 0\n    return sum(nums) / len(nums)',
+        codeCaption: 'Empty, single, all-equal, negatives, zero — test the boundaries.',
+        stepByStep: [
+          '1. List the boundaries: empty? one item? all same? negatives? zero?',
+          '2. Run your function on each by hand or in code',
+          '3. Watch for crashes (like dividing by zero) and wrong answers',
+          '4. Add small checks to handle the broken cases',
+          '5. Re-run all cases before submitting'
+        ],
+        mistake: {
+          title: 'Testing only the happy path',
+          description: 'A happy path is a normal, well-behaved input. Passing it feels like success, but hidden tests include empty and boundary inputs that the happy path never reveals.',
+          bad: '# Works on [1,2,3] -> submit -> crashes on [] -> wrong answer',
+          good: '# Works on [1,2,3], [], [5], [-1,-2] -> then submit'
+        },
+        quiz: {
+          question: 'Which of these is an edge case for a function that takes a list of numbers?',
+          options: [
+            'A list with three normal numbers',
+            'An empty list',
+            'A list you used in the example',
+            'A list with exactly the average values'
+          ],
+          correctIndex: 1,
+          explanation: 'An empty list is a boundary input — many solutions crash or misbehave on it, so it is a classic edge case.'
+        },
+        challenge: {
+          description: 'Make a function safe on its edge case. Write first_or_default(nums) that returns the first element, or returns 0 if the list is empty.',
+          starter: 'def first_or_default(nums):\n    # return the first element, or 0 if the list is empty\n    pass',
+          tests: [
+            { call: 'first_or_default([3, 5, 7])', expected: 3 },
+            { call: 'first_or_default([])', expected: 0 },
+            { call: 'first_or_default([9])', expected: 9 }
+          ],
+          solution: 'def first_or_default(nums):\n    if len(nums) == 0:\n        return 0\n    return nums[0]',
+          hint: 'Check len(nums) == 0 first and return 0; otherwise return nums[0].'
+        },
+        practice: {
+          question: 'Test this on 3 inputs including one edge case, and predict each result:\n\ndef count(nums):\n    return len(nums)\n\nTry: [1,2,3], [], [9]',
+          hint: 'len of each list.',
+          answer: 'count([1,2,3]) -> 3; count([]) -> 0 (the empty edge case); count([9]) -> 1. The empty list is the edge case and correctly gives 0.'
+        },
+        reflection: 'Recap: edge cases are boundary inputs (empty, single, all-equal, negatives, zero). Test them before submitting — that is where code breaks.'
+      },
+      {
+        id: 'l10-16', title: 'Debugging Wrong Answers',
+        explanation: [
+          'A Wrong Answer means your code ran but returned something different from the expected output. The fix is not to guess randomly — it is to find the exact input where your output differs, then trace why.',
+          'Why it matters: random changes (maybe flip this sign?) waste time and often break working parts. Systematic debugging finds the real cause fast.',
+          'The core tools: read the failing test, print your intermediate values, and trace the bad input by hand. The bug is always in the gap between what you expected and what actually happened.'
+        ],
+        analogy: 'Debugging is detective work, not guessing. A detective does not arrest random people — they follow the evidence to the one input that breaks, then ask why.',
+        code: '# Buggy: returns the count, but off by one\ndef count_positives(nums):\n    count = 0\n    for n in nums:\n        if n >= 0:        # bug: includes 0 as positive\n            count += 1\n    return count\n\n# Failing test: count_positives([0, 1, -2]) expected 1, got 2\n# Add a print to see what happens:\n#   n=0 -> counted (wrong!)\n# Fix: use n > 0 instead of n >= 0',
+        codeCaption: 'Find the failing input, print intermediate values, trace the cause.',
+        stepByStep: [
+          '1. Read the failing test: note the input, expected, and your output',
+          '2. Run that exact input yourself',
+          '3. Add prints to see intermediate values',
+          '4. Find the first step where reality differs from your expectation',
+          '5. Fix that one cause, then re-run all tests'
+        ],
+        mistake: {
+          title: 'Changing code randomly hoping it works',
+          description: 'Guessing edits without understanding the cause usually breaks something that was fine and rarely fixes the real bug.',
+          bad: '# "Maybe change > to >=? Maybe +1 here?" -> random flailing',
+          good: '# Trace the failing input -> find the exact wrong step -> fix it'
+        },
+        quiz: {
+          question: 'What is the best first step when you get a Wrong Answer?',
+          options: [
+            'Rewrite the whole solution from scratch',
+            'Find the specific input that fails and trace why your output differs',
+            'Change random operators until it passes',
+            'Add more comments'
+          ],
+          correctIndex: 1,
+          explanation: 'Identify the failing input and trace it. Understanding where your output diverges points straight to the bug.'
+        },
+        challenge: {
+          description: 'Fix the bug. count_positives(nums) should count numbers strictly greater than 0 (0 is NOT positive). The starter has the classic off-by-one bug.',
+          starter: 'def count_positives(nums):\n    count = 0\n    for n in nums:\n        if n >= 0:   # bug is on this line\n            count += 1\n    return count',
+          tests: [
+            { call: 'count_positives([0, 1, -2])', expected: 1 },
+            { call: 'count_positives([3, 4, 5])', expected: 3 },
+            { call: 'count_positives([0, 0, 0])', expected: 0 },
+            { call: 'count_positives([])', expected: 0 }
+          ],
+          solution: 'def count_positives(nums):\n    count = 0\n    for n in nums:\n        if n > 0:\n            count += 1\n    return count',
+          hint: '0 is not positive. Change >= to >.'
+        },
+        practice: {
+          question: 'Your function returns 5 but the test expected 6 for input [1,2,3]. What is your very first debugging step?',
+          hint: 'Do not change code yet.',
+          answer: 'Run [1,2,3] through your code by hand (or with prints) and watch each step. Find where your running value stops matching what it should be — that pinpoints the bug before you change anything.'
+        },
+        reflection: 'Recap: a Wrong Answer is a clue, not a dead end. Find the failing input, trace it, fix the one real cause.'
+      },
+      {
+        id: 'l10-17', title: 'Reading Time and Space Complexity',
+        explanation: [
+          'Time complexity describes how the number of steps grows as the input grows. Space complexity describes how much extra memory you use. We write them with Big-O, like O(n) or O(n^2).',
+          'Why it matters: as a beginner you do not need to optimize everything, but you should recognize when a solution will be too slow for a large input — that is what causes Time Limit Exceeded.',
+          'Two rules of thumb: one loop over n items is O(n); a loop inside a loop is O(n^2). O(n) is fast; O(n^2) gets slow quickly as n grows.'
+        ],
+        analogy: 'O(n) is reading every page of a book once. O(n^2) is re-reading the whole book once for every page — fine for a pamphlet, impossible for an encyclopedia.',
+        code: '# O(n): one pass over the list\ndef has_zero(nums):\n    for n in nums:        # n steps\n        if n == 0:\n            return True\n    return False\n\n# O(n^2): a loop inside a loop\ndef any_pair_sums_zero(nums):\n    for a in nums:            # n times...\n        for b in nums:        # ...n times each = n*n steps\n            if a + b == 0:\n                return True\n    return False',
+        codeCaption: 'One loop = O(n). A loop inside a loop = O(n^2).',
+        stepByStep: [
+          '1. Count the loops over the input',
+          '2. One loop over n items -> about n steps -> O(n)',
+          '3. A loop nested inside another -> about n*n -> O(n^2)',
+          '4. Extra lists/dicts you create -> that is space complexity',
+          '5. Check constraints: huge n + O(n^2) may be too slow'
+        ],
+        mistake: {
+          title: 'Optimizing before it is needed',
+          description: 'Beginners obsess over Big-O on tiny inputs where it does not matter. First make it correct; worry about complexity only when constraints say the input is large.',
+          bad: '# Agonize over O(n) vs O(n^2) for a list of 5 items -> wasted effort',
+          good: '# Get it correct first; check Big-O only when n can be large'
+        },
+        quiz: {
+          question: 'A function has a for-loop with another for-loop inside it, both over the same list of n items. What is its time complexity?',
+          options: [
+            'O(1)',
+            'O(n)',
+            'O(n^2)',
+            'O(n + n)'
+          ],
+          correctIndex: 2,
+          explanation: 'A loop inside a loop runs about n times n = n^2 steps, which is O(n^2).'
+        },
+        practice: {
+          question: 'Is this O(n) or O(n^2)?\n\ndef total(nums):\n    s = 0\n    for n in nums:\n        s += n\n    return s',
+          hint: 'Count how many loops run over the list.',
+          answer: 'O(n). There is a single loop that runs once per item, so the number of steps grows in direct proportion to the list length.'
+        },
+        reflection: 'Recap: time complexity = how steps grow with input. One loop is O(n), nested loops are O(n^2). Worry about it mainly when the input can be large.'
+      },
+      {
+        id: 'l10-18', title: 'When to Look for a Pattern',
+        explanation: [
+          'Patterns (like hash maps or two pointers) are reusable techniques that solve whole families of problems. But they come AFTER you understand the problem and have a brute force solution — not before.',
+          'Why it matters: reaching for a pattern too early means applying a tool you do not understand to a problem you have not grasped. That is how beginners get stuck and copy solutions without learning.',
+          'The signal to look for a pattern: you have a correct brute force solution, but the constraints say it is too slow. Now you ask, is there a smarter, known approach? The next module teaches the beginner patterns.'
+        ],
+        analogy: 'You learn to do arithmetic by hand before using a calculator. Patterns are calculators — powerful, but only useful once you understand the problem they speed up.',
+        code: '# The right order:\n# 1. Understand the problem (input, output, examples)\n# 2. Write brute force -> get it correct\n# 3. Check constraints -> is brute force fast enough?\n#      YES -> you are done\n#      NO  -> NOW look for a pattern\n\n# Example signal:\n#   Brute force is O(n^2) with nested loops,\n#   but n can be 100000 -> too slow\n#   -> reach for a pattern (e.g. a hash map for O(n))',
+        codeCaption: 'Understand, then brute force, then reach for a pattern if needed.',
+        stepByStep: [
+          '1. Make sure you understand the problem fully',
+          '2. Write a correct brute force solution',
+          '3. Check the constraints for speed needs',
+          '4. If brute force is fast enough, stop — no pattern needed',
+          '5. If it is too slow, look for a known pattern that fits'
+        ],
+        mistake: {
+          title: 'Reaching for a pattern before understanding the problem',
+          description: 'Jumping to this must be a two-pointer problem before grasping the task leads to forcing the wrong tool and getting confused.',
+          bad: '# See an array -> immediately try two pointers -> does not fit -> stuck',
+          good: '# Understand -> brute force -> too slow? -> THEN pick a fitting pattern'
+        },
+        quiz: {
+          question: 'When is the right time to reach for a known pattern?',
+          options: [
+            'Immediately, before reading the problem',
+            'After you understand the problem and have a correct brute force that is too slow',
+            'Only on Hard problems',
+            'Never — always use brute force'
+          ],
+          correctIndex: 1,
+          explanation: 'Patterns come after understanding and a correct (but too slow) brute force. They are an optimization step, not a starting point.'
+        },
+        practice: {
+          question: 'You wrote a correct brute force solution and it passes all tests within the time limit. Should you rewrite it using a fancy pattern?',
+          hint: 'What problem would the pattern be solving?',
+          answer: 'No. If it is correct and fast enough for the constraints, you are done. A pattern is only worth adding when brute force is too slow — otherwise it just adds complexity and risk.'
+        },
+        reflection: 'Recap: understand first, brute force second, pattern only if too slow. The next module covers the beginner patterns — you are ready for them now.'
+      },
+      {
         id: 'l10-0', title: 'How to Read a Problem',
         explanation: ['Reading a LeetCode problem carefully is half the work. Beginners rush into coding. Experienced programmers spend 30-50% of their time just understanding the problem.', 'Read the problem statement, then look at the examples — often they explain the problem better than the description. Check the constraints (how large can the input be?). Constraints tell you what time complexity you need.', 'The function signature tells you: what inputs you receive (names and types) and what to return. Never ignore this — every LeetCode solution must match the given signature exactly.'],
         code: `# Example: reading the Two Sum problem
@@ -5121,6 +5763,59 @@ def two_sum(nums, target):
         codeCaption: 'You have the tools. Go to Practice Problems and start solving.',
         mistake: { title: 'Waiting until you feel "ready"', description: 'You will never feel 100% ready. The only way to get better at solving problems is to attempt problems — struggle, get stuck, look at hints, understand the solution, and try again.', bad: '# "I\'ll try LeetCode when I know more Python"\n# → never try\n# → never improve', good: '# Attempt the problem now, even if you get stuck\n# Look at Hint 1, try again\n# Look at Hint 2, try again\n# Read the solution, understand it fully\n# Try again from scratch next day' },
         practice: { question: 'Go to Practice Problems in the sidebar and attempt Contains Duplicate. Come back here after you\'ve tried it (with or without hints).', hint: 'Use a set. Loop through the numbers. Check if you\'ve seen each one before.', answer: 'def contains_duplicate(nums):\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False\n\n# If you got this: excellent! You solved a real LeetCode problem.\n# If you needed hints: that is completely normal. Keep going.' }
+      },
+      {
+        id: 'l10-19', title: 'Beginner LeetCode Prep Checkpoint',
+        explanation: [
+          'This checkpoint pulls together everything in this module: what LeetCode is, how problems are structured, the difference between input and output, what return means, why print is not the answer, constraints, brute force, testing, debugging, complexity, and when to look for a pattern.',
+          'Why it matters: if these ideas are solid, real LeetCode problems stop feeling random. You will know exactly what each part of a problem is asking and how to approach it.',
+          'Take the quiz and the practice task. If anything feels shaky, revisit that lesson before moving on to the patterns module.'
+        ],
+        analogy: 'This is the pre-flight checklist before takeoff. Pilots run it every time — not because they forgot how to fly, but because checking the basics prevents the big mistakes.',
+        code: '# The full beginner approach, start to finish:\n# 1. Read all four parts (description, examples, constraints, signature)\n# 2. Name the input and the output\n# 3. Keep the function signature exactly\n# 4. Write brute force first -> RETURN the answer (do not print)\n# 5. Test normal cases AND edge cases\n# 6. Debug any wrong answers by tracing the failing input\n# 7. Check complexity; reach for a pattern only if too slow',
+        codeCaption: 'The whole beginner workflow on one card. Run it on every problem.',
+        stepByStep: [
+          '1. Recall the four parts of a problem',
+          '2. Recall: return gives the value to the tests, print does not',
+          '3. Recall: brute force first, optimize only if needed',
+          '4. Recall: test edge cases before submitting',
+          '5. Recall: patterns come last, after understanding'
+        ],
+        mistake: {
+          title: 'Rushing past the checkpoint',
+          description: 'Checkpoints feel optional, but skipping them lets small misunderstandings hide until the patterns module makes them painful.',
+          bad: '# Skip the checkpoint -> shaky basics -> struggle later',
+          good: '# Answer the quiz and task -> confirm the basics -> move on confident'
+        },
+        quiz: {
+          question: 'Your LeetCode function computes the right number but every test fails. What is the most likely cause?',
+          options: [
+            'You used the wrong programming language',
+            'You printed the answer instead of returning it',
+            'Your variable names are too short',
+            'You added too many comments'
+          ],
+          correctIndex: 1,
+          explanation: 'Tests read the RETURN value. Printing the answer leaves the return as None, so every test fails — the most common beginner bug.'
+        },
+        challenge: {
+          description: 'Put it all together. Write has_duplicate(nums) that RETURNS True if any number appears more than once, else False. Handle the empty list. (Brute force is fine.)',
+          starter: 'def has_duplicate(nums):\n    # return True if any value appears more than once, else False\n    pass',
+          tests: [
+            { call: 'has_duplicate([1, 2, 3, 1])', expected: true },
+            { call: 'has_duplicate([1, 2, 3])', expected: false },
+            { call: 'has_duplicate([])', expected: false },
+            { call: 'has_duplicate([7, 7])', expected: true }
+          ],
+          solution: 'def has_duplicate(nums):\n    seen = []\n    for n in nums:\n        if n in seen:\n            return True\n        seen.append(n)\n    return False',
+          hint: 'Keep a list of seen numbers. If you see one again, return True. After the loop, return False.'
+        },
+        practice: {
+          question: 'Without looking back, list the beginner workflow for solving a LeetCode problem from start to finish.',
+          hint: 'Start at reading the four parts; end at patterns.',
+          answer: 'Read all four parts; name input and output; keep the signature; write brute force and RETURN (not print); test normal and edge cases; debug wrong answers by tracing the failing input; check complexity and reach for a pattern only if too slow.'
+        },
+        reflection: 'Recap: you now know how LeetCode problems work end to end. If the quiz and challenge felt comfortable, you are ready for the Beginner LeetCode Patterns module.'
       }
     ]
   },
