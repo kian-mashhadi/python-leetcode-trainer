@@ -1095,16 +1095,40 @@ async function loadPracticeProblems() {
   } catch { LAB_PROBLEMS = []; }
 }
 
+let labFilter = 'All';
+
 function renderLabIndex() {
   const container = document.getElementById('lab-content');
   const passed = getPassedSet('lab-passed');
+
+  // Build pattern filters from the data, preserving first-seen order.
+  const patterns = [];
+  LAB_PROBLEMS.forEach(p => {
+    const grp = p.pattern || 'Python Basics';
+    if (!patterns.includes(grp)) patterns.push(grp);
+  });
+  const filters = ['All', ...patterns];
+  if (!filters.includes(labFilter)) labFilter = 'All';
+
+  const visible = LAB_PROBLEMS.filter(p =>
+    labFilter === 'All' || (p.pattern || 'Python Basics') === labFilter);
+
+  const filterBar = `
+    <div class="lab-filter-bar">
+      ${filters.map(f => `
+        <button class="lab-filter-btn ${f === labFilter ? 'active' : ''}"
+          onclick="setLabFilter(${JSON.stringify(f).replace(/"/g, '&quot;')})">${escapeHtml(f)}</button>
+      `).join('')}
+    </div>`;
+
   container.innerHTML = `
     <div class="page-header">
       <h1>&#x1F9EA; Practice Lab</h1>
       <p>Write and run real Python in your browser. ${passed.size}/${LAB_PROBLEMS.length} problems solved.</p>
     </div>
+    ${filterBar}
     <div class="lab-problems-grid">
-      ${LAB_PROBLEMS.map((p, i) => `
+      ${visible.map((p, i) => `
         <div class="lab-problem-card ${passed.has(p.id) ? 'passed' : ''}" onclick="openLabProblem('${p.id}')">
           <div class="lab-problem-card-header">
             <span class="lab-problem-num">#${i + 1}</span>
@@ -1113,10 +1137,16 @@ function renderLabIndex() {
           <div class="lab-problem-title">${escapeHtml(p.title)}</div>
           <div class="lab-problem-concept">${escapeHtml(p.concept)}</div>
           <span class="lab-problem-difficulty">${escapeHtml(p.difficulty)}</span>
+          ${p.pattern ? `<span class="lab-problem-pattern">${escapeHtml(p.pattern)}</span>` : ''}
         </div>
       `).join('')}
     </div>
   `;
+}
+
+function setLabFilter(f) {
+  labFilter = f;
+  renderLabIndex();
 }
 
 function openLabProblem(problemId) {
